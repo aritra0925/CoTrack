@@ -6,6 +6,9 @@ apply plugin: 'com.android.application'
         disable 'BlockedPrivateApi'
     }
     android {
+        packagingOptions {
+            exclude 'META-INF/INDEX.LIST'
+        }
         compileSdkVersion 30
         buildToolsVersion "30.0.0"
         ndkVersion "21.1.6352462"
@@ -31,6 +34,7 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'org.hibernate:hibernate-core:5.4.18.Final'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.android.material:material:1.0.0'
