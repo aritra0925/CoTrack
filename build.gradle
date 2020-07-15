@@ -1,0 +1,72 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.0"
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.3'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+project.ext {
+    compileSdkVersion = 30
+    minSdkVersion = 26
+    targetSdkVersion = 30
+
+    // AndroidX
+    annotationVersion = "1.1.0"
+    appcompatVersion = "1.1.0"
+    mediaVersion = "1.1.0"
+    preferenceVersion = "1.1.1"
+    workManagerVersion = "2.3.4"
+    googleMaterialVersion = "1.1.0"
+
+    // Third-party
+    commonslangVersion = "3.6"
+    commonsioVersion = "2.5"
+    jsoupVersion = "1.11.2"
+    glideVersion = "4.8.0"
+    okhttpVersion = "3.12.10"
+    okioVersion = "1.17.5"
+    eventbusVersion = "3.2.0"
+    rxAndroidVersion = "2.1.1"
+    rxJavaVersion = "2.2.2"
+    iconifyVersion = "2.2.2"
+    audioPlayerVersion = "v1.0.17"
+
+    // Google Play build
+    wearableSupportVersion = "2.6.0"
+
+    //Tests
+    awaitilityVersion = "3.1.6"
+    robotiumSoloVersion = "5.6.3"
+    espressoVersion = "3.2.0"
+    runnerVersion = "1.2.0"
+    rulesVersion = "1.2.0"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+repositories {
+    google()
+}
