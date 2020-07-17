@@ -1,0 +1,33 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="user.details.UserDetails" table="USER" schema="PXZ44922">
+
+		<meta attribute="class-description">
+			This class contains the user details.
+		</meta>
+
+		<id name="userId" column="USER_ID" type="String">
+			<generator class="assigned" />
+		</id>
+		<property name="signOnId" column="SIGNON_ID" type="string" />
+		<property name="password" column="LOGIN_PASSWORD"
+			type="string" />
+		<property name="userName" column="USER_NAME" type="string" />
+		<property name="userAdd" column="USER_ADDRESS1" type="string" />
+		<property name="city" column="CITY" type="string" />
+		<property name="state" column="STATE_NAME" type="string" />
+		<property name="zipCode" column="ZIP_CODE" type="string" />
+		<property name="email" column="EMAIL" type="string" />
+		<property name="contactNo" column="CONTACT_NUMBER"
+			type="string" />
+		<property name="serviceAvailed" column="SERVICE_NAME"
+			type="string" />
+		<property name="serviceRequectNo" column="SR_NO"
+			type="string" />
+
+	</class>
+</hibernate-mapping>
