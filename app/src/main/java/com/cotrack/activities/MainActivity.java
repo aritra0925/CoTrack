@@ -17,15 +17,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.user_login);
         //Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.background_preview);
         //VideoView view = (VideoView) findViewById(R.id.videoView);
         // initiate a video view
         //view.setVideoURI(uri);
         //view.start();
-        clickOnUserLogin();
+        //clickOnUserLogin();
     }
-    private void clickOnUserLogin(){
+    /*private void clickOnUserLogin(){
         Button b1 = findViewById(R.id.button);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,5 +34,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 }
