@@ -37,6 +37,7 @@ apply plugin: 'com.android.application'
 
 
 dependencies {
+    implementation group: 'com.cloudant', name: 'cloudant-sync-datastore-android-encryption', version:'latest.release'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'org.hibernate:hibernate-core:5.4.18.Final'
     implementation 'androidx.appcompat:appcompat:1.1.0'
