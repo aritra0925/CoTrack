@@ -2,26 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.Base.CoTrack.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.NavigationActivity"
-    android:background="@drawable/background_1">
-    >
-        <FrameLayout
+    android:background="@drawable/background_12"
+    tools:context=".activities.NavigationActivity">
+
+    <LinearLayout
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/card_elevation">
+        <ImageView
+            android:padding="@dimen/default_gap"
+            android:layout_width="@dimen/titleBar_height"
+            android:layout_height="@dimen/titleBar_height"
+            android:src="@drawable/logo"
+            android:layout_gravity="left"
+            android:elevation="@dimen/card_elevation"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container"
-        android:layout_above="@id/bottom_navigation"/>
-        <!-- Main content -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/background_elevated_darktheme"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            app:menu="@menu/navigation_menu"/>
+        android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/titleBar"
+        />
+    <!-- Main content -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/navigation_menu"
+        style="@style/Theme.Base.CoTrack.Light"/>
 
 </RelativeLayout>

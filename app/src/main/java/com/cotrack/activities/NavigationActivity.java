@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cotrack.R;
@@ -27,10 +26,10 @@ public class NavigationActivity  extends AppCompatActivity {
                         case R.id.navigation_home:
                             openFragment(HomeFragment.newInstance());
                             return true;
-                        case R.id.navigation_sms:
+                        case R.id.navigation_services:
                             openFragment(ServiceFragment.newInstance());
                             return true;
-                        case R.id.navigation_notifications:
+                        case R.id.navigation_chat:
                             openFragment(ChatFragment.newInstance());
                             return true;
                     }

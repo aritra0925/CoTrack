@@ -1,16 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ChatFragment">
+    android:padding="@dimen/default_gap">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/navigation_menu_chat"
-        android:textSize="50sp"
-        android:fontFamily="@font/trebuc"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reyclerview_message_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></androidx.recyclerview.widget.RecyclerView>
 
-</FrameLayout>
+    <!-- A horizontal line between the chatbox and RecyclerView -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginBottom="0dp"
+        android:background="#dfdfdf"
+        app:layout_constraintBottom_toTopOf="@+id/layout_chatbox"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout_chatbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:minHeight="55dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="@dimen/default_gap">
+
+        <EditText
+            android:id="@+id/edittext_chatbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_marginRight="@dimen/default_gap"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Enter message"
+            android:maxLines="6"
+            style="@style/Theme.Base.CoTrack.Light"/>
+
+        <ImageButton
+            android:id="@+id/button_chatbox_send"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="@drawable/send_message_icon_express"
+            android:clickable="true"
+            android:gravity="center"
+            android:elevation="@dimen/card_elevation"
+            android:padding="@dimen/default_gap"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

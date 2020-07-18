@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView1"
+        style="@style/Theme.Base.CoTrack.Light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/service_card_height"
+        android:layout_gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/imageLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left">
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="@dimen/service_image_width"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/default_gap"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:padding="@dimen/default_gap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/imageLayout">
+
+                <TextView
+                    android:id="@+id/serviceType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="TextView"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/trebuc"
+                    android:padding="@dimen/default_gap"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/serviceCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="TextView"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/trebuc"
+                    android:padding="@dimen/default_gap"
+                    android:layout_below="@id/serviceType"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
