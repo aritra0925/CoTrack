@@ -12,6 +12,9 @@ apply plugin: 'com.android.application'
         }
         packagingOptions {
             exclude 'META-INF/INDEX.LIST'
+            exclude 'res/anim/fade_out.xml'
+            exclude 'AndroidManifest.xml'
+            exclude 'res/anim/fade_in.xml'
         }
         compileSdkVersion 30
         buildToolsVersion "30.0.0"
