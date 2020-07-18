@@ -60,6 +60,7 @@ public class ServiceFragment extends Fragment {
         serviceDetailsModels = getServiceDetails();
         view = inflater.inflate(R.layout.fragment_service, container, false);
         listView=(ListView) view.findViewById(R.id.listView);
+        listView.setDivider(null);
         listView.setAdapter(new ServiceAdapter(this.getContext(), serviceDetailsModels));
 
         return view;
