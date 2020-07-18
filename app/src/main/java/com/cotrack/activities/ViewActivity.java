@@ -9,7 +9,7 @@ public class ViewActivity extends UserLogin {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_bar1);
+        setContentView(R.layout.user_login);
     }
 
 }

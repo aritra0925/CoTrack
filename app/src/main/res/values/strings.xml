@@ -2,6 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <!-- Activity and fragment titles -->
+    <string name="login_user_name" translatable="false">Enter username</string>
+    <string name="login_password" translatable="false">Enter password</string>
+    <string name="login_idle" translatable="false">Login</string>
     <string name="api_key" translatable="false">AIzaSyAAkWR5Ektn63hRlkKajhkOSAF7frmP26U</string>
     <string name="navigation_menu_home" translatable="false">Home</string>
     <string name="navigation_menu_services" translatable="false">Services</string>
