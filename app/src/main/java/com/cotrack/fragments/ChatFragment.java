@@ -1,5 +1,6 @@
 package com.cotrack.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
+import com.cotrack.utils.APIUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,10 +65,11 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mMessageRecycler.setAdapter(mMessageAdapter);
         ImageButton sendMessage = (ImageButton) view.findViewById(R.id.button_chatbox_send);
+        new DBConnect().execute("");
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(view.getContext(), "You clicked on send button", Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
             }
         });
         return view;
@@ -105,5 +108,24 @@ public class ChatFragment extends Fragment {
         messageList.add(message4);
 
         return messageList;
+    }
+
+    class DBConnect extends AsyncTask {
+
+        private Exception exception;
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        protected String doInBackground(Object[] objects) {
+            APIUtils.insertDocument("Test test text");
+            return "";
+        }
+
+        protected void onPostExecute(String feed) {
+            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
+        }
     }
 }

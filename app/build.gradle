@@ -7,14 +7,11 @@ apply plugin: 'com.android.application'
     }
     android {
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
         packagingOptions {
             exclude 'META-INF/INDEX.LIST'
-            exclude 'res/anim/fade_out.xml'
-            exclude 'AndroidManifest.xml'
-            exclude 'res/anim/fade_in.xml'
         }
         compileSdkVersion 30
         buildToolsVersion "30.0.0"
@@ -40,8 +37,12 @@ apply plugin: 'com.android.application'
 
 
 dependencies {
-    implementation group: 'com.cloudant', name: 'cloudant-sync-datastore-android-encryption', version:'latest.release'
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.ibm.watson:ibm-watson:8.5.0'
+    implementation group: 'com.cloudant', name: 'cloudant-client', version: '2.19.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp-urlconnection', version: '3.12.12'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.hibernate:hibernate-core:5.4.18.Final'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
@@ -105,7 +106,6 @@ dependencies {
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     implementation 'com.github.shts:TriangleLabelView:1.1.2'
     implementation 'com.leinardi.android:speed-dial:3.1.1'
-    implementation "com.github.AntennaPod:AntennaPod-AudioPlayer:$audioPlayerVersion"
     implementation 'com.github.mfietz:fyydlin:v0.5.0'
     implementation 'com.github.ByteHamster:SearchPreference:v2.0.0'
     implementation 'com.github.skydoves:balloon:1.1.5'
