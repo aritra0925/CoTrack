@@ -38,6 +38,9 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     implementation 'com.ibm.watson:ibm-watson:8.5.0'
     implementation group: 'com.cloudant', name: 'cloudant-client', version: '2.19.1'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp-urlconnection', version: '3.12.12'
