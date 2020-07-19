@@ -12,6 +12,7 @@ import com.cotrack.R;
 import com.cotrack.fragments.ChatFragment;
 import com.cotrack.fragments.HomeFragment;
 import com.cotrack.fragments.ServiceFragment;
+import com.cotrack.fragments.ServiceSpecificFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NavigationActivity  extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class NavigationActivity  extends AppCompatActivity {
                 @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            openFragment(HomeFragment.newInstance());
+                            openFragment(ServiceSpecificFragment.newInstance());
                             return true;
                         case R.id.navigation_services:
                             openFragment(ServiceFragment.newInstance());
