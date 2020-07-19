@@ -2,10 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Theme.Base.CoTrack.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_12"
     tools:context=".activities.NavigationActivity">
 
     <LinearLayout
@@ -13,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:elevation="@dimen/card_elevation">
+        android:elevation="@dimen/card_elevation"
+        android:background="@drawable/title_border">
         <ImageView
             android:padding="@dimen/default_gap"
-            android:layout_width="@dimen/titleBar_height"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/titleBar_height"
             android:src="@drawable/logo"
-            android:layout_gravity="left"
+            android:layout_gravity="center"
             android:elevation="@dimen/card_elevation"/>
     </LinearLayout>
 
@@ -40,6 +39,7 @@
         app:itemIconTint="@drawable/selector"
         app:itemTextColor="@drawable/selector"
         app:menu="@menu/navigation_menu"
-        style="@style/Theme.Base.CoTrack.Light"/>
+        style="@style/AppTheme.Dark"
+        android:background="@drawable/bottom_navigation_border"/>
 
 </RelativeLayout>
