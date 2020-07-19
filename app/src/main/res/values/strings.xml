@@ -840,4 +840,16 @@
     <string name="on_demand_config_download_text">Looks like you download a lot. Do you want episode lists to show download buttons?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Watson Chatbot Credentials-->
+    <!-- REPLACE `ASSISTANT_ID_HERE` with ID of the Assistant to use -->
+    <string name="assistant_id">f4315384-6a4f-428a-b328-129debd27469</string>
+
+    <!-- REPLACE `ASSISTANT_API_KEY_HERE` with Watson Assistant service API Key-->
+    <string name="assistant_apikey">XmOiu7Oe0Bl2s6cA-_WPXsRmaLFQTADvFRiDIpHLW-6i</string>
+
+    <!-- The URL provided below is for DALLAS region/location -->
+    <!-- If the Assistant service is created in another region/lpcation -->
+    <!-- REPLACE the URL with the one provided in the credentials of the service you created-->
+    <string name="assistant_url">https://api.us-south.assistant.watson.cloud.ibm.com/instances/3c53eaa3-e748-4047-8989-cc1ed18c9c2a/v2/assistants/f4315384-6a4f-428a-b328-129debd27469/sessions</string>
 </resources>

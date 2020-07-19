@@ -15,7 +15,7 @@ public class WatsonUtils {
     public static final String USERNAME = "";
     public static final String PASSWORD = "";
 
-    public String analyzeWatson(){
+    public static String analyzeWatson(){
 
         //Creating the class of the service. Make sure to insert you service username and password.
         NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(
