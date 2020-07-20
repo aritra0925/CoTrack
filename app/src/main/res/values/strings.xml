@@ -2,6 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <!-- Activity and fragment titles -->
+    <string name="add_to_cart">Add</string>
+    <string name="add_1">+</string>
+    <string name="subtract_1">-</string>
     <string name="loading">Please wait Loading…</string>
     <string name="new_product">New</string>
     <string name="action_settings">Settings</string>
