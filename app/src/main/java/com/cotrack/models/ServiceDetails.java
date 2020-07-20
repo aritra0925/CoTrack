@@ -6,6 +6,8 @@ import java.util.Random;
 
 // A Java type that can be serialized to JSON
 public class ServiceDetails {
+
+
     @JsonProperty(value = "_id")
     private String _id;
 
@@ -82,6 +84,7 @@ public class ServiceDetails {
     public void setSr_id(String sr_id) {
         this.sr_id = sr_id;
     }
+
 
     public ServiceDetails(String _id, String type, String service_id, String service_name, String asset_id, String sr_id) {
         this._id = _id;

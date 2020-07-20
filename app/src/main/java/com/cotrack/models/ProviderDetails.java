@@ -8,6 +8,9 @@ import java.util.Random;
 
 // A Java type that can be serialized to JSON
 public class ProviderDetails {
+    private int imageResourceId;
+    private boolean isLoading = false;
+    private boolean isNew = false;
 
     @JsonProperty(value = "_id")
     private String _id;
@@ -185,6 +188,33 @@ public class ProviderDetails {
         this.sr_id = sr_id;
     }
 
+    public int getImageResourceId() {
+        return imageResourceId;
+    }
+
+    public void setImageResourceId(int imageResourceId) {
+        this.imageResourceId = imageResourceId;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public ProviderDetails() {
+
+    }
 
     public ProviderDetails(String _id, String type, String provider_name, String provider_signonid, String provider_password, String provider_address1, String provider_city, String provider_state, String provider_zip, String provider_contact, String provider_email, String service_name, String asset_id, String sr_id) {
         this._id = _id;

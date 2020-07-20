@@ -38,6 +38,9 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
