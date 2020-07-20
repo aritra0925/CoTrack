@@ -44,6 +44,28 @@
                 android:hint="Password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:id="@+id/login_user_type">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/user_type_user"
+                android:fontFamily="@font/trebuc"
+                android:textColor="@color/iron"
+                android:id="@+id/login_user_type_user"
+                android:checked="true"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/user_type_service"
+                android:textColor="@color/iron"
+                android:id="@+id/login_user_type_service"/>
+        </RadioGroup>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"

@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <!-- Activity and fragment titles -->
+    <string name="user_type_user">User</string>
+    <string name="user_type_service">Service</string>
     <string name="add_to_cart">Add</string>
     <string name="add_1">+</string>
     <string name="subtract_1">-</string>

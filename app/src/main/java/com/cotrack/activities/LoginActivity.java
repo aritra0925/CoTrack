@@ -1,4 +1,5 @@
 package com.cotrack.activities;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +25,16 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.link_signup) TextView _signupLink;
+    @BindView(R.id.input_email)
+    EditText _emailText;
+    @BindView(R.id.input_password)
+    EditText _passwordText;
+    @BindView(R.id.btn_login)
+    Button _loginButton;
+    @BindView(R.id.link_signup)
+    TextView _signupLink;
+    @BindView(R.id.login_user_type)
+    RadioGroup _radioGroup;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +79,11 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
+        RadioButton radioButton = (RadioButton) findViewById(_radioGroup.getCheckedRadioButtonId());
+        boolean isService = false;
+        if(radioButton.getText().toString().equalsIgnoreCase(getString(R.string.user_type_service))){
+            isService = true;
+        }
         // TODO: Implement your own authentication logic here.
 
         new android.os.Handler().postDelayed(
