@@ -26,7 +26,7 @@ public class NavigationActivity  extends AppCompatActivity {
                 @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            openFragment(ServiceDetailsFragment.newInstance());
+                            openFragment(ServiceSpecificFragment.newInstance());
                             return true;
                         case R.id.navigation_services:
                             openFragment(ServiceFragment.newInstance());

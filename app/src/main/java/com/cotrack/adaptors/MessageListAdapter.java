@@ -124,6 +124,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void swapItems(List<Message> mMessageList){
+        this.mMessageList = mMessageList;
+        notifyDataSetChanged();
+    }
+
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText;
         ImageView profileImage;

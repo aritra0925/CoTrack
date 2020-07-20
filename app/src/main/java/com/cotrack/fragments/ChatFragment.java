@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageOptions;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -67,7 +69,7 @@ public class ChatFragment extends Fragment {
      * @return A new instance of fragment ServiceFragment.
      */
     public static ChatFragment newInstance() {
-        if(instance==null){
+        if (instance == null) {
             instance = new ChatFragment();
         }
         return instance;
@@ -85,6 +87,26 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setAdapter(mMessageAdapter);
 
         input = (EditText) view.findViewById(R.id.edittext_chatbox);
+        input.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
+                    String inputText = input.getText().toString();
+                    input.setText("");
+                    new WatsonTask().execute(inputText);
+                    Message message = new Message();
+                    User sender = new User();
+                    sender.setNickname("Random");
+                    message.setSender(sender);
+                    message.setMessage(inputText);
+                    message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
+                    mMessageList.add(message);
+                    mMessageAdapter.swapItems(mMessageList);
+                }
+                return true;
+            }
+        });
         ImageButton sendMessage = (ImageButton) view.findViewById(R.id.button_chatbox_send);
         new DBConnect().execute("");
         sendMessage.setOnClickListener(new View.OnClickListener() {
@@ -92,14 +114,23 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                 String inputText = input.getText().toString();
+                input.setText("");
                 new WatsonTask().execute(inputText);
+                Message message = new Message();
+                User sender = new User();
+                sender.setNickname("Random");
+                message.setSender(sender);
+                message.setMessage(inputText);
+                message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
+                mMessageList.add(message);
+                mMessageAdapter.swapItems(mMessageList);
 
             }
         });
         return view;
     }
 
-    public static MessageResponse startService(String assistant_apikey, String assistant_url, String workspace_id){
+    public static MessageResponse startService(String assistant_apikey, String assistant_url, String workspace_id) {
         IamAuthenticator authenticator = new IamAuthenticator(assistant_apikey);
         Assistant assistant = new Assistant("2019-04-30", authenticator);
         assistant.setServiceUrl(assistant_url);
@@ -114,7 +145,7 @@ public class ChatFragment extends Fragment {
     }
 
     public void displayMsg(MessageResponse msg) {
-        final MessageResponse mssg=msg;
+        final MessageResponse mssg = msg;
         handler.post(new Runnable() {
 
             @Override
@@ -135,7 +166,7 @@ public class ChatFragment extends Fragment {
 
     }
 
-    public List<Message> getMessageList(){
+    public List<Message> getMessageList() {
         List<Message> messageList = new ArrayList<>();
         User sender1 = new User();
         sender1.setNickname("Random");
@@ -188,20 +219,33 @@ public class ChatFragment extends Fragment {
             //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
         }
     }
-    class WatsonTask extends AsyncTask {
+
+    class WatsonTask extends AsyncTask<String, Void, MessageResponse> {
 
         private Exception exception;
 
-        protected void onPostExecute(MessageResponse feed) {
-            // TODO: check this.exception
-            // TODO: do something with the feed
+        /**
+         * @param strings
+         * @deprecated
+         */
+        @Override
+        protected MessageResponse doInBackground(String... strings) {
+            MessageResponse messageResponse = WatsonUtils.startService(assistant_apikey, assistant_url, workspace_id, strings[0]);
+            System.out.println("Response: " + messageResponse.toString());
+            return messageResponse;
         }
 
         @Override
-        protected MessageResponse doInBackground(Object[] objects) {
-            MessageResponse messageResponse = WatsonUtils.startService(assistant_apikey,assistant_url,workspace_id, objects[0].toString());
-            System.out.println("Response: " + messageResponse.toString());
-            return messageResponse;
+        protected void onPostExecute(MessageResponse feed) {
+            Message message = new Message();
+            User sender = new User();
+            sender.setNickname("Halo");
+            message.setSender(sender);
+            message.setMessage("Arya response");
+            message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
+            mMessageList.add(message);
+            mMessageAdapter.swapItems(mMessageList);
+            System.out.println("Message List: " + mMessageList);
         }
     }
 }

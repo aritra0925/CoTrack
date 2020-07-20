@@ -44,7 +44,9 @@
             android:background="@drawable/rounded_corner_edit_text"
             android:hint="Enter message"
             android:maxLines="6"
-            style="@style/Theme.Base.CoTrack.Light"/>
+            style="@style/Theme.Base.CoTrack.Light"
+            android:textAlignment="center"
+            android:textColor="@color/aluminum"/>
 
         <ImageButton
             android:id="@+id/button_chatbox_send"
