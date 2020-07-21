@@ -1,5 +1,12 @@
 package com.cotrack.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,14 +24,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cotrack.R;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AccountAuthenticatorActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-
+    public String loginNameVal;
+    public String loginPswdVal;
     @BindView(R.id.input_email)
     EditText _emailText;
     @BindView(R.id.input_password)
@@ -149,5 +159,76 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    // method to add account..
+    private void addAccount(String username, String password) {
+        AccountManager accnt_manager = AccountManager
+                .get(getApplicationContext());
+
+        Account[] accounts = accnt_manager
+                .getAccountsByType(getString(R.string.account_type)); // account name identifier.
+
+        if (accounts.length > 0) {
+            return;
+        }
+
+        final Account account = new Account(username,
+                getString(R.string.account_type));
+
+        accnt_manager.addAccountExplicitly(account, password, null);
+
+        final Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
+        intent.putExtra(AccountManager.KEY_PASSWORD, password);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE,
+                getString(R.string.account_type));
+        // intent.putExtra(AccountManager.KEY_AUTH_TOKEN_LABEL,
+        // PARAM_AUTHTOKEN_TYPE);
+        intent.putExtra(AccountManager.KEY_AUTHTOKEN, "token");
+        this.setAccountAuthenticatorResult(intent.getExtras());
+        this.setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
+    // method to retrieve account.
+    private boolean validateAccount() {
+        AccountManagerCallback<Bundle> callback = new AccountManagerCallback<Bundle>() {
+
+            @Override
+            public void run(AccountManagerFuture<Bundle> arg0) {
+                Log.e("calback", "msg");
+
+                try {
+                    Bundle b = arg0.getResult();
+                    if (b.getBoolean(AccountManager.KEY_ACCOUNT_MANAGER_RESPONSE)) {
+                        //User account exists!!..
+                    }
+                } catch (OperationCanceledException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (AuthenticatorException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        AccountManager accnt_manager = AccountManager
+                .get(getApplicationContext());
+
+        Account[] accounts = accnt_manager
+                .getAccountsByType(getString(R.string.account_type));
+
+        if (accounts.length <= 0) {
+            return false;
+        } else {
+            loginNameVal = accounts[0].name;
+            loginPswdVal = accnt_manager.getPassword(accounts[0]);
+            return true;
+        }
     }
 }

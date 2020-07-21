@@ -1,5 +1,6 @@
 package com.cotrack.fragments;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
+import com.cotrack.helpers.Session;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
 import com.cotrack.utils.APIUtils;
@@ -91,6 +95,14 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setAdapter(mMessageAdapter);
 
         input = (EditText) view.findViewById(R.id.edittext_chatbox);
+        if (!(input instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    Session.hideSoftKeyboard(getActivity());
+                    return false;
+                }
+            });
+        }
         input.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -134,20 +146,6 @@ public class ChatFragment extends Fragment {
         });
         return view;
     }
-
-    /*public static MessageResponse startService(String assistant_apikey, String assistant_url, String workspace_id) {
-        IamAuthenticator authenticator = new IamAuthenticator(assistant_apikey);
-        Assistant assistant = new Assistant("2019-04-30", authenticator);
-        assistant.setServiceUrl(assistant_url);
-        CreateSessionOptions createSessionOptions =
-                new CreateSessionOptions.Builder().assistantId(workspace_id).build();
-        createSessionOptions = createSessionOptions.newBuilder().build();
-        MessageOptions messageOptions =
-                new MessageOptions.Builder().assistantId(workspace_id).sessionId("session_id").build();
-        MessageResponse response = assistant.message(messageOptions).execute().getResult();
-        System.out.println("Checking: " + response);
-        return response;
-    }*/
 
     public void displayMsg(MessageResponse msg) {
         final MessageResponse mssg = msg;
