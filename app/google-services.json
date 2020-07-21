@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:550651402341:android:bc1185678732f72fa44e8c",
+        "mobilesdk_app_id": "1:550651402341:android:65f717829622680ea44e8c",
         "android_client_info": {
           "package_name": "com.cotrack"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "550651402341-jm8soag71qug0n6b18kr8jdlbs7t68aa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cotrack",
+            "certificate_hash": "66de05f8c40ac772a7f45dfd3a0c8801e2cba013"
+          }
+        },
         {
           "client_id": "550651402341-edlapql2g26ocrdg9nofbh4ksetiegrp.apps.googleusercontent.com",
           "client_type": 3
@@ -21,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAAkWR5Ektn63hRlkKajhkOSAF7frmP26U"
+          "current_key": "AIzaSyCiiXS9hkacecneEn0hfx1vNSbudwZ_thY"
         }
       ],
       "services": {
