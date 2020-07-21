@@ -31,6 +31,10 @@ import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageOptions;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -103,6 +107,7 @@ public class ChatFragment extends Fragment {
                     message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
                     mMessageList.add(message);
                     mMessageAdapter.swapItems(mMessageList);
+                    mMessageRecycler.smoothScrollToPosition(mMessageList.size());
                 }
                 return true;
             }
@@ -124,13 +129,13 @@ public class ChatFragment extends Fragment {
                 message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
                 mMessageList.add(message);
                 mMessageAdapter.swapItems(mMessageList);
-
+                mMessageRecycler.smoothScrollToPosition(mMessageList.size());
             }
         });
         return view;
     }
 
-    public static MessageResponse startService(String assistant_apikey, String assistant_url, String workspace_id) {
+    /*public static MessageResponse startService(String assistant_apikey, String assistant_url, String workspace_id) {
         IamAuthenticator authenticator = new IamAuthenticator(assistant_apikey);
         Assistant assistant = new Assistant("2019-04-30", authenticator);
         assistant.setServiceUrl(assistant_url);
@@ -142,7 +147,7 @@ public class ChatFragment extends Fragment {
         MessageResponse response = assistant.message(messageOptions).execute().getResult();
         System.out.println("Checking: " + response);
         return response;
-    }
+    }*/
 
     public void displayMsg(MessageResponse msg) {
         final MessageResponse mssg = msg;
@@ -239,13 +244,34 @@ public class ChatFragment extends Fragment {
         protected void onPostExecute(MessageResponse feed) {
             Message message = new Message();
             User sender = new User();
+            String jsonString = feed.getOutput().toString();
+            JSONObject jsonRootObject;
+            String text = null;
+
+            try {
+                jsonRootObject = new JSONObject(jsonString);
+                JSONArray jsonArray = jsonRootObject.getJSONArray("generic");
+                for(int i=0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    /*JSONArray jsonArray1 = jsonObject.getJSONArray("options");
+                    for(int j=i; j<=jsonArray1.length();j++){
+
+                    }*/
+                    text = jsonObject.optString("text").toString();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            System.out.println(text);
             sender.setNickname("Halo");
             message.setSender(sender);
-            message.setMessage("Arya response");
+            message.setMessage(text);
             message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
             mMessageList.add(message);
             mMessageAdapter.swapItems(mMessageList);
             System.out.println("Message List: " + mMessageList);
+
         }
     }
 }
