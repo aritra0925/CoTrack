@@ -1,5 +1,7 @@
 package com.cotrack.listeners;
 
+import android.util.Log;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +59,15 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
             lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         }
 
+        // Checking the list end
+        if (loading) {
+            if ((visibleThreshold + previousTotalItemCount) >= totalItemCount) {
+                loading = false;
+                Log.v("...", "Last Item Wow !");
+                // Do pagination.. i.e. fetch new data
+            }
+        }
+
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
         if (totalItemCount < previousTotalItemCount) {
@@ -66,6 +77,8 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
                 this.loading = true;
             }
         }
+
+
         // If it’s still loading, we check to see if the dataset count has
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
@@ -83,6 +96,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
             onLoadMore(currentPage, totalItemCount);
             loading = true;
         }
+
     }
 
     // Defines the process for actually loading more data based on page

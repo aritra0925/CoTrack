@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <!-- Activity and fragment titles -->
+
     <string name="user_type_user">User</string>
     <string name="user_type_service">Service</string>
     <string name="add_to_cart">Add</string>
@@ -17,10 +18,59 @@
     <string name="navigation_menu_home" translatable="false">Home</string>
     <string name="navigation_menu_services" translatable="false">Services</string>
     <string name="navigation_menu_chat" translatable="false">Chat</string>
+    <string name="services_navigation_menu_home" translatable="false">Add Service</string>
+    <string name="services_navigation_menu_registered_service" translatable="false">Registered Services</string>
     <string name="userRegistration" translatable="false">Register as user</string>
     <string name="serviceRegistration" translatable="false">Register as service</string>
     <string name="tab_text_1" translatable="false">Services</string>
     <string name="tab_text_2" translatable="false">Home</string>
+    <string-array name="service_types">
+        <item>Hospital</item>
+        <item>Disinfectant</item>
+        <item>Doctor</item>
+        <item>Ambulance</item>
+        <item>Pathology</item>
+        <item>Medicine</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="india_states">
+        <item>Andaman and Nicobar Islands</item>
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chandigarh</item>
+        <item>Chhattisgarh</item>
+        <item>Dadra and Nagar Haveli</item>
+        <item>Daman and Diu</item>
+        <item>Delhi</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu and Kashmir</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Lakshadweep</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Orissa</item>
+        <item>Pondicherry</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Telangana</item>
+        <item>Tripura</item>
+        <item>Uttaranchal</item>
+        <item>Uttar Pradesh</item>
+        <item>West Bengal</item>
+    </string-array>
     <string name="AppName">CoTrack</string>
     <string name="app_name" translate="false">CoTrack</string>
     <string name="provider_authority" translate="false">com.cotrack.provider</string>

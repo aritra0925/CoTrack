@@ -1,39 +1,36 @@
 package com.cotrack.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
-import com.cotrack.helpers.Space;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cotrack.R;
-import com.cotrack.adaptors.MessageListAdapter;
-import com.cotrack.adaptors.ProviderAdapter;
+import com.cotrack.adaptors.RegisterServiceItemsAdapter;
+import com.cotrack.helpers.Space;
 import com.cotrack.listeners.EndlessScrollListener;
-import com.cotrack.models.Message;
 import com.cotrack.models.ProviderDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ServiceSpecificFragment extends Fragment {
+public class RegisteredServicesFragment extends Fragment {
 
-    ProviderAdapter providerAdapter;
-    private static ServiceSpecificFragment instance = null;
-    View view;
+    private static RegisteredServicesFragment instance = null;
+    RegisterServiceItemsAdapter registerServiceItemsAdapter;
     List<ProviderDetails> providerDetails;
     RecyclerView recyclerViewProducts;
 
-    public ServiceSpecificFragment() {
+    View view;
+
+    public RegisteredServicesFragment() {
         // Required empty public constructor
     }
 
@@ -44,8 +41,8 @@ public class ServiceSpecificFragment extends Fragment {
      *
      * @return A new instance of fragment ServiceFragment.
      */
-    public static ServiceSpecificFragment newInstance() {
-        instance = new ServiceSpecificFragment();
+    public static RegisteredServicesFragment newInstance() {
+        instance = new RegisteredServicesFragment();
         return instance;
     }
 
@@ -53,12 +50,12 @@ public class ServiceSpecificFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_specific_service, container, false);
+        view = inflater.inflate(R.layout.fragment_registered_service, container, false);
         //Bind RecyclerView from layout to recyclerViewProducts object
-        recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
+        recyclerViewProducts = view.findViewById(R.id.recyclerViewProductsService);
 
         //Create new ProductsAdapter
-        providerAdapter = new ProviderAdapter(view.getContext());
+        registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext());
         //Create new GridLayoutManager
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this.getContext(),
                 2,//span count no of items in single row
@@ -71,7 +68,7 @@ public class ServiceSpecificFragment extends Fragment {
         EndlessScrollListener endlessScrollListener = new EndlessScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (!providerAdapter.loading) {
+                if (!registerServiceItemsAdapter.loading) {
                     feedData();
                 }
             }
@@ -81,10 +78,10 @@ public class ServiceSpecificFragment extends Fragment {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                switch (providerAdapter.getItemViewType(position)) {
-                    case ProviderAdapter.PRODUCT_ITEM:
+                switch (registerServiceItemsAdapter.getItemViewType(position)) {
+                    case RegisterServiceItemsAdapter.PRODUCT_ITEM:
                         return 1;
-                    case ProviderAdapter.LOADING_ITEM:
+                    case RegisterServiceItemsAdapter.LOADING_ITEM:
                         return 2; //number of columns of the grid
                     default:
                         return -1;
@@ -96,12 +93,12 @@ public class ServiceSpecificFragment extends Fragment {
         //add space between cards
         recyclerViewProducts.addItemDecoration(new Space(2, 20, true, 0));
         //Finally set the adapter
-        recyclerViewProducts.setAdapter(providerAdapter);
+        recyclerViewProducts.setAdapter(registerServiceItemsAdapter);
         //load first page of recyclerview
         endlessScrollListener.onLoadMore(0, 0);
         return view;
     }
-    
+
     //Load Data from your server here
     // loading data from server will make it very large
     // that's why i created data locally
@@ -110,7 +107,7 @@ public class ServiceSpecificFragment extends Fragment {
         recyclerViewProducts.post(new Runnable() {
             @Override
             public void run() {
-                providerAdapter.showLoading();
+                registerServiceItemsAdapter.showLoading();
             }
         });
 
@@ -132,9 +129,9 @@ public class ServiceSpecificFragment extends Fragment {
                 @Override
                 public void run() {
                     //hide loading
-                    providerAdapter.hideLoading();
+                    registerServiceItemsAdapter.hideLoading();
                     //add products to recyclerview
-                    providerAdapter.addProducts(products);
+                    registerServiceItemsAdapter.addProducts(products);
                 }
             });
         } else {
@@ -142,7 +139,7 @@ public class ServiceSpecificFragment extends Fragment {
                 @Override
                 public void run() {
                     Toast.makeText(view.getContext(), "That's all we have!", Toast.LENGTH_LONG).show();
-                    providerAdapter.hideLoading();
+                    registerServiceItemsAdapter.hideLoading();
                 }
             });
         }

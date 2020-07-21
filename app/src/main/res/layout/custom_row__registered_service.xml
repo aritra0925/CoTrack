@@ -1,0 +1,69 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/card_rounded"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:id="@+id/productContentService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageViewProductThumbService"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/textViewNewService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/iron"
+                android:paddingBottom="@dimen/margin_4"
+                android:paddingEnd="@dimen/margin_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_4"
+                android:text="@string/new_product"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/trebuc"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/textViewProductNameService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:layout_marginRight="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:lines="1"
+            android:textColor="@color/aluminum"
+            android:fontFamily="@font/trebuc"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+        <TextView
+            android:id="@+id/textViewProductPriceService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:layout_marginRight="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_4"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:fontFamily="@font/trebuc"
+            android:textColor="@color/aluminum" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

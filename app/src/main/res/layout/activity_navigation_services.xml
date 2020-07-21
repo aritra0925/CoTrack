@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ServiceNavigationActivity">
+
+    <LinearLayout
+        android:id="@+id/titleBarService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/card_elevation"
+        android:background="@drawable/title_border">
+        <ImageView
+            android:padding="@dimen/default_gap"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/titleBar_height"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"
+            android:elevation="@dimen/card_elevation"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/containerService"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigationService"
+        android:layout_below="@id/titleBarService"
+        />
+    <!-- Main content -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigationService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/navigation_menu_service"
+        style="@style/AppTheme.Dark"
+        android:background="@drawable/bottom_navigation_border"/>
+
+</RelativeLayout>
