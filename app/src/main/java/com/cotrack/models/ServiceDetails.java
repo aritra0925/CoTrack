@@ -23,6 +23,9 @@ public class ServiceDetails {
     @JsonProperty(value = "service_name")
     private  String service_name;
 
+    @JsonProperty(value = "service_description")
+    private  String service_description;
+
     @JsonProperty(value = "asset_id")
     private String asset_id;
 
@@ -69,6 +72,14 @@ public class ServiceDetails {
         this.service_name = service_name;
     }
 
+    public String getService_description() {
+        return service_description;
+    }
+
+    public void setservice_description(String service_description) {
+        this.service_description = service_description;
+    }
+
     public String getAsset_id() {
         return asset_id;
     }
@@ -85,12 +96,12 @@ public class ServiceDetails {
         this.sr_id = sr_id;
     }
 
-
-    public ServiceDetails(String _id, String type, String service_id, String service_name, String asset_id, String sr_id) {
+    public ServiceDetails(String _id, String type, String service_id, String service_name, String service_description, String asset_id, String sr_id) {
         this._id = _id;
         this.type = type;
         this.service_id = service_id;
         this.service_name = service_name;
+        this.service_description = service_description;
         this.asset_id = asset_id;
         this.sr_id = sr_id;
     }
@@ -102,6 +113,7 @@ public class ServiceDetails {
                 ", _rev='" + _rev + '\'' +
                 ", service_id='" + service_id + '\'' +
                 ", service_name='" + service_name + '\'' +
+                ", service_description='" + service_description + '\'' +
                 ", asset_id='" + asset_id + '\'' +
                 ", sr_id='" + sr_id + '\'' +
                 '}';
