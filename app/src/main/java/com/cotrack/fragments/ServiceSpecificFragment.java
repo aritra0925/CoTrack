@@ -141,7 +141,6 @@ public class ServiceSpecificFragment extends Fragment {
             recyclerViewProducts.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(view.getContext(), "That's all we have!", Toast.LENGTH_LONG).show();
                     providerAdapter.hideLoading();
                 }
             });

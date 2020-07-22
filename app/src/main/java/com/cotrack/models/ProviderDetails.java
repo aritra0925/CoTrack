@@ -231,6 +231,7 @@ public class ProviderDetails {
         this.service_name = service_name;
         this.asset_id = asset_id;
         this.sr_id = sr_id;
+        this.isNew = true;
     }
 
     @Override
