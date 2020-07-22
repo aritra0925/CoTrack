@@ -95,14 +95,14 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setAdapter(mMessageAdapter);
 
         input = (EditText) view.findViewById(R.id.edittext_chatbox);
-        if (!(input instanceof EditText)) {
+        /*if (!(input instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     Session.hideSoftKeyboard(getActivity());
                     return false;
                 }
             });
-        }
+        }*/
         input.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -214,7 +214,7 @@ public class ChatFragment extends Fragment {
          */
         @Override
         protected String doInBackground(Object[] objects) {
-            APIUtils.insertDocument("Test test text");
+            //APIUtils.insertDocument("Test test text");
             return "";
         }
 

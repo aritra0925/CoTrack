@@ -45,7 +45,6 @@ public class ServiceNavigationActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_services_service);
             openFragment(RegisteredServicesFragment.newInstance());
-            //openFragment(AddServiceFragment.newInstance());
         }
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }

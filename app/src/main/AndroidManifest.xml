@@ -4,13 +4,14 @@
     package="com.cotrack">
 
 
-    <uses-permission android:name="com.cotrack.maps.googlev2.permission.MAPS_RECEIVE"/>
+    <!--<uses-permission android:name="com.cotrack.maps.googlev2.permission.MAPS_RECEIVE"/>-->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"  tools:remove="android:maxSdkVersion"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  tools:remove="android:maxSdkVersion"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"  tools:remove="android:maxSdkVersion"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:remove="android:maxSdkVersion"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <!--<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"  tools:remove="android:maxSdkVersion"/>-->
+    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  tools:remove="android:maxSdkVersion"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"  tools:remove="android:maxSdkVersion"/>-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -18,12 +19,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/cotrack_ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AntennaPod.Light.Translucent">
+        android:theme="@style/AppTheme.Dark">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiiXS9hkacecneEn0hfx1vNSbudwZ_thY" />
-
+        <receiver
+            android:name=".receivers.Restarter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="restartservice" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".services.LoginService"
+            android:enabled="true" >
+        </service>
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"

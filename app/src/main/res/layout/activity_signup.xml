@@ -164,7 +164,7 @@
             android:layout_marginBottom="8dp">
 
             <RadioGroup
-                android:id="@+id/login_user_type"
+                android:id="@+id/login_user_type_registration"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -195,7 +195,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:text="Create Account" />
+            android:text="Create Account"
+            android:textColor="@color/iron"/>
 
         <TextView
             android:id="@+id/link_login"

@@ -1,39 +1,50 @@
 package com.cotrack.activities;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.cotrack.R;
+import com.cotrack.receivers.Restarter;
+import com.cotrack.services.LoginService;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     Context context;
-    boolean flag = false;
-    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.INTERNET};
-    int PERMISSION_ALL = 1;
-
+    LoginService mLoginService;
+    Intent mServiceIntent;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = this;
-        if (!hasPermissions(this, PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-            System.out.println("Checking permission request");
+        mLoginService = new LoginService();
+        mServiceIntent = new Intent(this, mLoginService.getClass());
+        if (!isMyServiceRunning(mLoginService.getClass())) {
+            startService(mServiceIntent);
         }
+        context = this;
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -41,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -58,65 +74,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!shouldShowRequestPermissionRationale(permission)) {
-                        requestPermissions(new String[] {permission}, PERMISSION_ALL);
-                    } else {
-                        Toast.makeText(context, "App permission not working", Toast.LENGTH_LONG).show();
-                        System.out.println("App permmission not working");
-                        return false;
-                    }
-
-                }
-            }
-        }
-        return true;
+    @Override
+    protected void onDestroy() {
+        //stopService(mServiceIntent);
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("restartservice");
+        broadcastIntent.setClass(this, Restarter.class);
+        this.sendBroadcast(broadcastIntent);
+        super.onDestroy();
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        System.out.println("Validating permission reuqest");
-        if (requestCode == PERMISSION_ALL) {
-            // for each permission check if the user granted/denied them
-            // you may want to group the rationale in a single dialog,
-            // this is just an example
-            for (int i = 0, len = permissions.length; i < len; i++) {
-                String permission = permissions[i];
-                switch (permission) {
-                    case Manifest.permission.ACCESS_BACKGROUND_LOCATION:
-                        if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                            // user rejected the permission
-                            boolean showRationale = shouldShowRequestPermissionRationale(permission);
-                            if (!showRationale) {
-                                // user also CHECKED "never ask again"
-                                // you can either enable some fall back,
-                                // disable features of your app
-                                // or open another dialog explaining
-                                // again the permission and directing to
-                                // the app setting
-                            }
-                        }
-                        break;
-                    case Manifest.permission.INTERNET:
-                        if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                            // user rejected the permission
-                            boolean showRationale = shouldShowRequestPermissionRationale(permission);
-                            if (!showRationale) {
-                                // user also CHECKED "never ask again"
-                                // you can either enable some fall back,
-                                // disable features of your app
-                                // or open another dialog explaining
-                                // again the permission and directing to
-                                // the app setting
-                            }
-                        }
-                        break;
-                }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
             }
         }
+        Log.i ("Service status", "Not running");
+        return false;
     }
 }

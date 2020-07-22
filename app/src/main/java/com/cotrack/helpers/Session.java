@@ -15,14 +15,15 @@ public class Session {
         prefs = activity.getPreferences(Context.MODE_PRIVATE);
     }
 
-    public void setusename(String usename) {
+    public void setUserName(String userName) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("usename", usename);
+        editor.putString("userName", userName);
     }
 
-    public String getusename() {
-        String usename = prefs.getString("usename","");
-        return usename;
+    public String getusername() {
+        String userName = prefs.getString("userName","");
+        System.out.println("User name session: " + userName);
+        return userName;
     }
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -31,5 +32,16 @@ public class Session {
                         Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void setUserType(String userType) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("userType", userType);
+    }
+
+    public String getUserType() {
+        String userType = prefs.getString("userType","");
+        System.out.println("User type session: " + userType);
+        return userType;
     }
 }
