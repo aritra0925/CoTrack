@@ -76,7 +76,7 @@ public class ServiceDetails {
         return service_description;
     }
 
-    public void setservice_description(String service_description) {
+    public void setService_description(String service_description) {
         this.service_description = service_description;
     }
 
