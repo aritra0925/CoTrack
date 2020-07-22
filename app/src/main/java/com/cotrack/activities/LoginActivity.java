@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 
 import android.content.Intent;
@@ -24,13 +25,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.cloudant.client.api.query.Expression;
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
@@ -39,7 +37,12 @@ import com.cotrack.services.LoginService;
 import com.cotrack.utils.APIUtils;
 import com.cotrack.utils.CommonUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +52,9 @@ import static com.cloudant.client.api.query.Operation.and;
 
 
 public class LoginActivity extends AccountAuthenticatorActivity {
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
     private String errorMessage;
     boolean isService = false;
     Session session;
@@ -72,12 +78,15 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     String email;
     LoginService mLoginService;
     Intent mServiceIntent;
+    public String userCookie;
+    public String userTypeCookie;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
+        session = new Session(this);
         setContentView(R.layout.activity_login);
         mLoginService = new LoginService();
         mServiceIntent = new Intent(this, mLoginService.getClass());
@@ -89,7 +98,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             System.out.println("Service is already running");
         }
         ButterKnife.bind(this);
-        session = new Session(this);
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -116,6 +124,27 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             email = session.getusername();
             onSessionActive();
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        String userCookie =  savedInstanceState.getString(USER_COOKIE);
+        if(!TextUtils.isEmpty(userCookie)) {
+            this.userCookie = userCookie;
+        }
+        String userTypeCookie =  savedInstanceState.getString(USER_TYPE_COOKIE);
+        if(!TextUtils.isEmpty(userTypeCookie)) {
+            this.userTypeCookie = userTypeCookie;
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save the critical data
+        outState.putString(USER_COOKIE, userCookie);
+        outState.putString(USER_TYPE_COOKIE, userTypeCookie);
+        super.onSaveInstanceState(outState);
     }
 
     public void login() {
@@ -209,12 +238,16 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             Bundle bundle = new Bundle();
             bundle.putString("service_user", email); //Your id
             intent.putExtras(bundle); //Put your id to your next Intent
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "service");
 
         } else {
             intent = new Intent(this, NavigationActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("regular_user", email); //Your id
             intent.putExtras(bundle); //Put your id to your next Intent
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "regular");
         }
         startActivity(intent);
         finish();
@@ -233,6 +266,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session = new Session(this);
             session.setUserName(email);
             session.setUserType("service");
+            userCookie = email;
+            userTypeCookie = "service";
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "service");
 
         } else {
             intent = new Intent(this, NavigationActivity.class);
@@ -242,6 +279,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session = new Session(this);
             session.setUserName(email);
             session.setUserType("regular");
+            userCookie = email;
+            userTypeCookie = "regular";
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "regular");
         }
         startActivity(intent);
         finish();
@@ -422,4 +463,24 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 PERMISSIONS, permissionRequestCode);
     }
 
+    public Properties writeProperties(String key, String value){
+        Properties props = new Properties();
+        try {
+            File file = this.getFileStreamPath(COOKIE_FILE_NAME);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileInputStream  fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+            props.put(key, value);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME,Context.MODE_PRIVATE);
+            props.store(fOut, "Cookie Data");
+            System.out.println("Properties was written successfully");
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
+    }
 }

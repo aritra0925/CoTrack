@@ -20,14 +20,30 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.cotrack.R;
+import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LoginService;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     Context context;
     LoginService mLoginService;
     Intent mServiceIntent;
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
+    public String userCookie;
+    public String userTypeCookie;
+    Session session;
+    boolean isService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +54,70 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             startService(mServiceIntent);
         }
         context = this;
+        session = new Session(this);
+        if(savedInstanceState!=null) {
+            // App has been closed by the OS before and is now being restored
+
+            if(fileExists(this, COOKIE_FILE_NAME)){
+                Properties properties = getProperties();
+                if(properties.containsKey(USER_COOKIE) && (properties.getProperty(USER_COOKIE) != null) && !properties.getProperty(USER_COOKIE).isEmpty()){
+                    userCookie = properties.getProperty(USER_COOKIE);
+                    session.setUserName(userCookie);
+                }
+                if(properties.containsKey(USER_TYPE_COOKIE) && (properties.getProperty(USER_TYPE_COOKIE) != null) && !properties.getProperty(USER_TYPE_COOKIE).isEmpty()){
+                    userTypeCookie = properties.getProperty(USER_TYPE_COOKIE);
+                    if(userTypeCookie.equalsIgnoreCase("service")){
+                        isService = true;
+                    }
+                    session.setUserType(userTypeCookie);
+                }
+                if(userCookie!=null && userTypeCookie!=null) {
+                    launchActivity();
+                }
+                return;
+            } else {
+                System.out.println("Properties file is not present as of now");
+            }
+        } else {
+            if(fileExists(this, COOKIE_FILE_NAME)){
+                Properties properties = getProperties();
+                if(properties.containsKey(USER_COOKIE) && (properties.getProperty(USER_COOKIE) != null) && !properties.getProperty(USER_COOKIE).isEmpty()){
+                    userCookie = properties.getProperty(USER_COOKIE);
+                    session.setUserName(userCookie);
+                }
+                if(properties.containsKey(USER_TYPE_COOKIE) && (properties.getProperty(USER_TYPE_COOKIE) != null) && !properties.getProperty(USER_TYPE_COOKIE).isEmpty()){
+                    userTypeCookie = properties.getProperty(USER_TYPE_COOKIE);
+                    session.setUserType(userTypeCookie);
+                    if(userTypeCookie.equalsIgnoreCase("service")){
+                        isService = true;
+                    }
+                }
+                if(userCookie!=null && userTypeCookie!=null) {
+                    launchActivity();
+                }
+                return;
+            } else {
+                System.out.println("Properties file is not present as of now");
+            }
+        }
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchActivity(){
+        Intent intent = null;
+        if (isService) {
+            intent = new Intent(this, ServiceNavigationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("service_user", userCookie); //Your id
+            intent.putExtras(bundle); //Put your id to your next Intent
+        } else {
+            intent = new Intent(this, NavigationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("regular_user", userCookie); //Your id
+            intent.putExtras(bundle); //Put your id to your next Intent
+
+        }
         startActivity(intent);
     }
 
@@ -94,5 +173,46 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         Log.i ("Service status", "Not running");
         return false;
+    }
+
+    public Properties getProperties(){
+        Properties props = new Properties();
+        try {
+            FileInputStream fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
+    }
+
+    public Properties writeProperties(String key, String value){
+        Properties props = new Properties();
+        try {
+            File file = this.getFileStreamPath(COOKIE_FILE_NAME);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileInputStream  fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+            props.put(key, value);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME,Context.MODE_PRIVATE);
+            props.store(fOut, "Cookie Data");
+            System.out.println("Properties was written successfully");
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
+    }
+    public boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if(file == null || !file.exists()) {
+            return false;
+        }
+        return true;
     }
 }

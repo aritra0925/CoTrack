@@ -12,7 +12,7 @@ public class Session {
     private SharedPreferences prefs;
 
     public Session(Activity activity) {
-        prefs = activity.getPreferences(Context.MODE_PRIVATE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     public void setUserName(String userName) {

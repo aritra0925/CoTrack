@@ -79,13 +79,13 @@ public class LoginService extends Service {
     private Timer timer;
     private TimerTask timerTask;
     public void startTimer() {
-        timer = new Timer();
+        /*timer = new Timer();
         timerTask = new TimerTask() {
             public void run() {
                 Log.i("Count", "=========  "+ (counter++));
             }
         };
-        timer.schedule(timerTask, 1000, 1000); //
+        timer.schedule(timerTask, 1000, 1000); //*/
     }
 
     public void stoptimertask() {
@@ -100,4 +100,5 @@ public class LoginService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 }
