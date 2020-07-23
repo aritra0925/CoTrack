@@ -64,12 +64,58 @@
                     android:id="@+id/feedView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/navigation_menu_home" />
+                        android:id="@+id/textView_Service"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginRight="@dimen/margin_8"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:lines="1"
+                        android:textColor="@color/aluminum"
+                        android:fontFamily="@font/trebuc"
+                        android:layout_gravity="left"
+                        android:padding="@dimen/default_gap"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="AMRI Hospital"/>
+
+                    <TextView
+                        android:id="@+id/textView_ServiceDetails_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_marginRight="@dimen/margin_8"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:layout_gravity="left"
+                        android:fontFamily="@font/trebuc"
+                        android:padding="@dimen/default_gap"
+                        android:text="No of Beds : 70"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/aluminum" />
+                    <TextView
+                        android:id="@+id/textView_ServiceDetails_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_marginRight="@dimen/margin_8"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:layout_gravity="left"
+                        android:fontFamily="@font/trebuc"
+                        android:padding="@dimen/default_gap"
+                        android:text="The hospital has advanced equipments to serve you better. It has Emergency, MRI, CT Scan as well as out patient "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/aluminum" />
                 </LinearLayout>
             </RelativeLayout>
 
