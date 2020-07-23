@@ -1,6 +1,7 @@
 package com.cotrack.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,12 +25,21 @@ import com.cotrack.models.UserDetails;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Properties;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
     private static final String TAG = "SignupActivity";
     private String errorMessage;
     boolean isService = false;
@@ -148,6 +158,8 @@ public class SignupActivity extends AppCompatActivity {
             session = new Session(this);
             session.setUserName(email);
             session.setUserType("service");
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "service");
 
         } else{
             intent = new Intent(this, NavigationActivity.class);
@@ -157,6 +169,8 @@ public class SignupActivity extends AppCompatActivity {
             session = new Session(this);
             session.setUserName(email);
             session.setUserType("regular");
+            writeProperties(USER_COOKIE, email);
+            writeProperties(USER_TYPE_COOKIE, "regular");
         }
         startActivity(intent);
         finish();
@@ -313,5 +327,26 @@ public class SignupActivity extends AppCompatActivity {
             flag = true;
         }
         return flag;
+    }
+
+    public Properties writeProperties(String key, String value){
+        Properties props = new Properties();
+        try {
+            File file = this.getFileStreamPath(COOKIE_FILE_NAME);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileInputStream fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+            props.put(key, value);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME, Context.MODE_PRIVATE);
+            props.store(fOut, "Cookie Data");
+            System.out.println("Properties was written successfully");
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 }

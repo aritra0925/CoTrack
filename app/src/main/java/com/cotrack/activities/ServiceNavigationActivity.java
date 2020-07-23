@@ -53,7 +53,7 @@ public class ServiceNavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_services);
-
+        serviceNavigationLayout = (RelativeLayout) findViewById(R.id.serviceNavigationLayout);
         new DataLoadTask().execute("");
         bottomNavigation = findViewById(R.id.bottom_navigationService);
         if(savedInstanceState == null){
