@@ -35,6 +35,7 @@ import org.json.JSONObject;
  * Use the {@link com.cotrack.fragments.HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings("ALL")
 public class HomeFragment extends Fragment {
 
     public static final String COVID_19_URL = "https://api.covid19api.com/summary";

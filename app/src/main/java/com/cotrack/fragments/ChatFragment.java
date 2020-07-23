@@ -41,6 +41,7 @@ import java.util.List;
  * Use the {@link com.cotrack.fragments.ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings("ALL")
 public class ChatFragment extends Fragment {
 
     private List<Message> mMessageList;

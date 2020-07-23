@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class ProviderAdapter extends RecyclerView.Adapter {
     List<ServiceProviderDataHolder> mProducts;
     Context mContext;
@@ -146,6 +147,12 @@ public class ProviderAdapter extends RecyclerView.Adapter {
             notifyItemRemoved(LoadingItemPos);
             loading = false;
         }
+    }
 
+    //method to hide loading
+    public void updateListLoading(List<ServiceProviderDataHolder> serviceProviderDataHolders) {
+        mProducts = serviceProviderDataHolders;
+        notifyDataSetChanged();//    notifyItemRemoved(LoadingItemPos);
+        loading = false;
     }
 }

@@ -28,6 +28,7 @@ import com.cotrack.listeners.EndlessScrollListener;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
 
     String asset_id;
@@ -188,7 +189,8 @@ public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
 
     @Override
     public void onItemClicked(int position) {
-        String service_id = ServiceProviderDataHolder.getSpecificServiceDetails(asset_id).get(position).getService_id();
+        providerAdapter.updateListLoading(ServiceProviderDataHolder.getSpecificServiceDetails(asset_id));
+        String service_id = ServiceProviderDataHolder.getSpecificServiceDetails(asset_id).get(position - 1).getService_id();
         ServiceDetailsFragment serviceDetailsFragment = ServiceDetailsFragment.newInstance();
         FragmentManager fragmentManager=getFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
