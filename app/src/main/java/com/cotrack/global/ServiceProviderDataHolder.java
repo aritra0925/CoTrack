@@ -28,6 +28,7 @@ public class ServiceProviderDataHolder {
     private boolean isLoading;
     private int imageResource;
     private static Map<String, List<ServiceProviderDataHolder>> serviceSpecificDetails;
+    private static Map<String, List<ServiceProviderDataHolder>> userSpecificDetails;
 
     private static List<ServiceProviderDataHolder> allInstances;
 
@@ -319,11 +320,140 @@ public class ServiceProviderDataHolder {
         return serviceSpecificDetails;
     }
 
+    public static Map<String, List<ServiceProviderDataHolder>> getAllUserSpecificDetails() {
+        if(userSpecificDetails == null) {
+            allInstances = new ArrayList<>();
+            userSpecificDetails = new HashMap<>();
+            QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
+            for (ServiceDetails serviceDetails : queryResult.getDocs()) {
+                String asset_id = serviceDetails.getAsset_id();
+                String user_id = serviceDetails.getService_id();
+                ServiceProviderDataHolder holder = new ServiceProviderDataHolder();
+                holder.set_id(serviceDetails.get_id());
+                holder.setAddress_line(serviceDetails.getAddress_line());
+                holder.setAsset_id(asset_id);
+                holder.setCity(serviceDetails.getCity());
+                holder.setContact(serviceDetails.getContact());
+                holder.setPostal_code(serviceDetails.getPostal_code());
+                holder.setService_description(holder.getService_description());
+                holder.setService_id(user_id);
+                holder.setService_name(serviceDetails.getService_name());
+                holder.setSr_id(serviceDetails.getSr_id());
+                holder.setState(serviceDetails.getType());
+                holder.setType(serviceDetails.getType());
+                holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
+                holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+                switch (serviceDetails.getService_name().toUpperCase()) {
+                    case "AMBULANCE":
+                        holder.setImageResource(R.drawable.ambulance_icon);
+                        break;
+                    case "DOCTOR":
+                        holder.setImageResource(R.drawable.doctor_icon);
+                        break;
+                    case "PATHOLOGY":
+                        holder.setImageResource(R.drawable.pathology_icon);
+                        break;
+                    case "DISINFECT":
+                        holder.setImageResource(R.drawable.disinfect_icon);
+                        break;
+                    case "MEDICINE":
+                        holder.setImageResource(R.drawable.medicine_icon);
+                        break;
+                    case "HOSPITAL":
+                        holder.setImageResource(R.drawable.hospital_icon);
+                        break;
+                    default:
+                        holder.setImageResource(R.drawable.medical_icon);
+                }
+                allInstances.add(holder);
+
+                // Grouping by service category
+                if(userSpecificDetails.containsKey(user_id)){
+                    List<ServiceProviderDataHolder> serviceProviderDataHolders = userSpecificDetails.get(user_id);
+                    serviceProviderDataHolders.add(holder);
+                    userSpecificDetails.replace(user_id, serviceProviderDataHolders);
+                } else {
+                    List<ServiceProviderDataHolder> serviceProviderDataHolders = new ArrayList<>();
+                    serviceProviderDataHolders.add(holder);
+                    userSpecificDetails.put(user_id, serviceProviderDataHolders);
+                }
+            }
+        }
+        return userSpecificDetails;
+    }
+
+    public static Map<String, List<ServiceProviderDataHolder>> refreshAllUserSpecificDetails() {
+        allInstances = new ArrayList<>();
+        userSpecificDetails = new HashMap<>();
+        QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
+        for (ServiceDetails serviceDetails : queryResult.getDocs()) {
+            String asset_id = serviceDetails.getAsset_id();
+            String user_id = serviceDetails.getService_id();
+            ServiceProviderDataHolder holder = new ServiceProviderDataHolder();
+            holder.set_id(serviceDetails.get_id());
+            holder.setAddress_line(serviceDetails.getAddress_line());
+            holder.setAsset_id(asset_id);
+            holder.setCity(serviceDetails.getCity());
+            holder.setContact(serviceDetails.getContact());
+            holder.setPostal_code(serviceDetails.getPostal_code());
+            holder.setService_description(holder.getService_description());
+            holder.setService_id(user_id);
+            holder.setService_name(serviceDetails.getService_name());
+            holder.setSr_id(serviceDetails.getSr_id());
+            holder.setState(serviceDetails.getType());
+            holder.setType(serviceDetails.getType());
+            holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
+            holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+            switch (serviceDetails.getService_name().toUpperCase()) {
+                case "AMBULANCE":
+                    holder.setImageResource(R.drawable.ambulance_icon);
+                    break;
+                case "DOCTOR":
+                    holder.setImageResource(R.drawable.doctor_icon);
+                    break;
+                case "PATHOLOGY":
+                    holder.setImageResource(R.drawable.pathology_icon);
+                    break;
+                case "DISINFECT":
+                    holder.setImageResource(R.drawable.disinfect_icon);
+                    break;
+                case "MEDICINE":
+                    holder.setImageResource(R.drawable.medicine_icon);
+                    break;
+                case "HOSPITAL":
+                    holder.setImageResource(R.drawable.hospital_icon);
+                    break;
+                default:
+                    holder.setImageResource(R.drawable.medical_icon);
+            }
+            allInstances.add(holder);
+
+            // Grouping by service category
+            if(serviceSpecificDetails.containsKey(user_id)){
+                List<ServiceProviderDataHolder> serviceProviderDataHolders = userSpecificDetails.get(user_id);
+                serviceProviderDataHolders.add(holder);
+                userSpecificDetails.replace(user_id, serviceProviderDataHolders);
+            } else {
+                List<ServiceProviderDataHolder> serviceProviderDataHolders = new ArrayList<>();
+                serviceProviderDataHolders.add(holder);
+                userSpecificDetails.put(user_id, serviceProviderDataHolders);
+            }
+        }
+        return userSpecificDetails;
+    }
+
     public static List<ServiceProviderDataHolder> getSpecificServiceDetails(String asset_id){
         if(serviceSpecificDetails == null){
             getAllServiceSpecificDetails();
         }
         return serviceSpecificDetails.get(asset_id);
+    }
+
+    public static List<ServiceProviderDataHolder> getUserSpecificServiceDetails(String user_id){
+        if(userSpecificDetails == null){
+            getAllUserSpecificDetails();
+        }
+        return userSpecificDetails.get(user_id);
     }
 
     public static List<ServiceProviderDataHolder> refreshAllInstances() {
