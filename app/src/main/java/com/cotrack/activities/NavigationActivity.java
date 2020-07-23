@@ -1,7 +1,13 @@
 package com.cotrack.activities;
 
+import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +20,20 @@ import com.cotrack.fragments.HomeFragment;
 import com.cotrack.fragments.ServiceDetailsFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.fragments.ServiceSpecificFragment;
+import com.cotrack.global.AssetDataHolder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
+import java.util.Objects;
+
+import butterknife.BindView;
 
 public class NavigationActivity  extends AppCompatActivity {
     // Objects
     BottomNavigationView bottomNavigation;
+    @BindView(R.id.userNavigationLayout)
+    RelativeLayout userNavigationLayout;
+    ProgressBar progressBar;
 
     // Listeners
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -26,7 +41,7 @@ public class NavigationActivity  extends AppCompatActivity {
                 @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            openFragment(ServiceSpecificFragment.newInstance());
+                            openFragment(HomeFragment.newInstance());
                             return true;
                         case R.id.navigation_services:
                             openFragment(ServiceFragment.newInstance());
@@ -43,6 +58,8 @@ public class NavigationActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        userNavigationLayout = (RelativeLayout) findViewById(R.id.userNavigationLayout);
+        new DataLoadTask().execute("");
         bottomNavigation = findViewById(R.id.bottom_navigation);
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_home);
@@ -56,6 +73,39 @@ public class NavigationActivity  extends AppCompatActivity {
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @SuppressWarnings("deprecation")
+    class DataLoadTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = new ProgressBar(NavigationActivity.this);
+            progressBar.setTooltipText("Please wait. Fetching data...");
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            userNavigationLayout.addView(progressBar, params);
+        }
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        public Boolean doInBackground(String... objects) {
+            AssetDataHolder.getAllInstances();
+            return true;
+        }
+
+        public void onPostExecute(Boolean objects) {
+            progressBar.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
     }
 
 

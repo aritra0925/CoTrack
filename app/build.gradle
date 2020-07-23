@@ -1,39 +1,87 @@
 apply plugin: 'com.android.application'
 
-    android.lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
-        disable 'BlockedPrivateApi'
+android.lintOptions {
+    disable 'MissingTranslation'
+    disable 'ExtraTranslation'
+    disable 'BlockedPrivateApi'
+}
+
+def getCloudantApiKey() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("CLOUDANT_API_KEY");
+}
+
+def getCloudantUrl() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("CLOUDANT_URL");
+}
+
+def getCloudantDBList() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("CLOUDANT_DB_LIST");
+}
+
+def getWatsonApiKey() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("WATSON_API_KEY");
+}
+
+def getWatsonAssistantUrl() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("WATSON_ASSISTANT_URL");
+}
+
+def getWatsonWorkspace() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("WATSON_WORKSPACE");
+}
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-    android {
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-        packagingOptions {
-            exclude 'META-INF/INDEX.LIST'
-        }
-        compileSdkVersion 30
-        buildToolsVersion "30.0.0"
-        ndkVersion "21.1.6352462"
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+    }
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+    ndkVersion "21.1.6352462"
 
-        defaultConfig {
-            applicationId "com.cotrack"
-            minSdkVersion 26
-            targetSdkVersion 30
-            versionCode 1
-            versionName "1.0"
+    defaultConfig {
+        applicationId "com.cotrack"
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
 
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "CLOUDANT_API_KEY", "\""+getCloudantApiKey()+"\""
+        buildConfigField "String", "CLOUDANT_URL", "\""+getCloudantUrl()+"\""
+        buildConfigField "String", "CLOUDANT_DB_LIST", "\""+getCloudantDBList()+"\""
+        buildConfigField "String", "WATSON_API_KEY", "\""+getWatsonApiKey()+"\""
+        buildConfigField "String", "WATSON_ASSISTANT_URL", "\""+getWatsonAssistantUrl()+"\""
+        buildConfigField "String", "WATSON_WORKSPACE", "\""+getWatsonWorkspace()+"\""
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-        buildTypes {
-            release {
-                minifyEnabled false
-                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
 
 
 dependencies {
@@ -70,7 +118,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
-    
+
     implementation 'com.google.firebase:firebase-config:19.1.4'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'

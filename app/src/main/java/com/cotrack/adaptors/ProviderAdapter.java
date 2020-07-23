@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cotrack.R;
+import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.helpers.OnItemClick;
 import com.cotrack.models.ProviderDetails;
 import com.squareup.picasso.Picasso;
 
@@ -18,19 +20,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProviderAdapter extends RecyclerView.Adapter {
-    List<ProviderDetails> mProducts;
+    List<ServiceProviderDataHolder> mProducts;
     Context mContext;
     public static final int LOADING_ITEM = 0;
     public static final int PRODUCT_ITEM = 1;
     int LoadingItemPos;
     public boolean loading = false;
+    private OnItemClick itemClick;
+    public OnItemClick getItemClick() {
+        return itemClick;
+    }
 
-    public ProviderAdapter(Context mContext) {
-        mProducts = new ArrayList<>();
+    public void setItemClick(OnItemClick itemClick) {
+        this.itemClick = itemClick;
+    }
+
+    public ProviderAdapter(Context mContext, List<ServiceProviderDataHolder> products) {
+        this.mProducts = products;
+        //mProducts = new ArrayList<>();
         this.mContext = mContext;
     }
+
     //method to add products as soon as they fetched
-    public void addProducts(List<ProviderDetails> products) {
+    public void addProducts(List<ServiceProviderDataHolder> products) {
         int lastPos = mProducts.size();
         this.mProducts.addAll(products);
         notifyItemRangeInserted(lastPos, mProducts.size());
@@ -39,7 +51,7 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        ProviderDetails currentProduct = mProducts.get(position);
+        ServiceProviderDataHolder currentProduct = mProducts.get(position);
         if (currentProduct.isLoading()) {
             return LOADING_ITEM;
         } else {
@@ -56,7 +68,7 @@ public class ProviderAdapter extends RecyclerView.Adapter {
             return new LoadingHolder(row);
         } else if (viewType == PRODUCT_ITEM) {
             View row = inflater.inflate(R.layout.custome_row_service, parent, false);
-            return new ProductHolder(row);
+            return new ProductHolder(row, viewType);
         }
         return null;
     }
@@ -64,25 +76,17 @@ public class ProviderAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //get current product
-        final ProviderDetails currentProduct = mProducts.get(position);
+        final ServiceProviderDataHolder currentProduct = mProducts.get(position);
         if (holder instanceof ProductHolder) {
             ProductHolder productHolder = (ProductHolder) holder;
             //bind products information with view
-            Picasso.with(mContext).load(currentProduct.getImageResourceId()).into(productHolder.imageViewProductThumb);
-            productHolder.textViewProductName.setText(currentProduct.getProvider_name());
-            productHolder.textViewProductPrice.setText(currentProduct.getProvider_address1());
+            Picasso.with(mContext).load(currentProduct.getImageResource()).into(productHolder.imageViewProductThumb);
+            productHolder.textViewProductName.setText(currentProduct.getService_name());
+            productHolder.textViewProductPrice.setText(currentProduct.getAddress_line() + "\n" + currentProduct.getCity() + "\n" + currentProduct.getState() + "\n" + currentProduct.getPostal_code());
             if (currentProduct.isNew())
                 productHolder.textViewNew.setVisibility(View.VISIBLE);
             else
                 productHolder.textViewNew.setVisibility(View.GONE);
-
-            productHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // user selected product now you can show details of that product
-                    Toast.makeText(mContext, "Selected "+currentProduct.getProvider_name(), Toast.LENGTH_SHORT).show();
-                }
-            });
         }
 
     }
@@ -93,20 +97,31 @@ public class ProviderAdapter extends RecyclerView.Adapter {
     }
 
     //Holds view of product with information
-    private class ProductHolder extends RecyclerView.ViewHolder {
+    private class ProductHolder extends RecyclerView.ViewHolder implements RecyclerView.OnClickListener {
         ImageView imageViewProductThumb;
         TextView textViewProductName, textViewProductPrice, textViewNew;
+        int position;
 
 
-        public ProductHolder(View itemView) {
+        public ProductHolder(View itemView, int position) {
             super(itemView);
             imageViewProductThumb = itemView.findViewById(R.id.imageViewProductThumb);
             textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
             textViewNew = itemView.findViewById(R.id.textViewNew);
+            this.position = position;
+            itemView.setClickable(true);
+            itemView.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View view) {
+            if (itemClick != null) {
+                itemClick.onItemClicked(position);
+            }
         }
     }
+
     //holds view of loading item
     private class LoadingHolder extends RecyclerView.ViewHolder {
         public LoadingHolder(View itemView) {
@@ -116,7 +131,7 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     //method to show loading
     public void showLoading() {
-        ProviderDetails product = new ProviderDetails();
+        ServiceProviderDataHolder product = new ServiceProviderDataHolder();
         product.setLoading(true);
         mProducts.add(product);
         LoadingItemPos = mProducts.size();

@@ -1,6 +1,5 @@
 package com.cotrack.fragments;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -11,28 +10,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cotrack.BuildConfig;
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
-import com.cotrack.helpers.Session;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
-import com.cotrack.utils.APIUtils;
 import com.cotrack.utils.WatsonUtils;
-import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.assistant.v2.Assistant;
-import com.ibm.watson.assistant.v2.model.CreateSessionOptions;
 import com.ibm.watson.assistant.v2.model.MessageContext;
-import com.ibm.watson.assistant.v2.model.MessageOptions;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
 
 import org.json.JSONArray;
@@ -56,9 +49,6 @@ public class ChatFragment extends Fragment {
     private static ChatFragment instance = null;
     View view;
     private EditText input;
-    public static final String assistant_apikey = "XmOiu7Oe0Bl2s6cA-_WPXsRmaLFQTADvFRiDIpHLW-6i";
-    public static final String assistant_url = "https://api.us-south.assistant.watson.cloud.ibm.com/instances/3c53eaa3-e748-4047-8989-cc1ed18c9c2a/v2/assistants/f4315384-6a4f-428a-b328-129debd27469/sessions";
-    public static final String workspace_id = "f4315384-6a4f-428a-b328-129debd27469";
     MessageContext context;
     private Handler handler = new Handler();
     public ArrayAdapter<String> msgList;
@@ -87,7 +77,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mMessageList = getMessageList();
+        mMessageList = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(view.getContext(), mMessageList);
@@ -95,14 +85,6 @@ public class ChatFragment extends Fragment {
         mMessageRecycler.setAdapter(mMessageAdapter);
 
         input = (EditText) view.findViewById(R.id.edittext_chatbox);
-        /*if (!(input instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    Session.hideSoftKeyboard(getActivity());
-                    return false;
-                }
-            });
-        }*/
         input.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -169,41 +151,7 @@ public class ChatFragment extends Fragment {
 
     }
 
-    public List<Message> getMessageList() {
-        List<Message> messageList = new ArrayList<>();
-        User sender1 = new User();
-        sender1.setNickname("Random");
-        User sender2 = new User();
-        sender2.setNickname("Halo");
-
-        Message message1 = new Message();
-        message1.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        message1.setMessage("Hello");
-        message1.setSender(sender1);
-
-        Message message2 = new Message();
-        message2.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        message2.setMessage("Hi");
-        message2.setSender(sender2);
-
-        Message message3 = new Message();
-        message3.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        message3.setMessage("Just checking");
-        message3.setSender(sender1);
-
-        Message message4 = new Message();
-        message4.setCreatedAt(Calendar.getInstance().getTimeInMillis());
-        message4.setMessage("Still checking");
-        message4.setSender(sender2);
-
-        messageList.add(message1);
-        messageList.add(message2);
-        messageList.add(message3);
-        messageList.add(message4);
-
-        return messageList;
-    }
-
+    @SuppressWarnings("deprecation")
     class DBConnect extends AsyncTask {
 
         private Exception exception;
@@ -233,7 +181,7 @@ public class ChatFragment extends Fragment {
          */
         @Override
         protected MessageResponse doInBackground(String... strings) {
-            MessageResponse messageResponse = WatsonUtils.startService(assistant_apikey, assistant_url, workspace_id, strings[0]);
+            MessageResponse messageResponse = WatsonUtils.startService(BuildConfig.WATSON_API_KEY, BuildConfig.WATSON_ASSISTANT_URL, BuildConfig.WATSON_WORKSPACE, strings[0]);
             System.out.println("Response: " + messageResponse.toString());
             return messageResponse;
         }

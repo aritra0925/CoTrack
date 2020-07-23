@@ -2,42 +2,37 @@ package com.cotrack.adaptors;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.cotrack.R;
-import com.cotrack.fragments.ChatFragment;
-import com.cotrack.fragments.HomeFragment;
-import com.cotrack.fragments.ServiceFragment;
-import com.cotrack.models.ServiceDetailsModel;
+import com.cotrack.global.AssetDataHolder;
+import com.cotrack.helpers.OnItemClick;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceAdapter extends BaseAdapter {
-    List<ServiceDetailsModel> serviceDetailsModels;
+public class ServiceAdapter extends BaseAdapter{
+    List<AssetDataHolder> serviceDetailsModels;
     Context context;
     int[] imageId;
     private static LayoutInflater inflater = null;
+    private OnItemClick itemClick;
+    public OnItemClick getItemClick() {
+        return itemClick;
+    }
 
-    public ServiceAdapter(Context context, List<ServiceDetailsModel> serviceDetailsModels) {
+    public void setItemClick(OnItemClick itemClick) {
+        this.itemClick = itemClick;
+    }
+
+    public ServiceAdapter(Context context, List<AssetDataHolder> serviceDetailsModels) {
         this.context = context;
         this.serviceDetailsModels = serviceDetailsModels;
         inflater = (LayoutInflater) context.
@@ -59,28 +54,56 @@ public class ServiceAdapter extends BaseAdapter {
         return position;
     }
 
-    public class Holder {
+    public class Holder implements CardView.OnClickListener {
         TextView serviceType;
         TextView serviceCount;
         ImageView img;
+        CardView cardView;
+        int postion;
+
+        public Holder(TextView serviceType,
+                      TextView serviceCount,
+                      ImageView img,
+                      CardView cardView,
+                      int position) {
+            this.serviceType = serviceType;
+            this.serviceCount = serviceCount;
+            this.img = img;
+            this.cardView = cardView;
+            this.postion = position;
+            cardView.setClickable(true);
+            cardView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (itemClick != null) {
+                itemClick.onItemClicked(postion);
+            }
+        }
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.layout_service_list, null);
-        holder.serviceType = (TextView) rowView.findViewById(R.id.serviceType);
-        holder.serviceCount = (TextView) rowView.findViewById(R.id.serviceCount);
-        holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
-        String serviceType = serviceDetailsModels.get(position).getServiceType();
-        int serviceCount = serviceDetailsModels.get(position).getServiceCount();
+
+        CardView cardViewComponent = (CardView) rowView.findViewById(R.id.cardView1);
+        TextView serviceTypeComponent = (TextView) rowView.findViewById(R.id.serviceType);
+        TextView serviceCountComponent = (TextView) rowView.findViewById(R.id.serviceCount);
+        ImageView imgComponent = (ImageView) rowView.findViewById(R.id.imageView1);
+
+        Holder holder = new Holder(serviceTypeComponent, serviceCountComponent, imgComponent, cardViewComponent, position);
+
+        String serviceName = serviceDetailsModels.get(position).getAsset_type();
+        String serviceType = serviceDetailsModels.get(position).getAsset_title();
+        int serviceCount = serviceDetailsModels.get(position).getAsset_available_services_count();
         holder.serviceType.setText(serviceType);
         holder.serviceCount.setText("Available Services: " + serviceCount);
-        if(serviceCount==0) {
+        if (serviceCount == 0) {
             holder.serviceCount.setTextColor(Color.RED);
         }
-        switch (serviceType.toUpperCase()) {
+        switch (serviceName.toUpperCase()) {
             case "AMBULANCE":
                 holder.img.setImageResource(R.drawable.ambulance_icon);
                 break;
@@ -90,7 +113,7 @@ public class ServiceAdapter extends BaseAdapter {
             case "PATHOLOGY":
                 holder.img.setImageResource(R.drawable.pathology_icon);
                 break;
-            case "DISINFECTANT":
+            case "DISINFECT":
                 holder.img.setImageResource(R.drawable.disinfect_icon);
                 break;
             case "MEDICINE":
@@ -102,12 +125,6 @@ public class ServiceAdapter extends BaseAdapter {
             default:
                 holder.img.setImageResource(R.drawable.medical_icon);
         }
-        rowView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "You Clicked " + serviceDetailsModels.get(position).getServiceType(), Toast.LENGTH_LONG).show();
-            }
-        });
         return rowView;
     }
 }

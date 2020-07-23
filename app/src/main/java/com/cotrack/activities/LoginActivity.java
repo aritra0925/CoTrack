@@ -34,7 +34,7 @@ import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LoginService;
-import com.cotrack.utils.APIUtils;
+import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
 
 import java.io.File;
@@ -320,10 +320,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         flag = false;
         if (!isService) {
             Selector selector = and(eq("user_signonid", userName), eq("user_password", CommonUtils.encode(password)));
-            flag = APIUtils.validateEntry(selector);
+            flag = CloudantProviderUtils.validateEntry(selector);
         } else {
             Selector selector = and(eq("provider_signonid", userName), eq("provider_password", CommonUtils.encode(password)));
-            flag = APIUtils.validateEntry(selector);
+            flag = CloudantProviderUtils.validateEntry(selector);
         }
         return flag;
     }

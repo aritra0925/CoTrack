@@ -1,5 +1,7 @@
 package com.cotrack.utils;
 
+import android.util.Log;
+
 import static com.cloudant.client.api.query.Expression.eq;
 
 import com.cloudant.client.api.ClientBuilder;
@@ -9,32 +11,28 @@ import com.cloudant.client.api.query.QueryBuilder;
 import com.cloudant.client.api.query.QueryResult;
 import com.cloudant.client.api.query.Selector;
 import com.cloudant.client.org.lightcouch.NoDocumentException;
+import com.cotrack.BuildConfig;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-public class APIUtils {
+public class CloudantProviderUtils {
 
-    public static final String URL = "https://ff37d895-652c-42c6-9987-c0f9fbbf5bc4-bluemix.cloudantnosqldb.appdomain.cloud";
-    public static final String API_KEY = "ngpeWlOu1fUpz4y9zrFLCTnvF4Aq3WwZ2_pDjHNAA_yt";
+    private static final String LOG = "Provider DB Activity";
     public static final String DB = "provider";
 
     public static Database cloudantConnect() {
         // Create a new CloudantClient instance for account endpoint example.cloudant.com
         CloudantClient client = null;
         try {
-            client = ClientBuilder.url(new URL(URL)).iamApiKey(API_KEY).build();
+            client = ClientBuilder.url(new URL(BuildConfig.CLOUDANT_URL)).iamApiKey(BuildConfig.CLOUDANT_API_KEY).build();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        String dbReturn = "";
-        // Get a List of all the databases this Cloudant account
-        List<String> databases = ((CloudantClient) client).getAllDbs();
         Database db = client.database(DB, false);
-        System.out.println("Conneected to server version: ' " + client.serverVersion() + "' \nDatabase: '" + DB + "'");
+        Log.d(LOG, "Conneected to server version: ' " + client.serverVersion() + "' \nDatabase: '" + DB + "'");
         return db;
     }
 
@@ -42,6 +40,7 @@ public class APIUtils {
         Database database = cloudantConnect();
         QueryBuilder queryBuilder = new QueryBuilder(selector);
         QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
+        Log.d(LOG, "Query result retreived: '" + queryResult + "' from " + DB + "'");
         return queryResult;
     }
 
@@ -50,6 +49,7 @@ public class APIUtils {
         QueryBuilder queryBuilder = new QueryBuilder(selector);
         QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
         boolean flag = queryResult.getDocs().size() > 0;
+        Log.d(LOG, "Validating entry status: '" + flag + "' from " + DB + "'");
         return flag;
     }
 
@@ -58,14 +58,14 @@ public class APIUtils {
         Selector selector = eq(key, value);
         QueryBuilder queryBuilder = new QueryBuilder(selector);
         QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
-        System.out.println(queryResult.getDocs().get(0).toString());
+        Log.d(LOG, "Query result retreived: '" + queryResult + "' from " + DB + "'");
         return queryResult;
     }
 
     public static <T> boolean insertDocument(T document) {
         Database database = cloudantConnect();
         database.save(document);
-        System.out.println("You have inserted the document");
+        Log.d(LOG, "You have inserted the document");
         return true;
     }
 
@@ -77,7 +77,7 @@ public class APIUtils {
         } catch (NoDocumentException ex) {
             return false;
         }
-
+        Log.d(LOG, "Validating entry status: '" + flag + "' from " + DB + "'");
         return flag;
     }
 
@@ -87,6 +87,7 @@ public class APIUtils {
         QueryBuilder queryBuilder = new QueryBuilder(selector);
         QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
         boolean flag = queryResult.getDocs().size() > 0;
+        Log.d(LOG, "Validating entry status: '" + flag + "' from " + DB + "'");
         return flag;
     }
 

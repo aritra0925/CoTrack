@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,11 +21,10 @@ import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.models.ProviderDetails;
 import com.cotrack.models.UserDetails;
-import com.cotrack.utils.APIUtils;
+import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -259,7 +257,7 @@ public class SignupActivity extends AppCompatActivity {
          */
         @Override
         protected String doInBackground(Object[] objects) {
-            APIUtils.insertDocument("Test test text");
+            CloudantProviderUtils.insertDocument("Test test text");
             return "";
         }
 
@@ -274,12 +272,12 @@ public class SignupActivity extends AppCompatActivity {
         int totalCount = 10;
         String id = CommonUtils.generateRandomDigits(8);
         if (isService) {
-            if(APIUtils.checkEntry("provider_signonid", provider_email)){
+            if(CloudantProviderUtils.checkEntry("provider_signonid", provider_email)){
                 errorMessage = "Email already exists";
                 return false;
             }
             String _id = "provider:P" + id;
-            while (APIUtils.checkEntry(ProviderDetails.class, _id) && count <= totalCount) {
+            while (CloudantProviderUtils.checkEntry(ProviderDetails.class, _id) && count <= totalCount) {
                 _id = "provider:P" + CommonUtils.generateRandomDigits(8);
                 count++;
             }
@@ -290,16 +288,16 @@ public class SignupActivity extends AppCompatActivity {
             String type = "Other";
             String service_name = "";
             ProviderDetails providerDetails = new ProviderDetails(_id, type, provider_name, provider_email, provider_password, provider_address1, provider_city, provider_state, provider_zip, provider_contact, provider_email, service_name, _id, _id);
-            APIUtils.insertDocument(providerDetails);
+            CloudantProviderUtils.insertDocument(providerDetails);
             this.email = provider_email;
             flag = true;
         } else {
-            if(APIUtils.checkEntry("user_signonid", provider_email)){
+            if(CloudantProviderUtils.checkEntry("user_signonid", provider_email)){
                 errorMessage = "Email already exists";
                 return false;
             }
             String _id = "user:U" + id;
-            while (APIUtils.checkEntry(UserDetails.class, _id) && count <= totalCount) {
+            while (CloudantProviderUtils.checkEntry(UserDetails.class, _id) && count <= totalCount) {
                 _id = "user:U" + CommonUtils.generateRandomDigits(8);
                 count++;
             }
@@ -310,7 +308,7 @@ public class SignupActivity extends AppCompatActivity {
             String type = "Other";
             String service_name = "";
             UserDetails userDetails = new UserDetails(_id, type, provider_name, provider_email, provider_password, provider_address1, provider_city, provider_state, provider_zip, provider_contact, provider_email, provider_name, _id);
-            APIUtils.insertDocument(userDetails);
+            CloudantProviderUtils.insertDocument(userDetails);
             this.email = provider_email;
             flag = true;
         }
