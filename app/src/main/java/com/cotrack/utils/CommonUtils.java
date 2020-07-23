@@ -19,4 +19,5 @@ public class CommonUtils {
     public static String encode(String text){
         return new String(Base64.getEncoder().encode(text.getBytes()));
     }
+
 }
