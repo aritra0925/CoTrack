@@ -7,10 +7,15 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -20,8 +25,10 @@ import com.cotrack.receivers.Restarter;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LoginService extends Service {
+public class LocationService extends Service implements LocationListener {
     public int counter=0;
+    Notification notification;
+    protected LocationManager locationManager;
 
     @Override
     public void onCreate() {
@@ -36,20 +43,20 @@ public class LoginService extends Service {
     private void startMyOwnForeground()
     {
         String NOTIFICATION_CHANNEL_ID = "com.cotrack";
-        String channelName = "Background Service";
+        String channelName = "Background Location Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
-        chan.setLightColor(Color.BLUE);
-        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        chan.setLightColor(Color.RED);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         assert manager != null;
         manager.createNotificationChannel(chan);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        Notification notification = notificationBuilder.setOngoing(true)
+        notification = notificationBuilder.setOngoing(true)
                 .setContentTitle("App is running in background")
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
+                .setCategory(Notification.CATEGORY_NAVIGATION)
                 .build();
         startForeground(2, notification);
     }
@@ -101,4 +108,29 @@ public class LoginService extends Service {
         return null;
     }
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        //
+    }
+
+    /**
+     * @param provider
+     * @param status
+     * @param extras
+     * @deprecated
+     */
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
 }

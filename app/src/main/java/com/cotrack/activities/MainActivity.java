@@ -1,8 +1,10 @@
 package com.cotrack.activities;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -15,7 +17,7 @@ import androidx.core.app.ActivityCompat;
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
-import com.cotrack.services.LoginService;
+import com.cotrack.services.LocationService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +29,7 @@ import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     Context context;
-    LoginService mLoginService;
+    LocationService mLoginService;
     Intent mServiceIntent;
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
@@ -36,12 +38,40 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public String userTypeCookie;
     Session session;
     boolean isService;
+    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            Manifest.permission.INTERNET};
+    int PERMISSION_ALL = 1;
+
+    @Override
+    protected void onStart() {
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+            System.out.println("Checking permission request");
+        }
+        super.onStart();
+    }
+
+    public boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                int selfPermission = ActivityCompat.checkSelfPermission(context, permission);
+                int permissionGrantedCode = PackageManager.PERMISSION_GRANTED;
+                System.out.println("Permission status: " + selfPermission);
+                System.out.println("Permission Granted: " + permissionGrantedCode);
+                if (selfPermission != permissionGrantedCode) {
+                    System.out.println("App permmission not working");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLoginService = new LoginService();
+        mLoginService = new LocationService();
         mServiceIntent = new Intent(this, mLoginService.getClass());
         if (!isMyServiceRunning(mLoginService.getClass())) {
             startService(mServiceIntent);

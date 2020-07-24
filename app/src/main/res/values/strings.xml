@@ -3,6 +3,9 @@
 
     <!-- Activity and fragment titles -->
 
+    <string name="permission_required_toast">Location permission is a prerequisite</string>
+    <string name="permission_rationale_location">In order to keep you safe from COVID 19, we need the location services to be enabled</string>
+    <string name="location_permission_denied">Location permission was denied</string>
     <string name="account_type">username_key</string>
     <string name="user_type_user">User</string>
     <string name="user_type_service">Service</string>

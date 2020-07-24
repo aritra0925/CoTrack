@@ -33,7 +33,7 @@ import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
-import com.cotrack.services.LoginService;
+import com.cotrack.services.LocationService;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
 
@@ -73,10 +73,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     @BindView(R.id.login_user_type)
     RadioGroup _radioGroup;
     boolean flag = false;
-    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
+    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            Manifest.permission.INTERNET};
+
     int PERMISSION_ALL = 1;
     String email;
-    LoginService mLoginService;
+    LocationService mLoginService;
     Intent mServiceIntent;
     public String userCookie;
     public String userTypeCookie;
@@ -88,7 +90,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         session = new Session(this);
         setContentView(R.layout.activity_login);
-        mLoginService = new LoginService();
+        mLoginService = new LocationService();
         mServiceIntent = new Intent(this, mLoginService.getClass());
         if (!isMyServiceRunning(mLoginService.getClass())) {
             System.out.println("Service is already running");
@@ -115,11 +117,11 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
-        if (!hasPermissions(this, PERMISSIONS)) {
+        /*if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
             System.out.println("Checking permission request");
-        }
-        if(session.getusername() != null && !session.getusername().isEmpty()
+        }*/
+        if (session.getusername() != null && !session.getusername().isEmpty()
                 && session.getUserType() != null && !session.getUserType().isEmpty()) {
             email = session.getusername();
             onSessionActive();
@@ -128,12 +130,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        String userCookie =  savedInstanceState.getString(USER_COOKIE);
-        if(!TextUtils.isEmpty(userCookie)) {
+        String userCookie = savedInstanceState.getString(USER_COOKIE);
+        if (!TextUtils.isEmpty(userCookie)) {
             this.userCookie = userCookie;
         }
-        String userTypeCookie =  savedInstanceState.getString(USER_TYPE_COOKIE);
-        if(!TextUtils.isEmpty(userTypeCookie)) {
+        String userTypeCookie = savedInstanceState.getString(USER_TYPE_COOKIE);
+        if (!TextUtils.isEmpty(userTypeCookie)) {
             this.userTypeCookie = userTypeCookie;
         }
         super.onRestoreInstanceState(savedInstanceState);
@@ -220,11 +222,11 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
+                Log.i("Service status", "Running");
                 return true;
             }
         }
-        Log.i ("Service status", "Not running");
+        Log.i("Service status", "Not running");
         return false;
     }
 
@@ -328,77 +330,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         return flag;
     }
 
-    // method to add account..
-    private void addAccount(String username, String password) {
-        AccountManager accnt_manager = AccountManager
-                .get(getApplicationContext());
-
-        Account[] accounts = accnt_manager
-                .getAccountsByType(getString(R.string.account_type)); // account name identifier.
-
-        if (accounts.length > 0) {
-            return;
-        }
-
-        final Account account = new Account(username,
-                getString(R.string.account_type));
-
-        accnt_manager.addAccountExplicitly(account, password, null);
-
-        final Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
-        intent.putExtra(AccountManager.KEY_PASSWORD, password);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE,
-                getString(R.string.account_type));
-        // intent.putExtra(AccountManager.KEY_AUTH_TOKEN_LABEL,
-        // PARAM_AUTHTOKEN_TYPE);
-        intent.putExtra(AccountManager.KEY_AUTHTOKEN, "token");
-        this.setAccountAuthenticatorResult(intent.getExtras());
-        this.setResult(RESULT_OK, intent);
-        this.finish();
-    }
-
-    // method to retrieve account.
-    private boolean validateAccount() {
-        AccountManagerCallback<Bundle> callback = new AccountManagerCallback<Bundle>() {
-
-            @Override
-            public void run(AccountManagerFuture<Bundle> arg0) {
-                Log.e("calback", "msg");
-
-                try {
-                    Bundle b = arg0.getResult();
-                    if (b.getBoolean(AccountManager.KEY_ACCOUNT_MANAGER_RESPONSE)) {
-                        //User account exists!!..
-                    }
-                } catch (OperationCanceledException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        AccountManager accnt_manager = AccountManager
-                .get(getApplicationContext());
-
-        Account[] accounts = accnt_manager
-                .getAccountsByType(getString(R.string.account_type));
-
-        if (accounts.length <= 0) {
-            return false;
-        } else {
-            loginNameVal = accounts[0].name;
-            loginPswdVal = accnt_manager.getPassword(accounts[0]);
-            return true;
-        }
-    }
-
     public boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
@@ -463,17 +394,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 PERMISSIONS, permissionRequestCode);
     }
 
-    public Properties writeProperties(String key, String value){
+    public Properties writeProperties(String key, String value) {
         Properties props = new Properties();
         try {
             File file = this.getFileStreamPath(COOKIE_FILE_NAME);
-            if(!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
             }
-            FileInputStream  fin= openFileInput(COOKIE_FILE_NAME);
+            FileInputStream fin = openFileInput(COOKIE_FILE_NAME);
             props.load(fin);
             props.put(key, value);
-            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME,Context.MODE_PRIVATE);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME, Context.MODE_PRIVATE);
             props.store(fOut, "Cookie Data");
             System.out.println("Properties was written successfully");
         } catch (FileNotFoundException e) {
