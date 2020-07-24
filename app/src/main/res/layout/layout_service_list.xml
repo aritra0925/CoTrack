@@ -5,7 +5,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"
-        style="@style/Theme.Base.CoTrack.Light"
+        style="@style/AppTheme.Dark"
         android:layout_width="match_parent"
         android:layout_height="@dimen/service_card_height"
         android:layout_gravity="center">

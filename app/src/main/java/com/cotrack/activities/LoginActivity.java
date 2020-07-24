@@ -407,7 +407,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 System.out.println("Permission status: " + selfPermission);
                 System.out.println("Permission Granted: " + permissionGrantedCode);
                 if (selfPermission != permissionGrantedCode) {
-                    System.out.println("App permmission not working");
                     return false;
                 }
             }
