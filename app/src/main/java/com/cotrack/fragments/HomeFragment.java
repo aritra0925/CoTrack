@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -97,6 +98,7 @@ public class HomeFragment extends Fragment {
                 mMap = googleMap;
 
                 // Add a marker in Sydney and move the camera
+                Log.d("Map Debug", "Inside Map Ready");
                 LatLng sydney = new LatLng(-34, 151);
                 mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -117,8 +119,20 @@ public class HomeFragment extends Fragment {
                         Log.e("Response", response.toString());
                         Global globalData = JSONUtils.mapJsonObject(response.toString(), Global.class);
                         Log.e("Global", globalData.getGlobal().getNewConfirmed());
+                        TextView globalActiveCount = (TextView) getActivity().findViewById(R.id.globalActiveCount);
+                        TextView globalConfirmedCount = (TextView) getActivity().findViewById(R.id.globalConfirmedCount);
+                        TextView indiaActiveCount = (TextView) getActivity().findViewById(R.id.indiaActiveCount);
+                        TextView indiaConfirmedCount = (TextView) getActivity().findViewById(R.id.indiaConfirmedCount);
+
+                        globalActiveCount.setText(globalData.getGlobal().getNewConfirmed());
+                        globalConfirmedCount.setText(globalData.getGlobal().getTotalConfirmed());
                         for(Country country:globalData.getCountryList()){
                             if(country.getCountry().equalsIgnoreCase("India")){
+                                indiaActiveCount.setText(country.getNewConfirmed());
+                                indiaConfirmedCount.setText(country.getTotalConfirmed());
+                                if(Integer.parseInt(country.getNewConfirmed())>20000){
+                                    indiaActiveCount.setTextColor(getResources().getColor(R.color.primary));
+                                }
                                 Log.e("India", country.getNewConfirmed());
                             }
                         }

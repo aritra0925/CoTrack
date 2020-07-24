@@ -16,9 +16,9 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            style="@style/Theme.Base.CoTrack.Light"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/Theme.Base.CoTrack.Light">
+            android:layout_height="match_parent">
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -35,13 +35,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            style="@style/Theme.Base.CoTrack.Light"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/Theme.Base.CoTrack.Light">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -49,29 +49,176 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/logoView"
+                    android:id="@+id/feedView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/feedView"
-                    android:layout_weight="2">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_bottom"
+                    android:elevation="@dimen/card_elevation">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/logo" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:layout_marginBottom="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_card_title"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/feedView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:id="@+id/covidStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/feedView"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/navigation_menu_home" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_status_text"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/covidStatusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="SAFE"
+                        android:textColor="@color/download_success_green"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/covidTotalCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/covidStatus"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_covid__global_active"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/globalActiveCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/covidIndiaCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/covidTotalCount"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_covid_india_active"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/indiaActiveCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/covidGlobalConfirmedCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/covidIndiaCount"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_covid__global_confirmed"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/globalConfirmedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/covidIndiaConfirmedCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/covidGlobalConfirmedCount"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:text="@string/home_fragment_covid_india_confirmed"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/indiaConfirmedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/default_gap"
+                        android:layout_marginTop="@dimen/default_gap"
+                        android:fontFamily="@font/trebuc"
+                        android:textColor="@color/iron"
+                        android:textSize="@dimen/text_size_micro"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
