@@ -17,6 +17,12 @@
     <string name="login_idle" translatable="false">Login</string>
     <string name="api_key" translatable="false">AIzaSyAAkWR5Ektn63hRlkKajhkOSAF7frmP26U</string>
     <string name="navigation_menu_home" translatable="false">Home</string>
+    <string name="home_fragment_card_title" translatable="false">Covid-19 Summary</string>
+    <string name="home_fragment_covid__global_confirmed" translatable="false">Total confirmed cases: </string>
+    <string name="home_fragment_covid_india_confirmed" translatable="false">Confirmed cases in India: </string>
+    <string name="home_fragment_covid__global_active" translatable="false">New confirmed cases globally: </string>
+    <string name="home_fragment_covid_india_active" translatable="false">New confirmed cases in India: </string>
+    <string name="home_fragment_status_text" translatable="false">Your Status: </string>
     <string name="navigation_menu_services" translatable="false">Services</string>
     <string name="navigation_menu_chat" translatable="false">Chat</string>
     <string name="services_navigation_menu_home" translatable="false">Add Service</string>
