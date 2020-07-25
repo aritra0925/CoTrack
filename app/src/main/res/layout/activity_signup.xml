@@ -17,7 +17,7 @@
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/app_icon_transparent" />
 
         <!-- Name Label -->
         <com.google.android.material.textfield.TextInputLayout
@@ -175,7 +175,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/trebuc"
                     android:text="@string/user_type_user"
-                    android:textColor="@color/iron"
+                    android:textColor="@color/accent"
                     android:checked="true"/>
 
                 <RadioButton
@@ -183,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/user_type_service"
-                    android:textColor="@color/iron" />
+                    android:textColor="@color/accent" />
             </RadioGroup>
         </com.google.android.material.textfield.TextInputLayout>
         <!-- Signup Button -->
@@ -195,7 +195,8 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="Create Account"
-            android:textColor="@color/iron"/>
+            android:textColor="@color/accent"
+            android:background="@drawable/rounded_rectangle_button"/>
 
         <TextView
             android:id="@+id/link_login"

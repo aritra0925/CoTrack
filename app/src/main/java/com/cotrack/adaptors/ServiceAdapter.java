@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.cotrack.R;
 import com.cotrack.global.AssetDataHolder;
@@ -101,7 +102,7 @@ public class ServiceAdapter extends BaseAdapter{
         holder.serviceType.setText(serviceType);
         holder.serviceCount.setText("Available Services: " + serviceCount);
         if (serviceCount == 0) {
-            holder.serviceCount.setTextColor(Color.RED);
+            holder.serviceCount.setTextColor(ContextCompat.getColor(context, R.color.primary_dark));
         }
         switch (serviceName.toUpperCase()) {
             case "AMBULANCE":
