@@ -76,8 +76,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION };
     int PERMISSION_ALL = 101;
     String email;
-    LoginService mLoginService;
-    Intent mServiceIntent;
     public String userCookie;
     public String userTypeCookie;
 
@@ -88,15 +86,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         session = new Session(this);
         setContentView(R.layout.activity_login);
-        mLoginService = new LoginService();
-        mServiceIntent = new Intent(this, mLoginService.getClass());
-        if (!isMyServiceRunning(mLoginService.getClass())) {
-            System.out.println("Service is already running");
-            startService(mServiceIntent);
-            System.out.println("Service started");
-        } else {
-            System.out.println("Service is already running");
-        }
         ButterKnife.bind(this);
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -232,18 +221,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         broadcastIntent.setClass(this, Restarter.class);
         this.sendBroadcast(broadcastIntent);
         super.onDestroy();
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i("Service status", "Running");
-                return true;
-            }
-        }
-        Log.i("Service status", "Not running");
-        return false;
     }
 
     public void onLoginSuccess() {

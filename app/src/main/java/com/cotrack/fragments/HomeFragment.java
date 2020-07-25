@@ -1,7 +1,9 @@
 package com.cotrack.fragments;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import com.cotrack.R;
 import com.cotrack.models.Country;
 import com.cotrack.models.Countries;
 import com.cotrack.models.Global;
+import com.cotrack.services.LoginService;
 import com.cotrack.utils.JSONUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -53,6 +56,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     FusedLocationProviderClient fusedLocationProviderClient;
     final int REQUEST_CODE = 101;
     public static final String COVID_19_URL = "https://api.covid19api.com/summary";
+    LoginService mLoginService;
+    Intent mServiceIntent;
 
     /**
      * Use this factory method to create a new instance of
@@ -89,7 +94,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         fetchLocation(view.getContext());
         doGetCovidSummary(view.getContext());
+        mLoginService = new LoginService();
+        mServiceIntent = new Intent(view.getContext(), mLoginService.getClass());
+        if (!isMyServiceRunning(mLoginService.getClass())) {
+            System.out.println("Service is already running");
+            getActivity().startService(new Intent(getActivity(),mLoginService.getClass()));
+            System.out.println("Service started");
+        } else {
+            System.out.println("Service is already running");
+        }
         return view;
+    }
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i("Service status", "Not running");
+        return false;
     }
 
     private void setUpMapIfNeeded() {
