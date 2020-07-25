@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
         mLoginService = new LoginService();
         mServiceIntent = new Intent(this, mLoginService.getClass());
-        if (!isMyServiceRunning(mLoginService.getClass())) {
+        /*if (!isMyServiceRunning(mLoginService.getClass())) {
             startService(mServiceIntent);
-        }
+        }*/
         context = this;
         session = new Session(this);
         if(savedInstanceState!=null) {

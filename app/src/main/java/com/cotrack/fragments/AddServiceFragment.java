@@ -251,6 +251,7 @@ public class AddServiceFragment extends Fragment {
         }
         String asset_id = "";
         String service_name = "";
+        System.out.println("Asset ID: " + asset_id);
         for (AssetDataHolder assetDataHolder: AssetDataHolder.getAllInstances()){
             if(assetDataHolder.getAsset_type().equalsIgnoreCase(type)) {
                 asset_id = assetDataHolder.getAsset_id();

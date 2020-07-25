@@ -94,7 +94,11 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        if(mProducts == null || !mProducts.isEmpty()) {
+            return mProducts.size();
+        } else {
+            return 0;
+        }
     }
 
     //Holds view of product with information

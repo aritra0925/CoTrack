@@ -2,14 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/home_icon"
+        android:icon="@drawable/home_nav"
+        android:iconTint="@color/primary_dark"
         android:title="@string/navigation_menu_home"/>
     <item
         android:id="@+id/navigation_services"
-        android:icon="@drawable/service_icon"
+        android:icon="@drawable/medical_cart"
+        android:iconTint="@color/primary_dark"
         android:title="@string/navigation_menu_services" />
     <item
         android:id="@+id/navigation_chat"
-        android:icon="@drawable/chat_icon"
+        android:icon="@drawable/chat_nav"
+        android:iconTint="@color/primary_dark"
         android:title="@string/navigation_menu_chat" />
 </menu>
