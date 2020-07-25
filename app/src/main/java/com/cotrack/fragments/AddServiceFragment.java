@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.cotrack.R;
 import com.cotrack.activities.ServiceNavigationActivity;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.ServiceProviderDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.models.ProviderDetails;
 import com.cotrack.models.ServiceDetails;
@@ -143,6 +144,7 @@ public class AddServiceFragment extends Fragment {
                         // depending on success
                         if (addService(context, serviceType, description, address, mobile, state, city, postalCode)) {
                             onServiceAdditionSuccess(view.getContext());
+                            ServiceProviderDataHolder.refreshAllUserSpecificDetails();
                         } else {
                             onServiceAdditionFailed(view.getContext());
                         }
@@ -251,8 +253,10 @@ public class AddServiceFragment extends Fragment {
         }
         String asset_id = "";
         String service_name = "";
-        System.out.println("Asset ID: " + asset_id);
+
         for (AssetDataHolder assetDataHolder: AssetDataHolder.getAllInstances()){
+            System.out.println("Asset ID: " + asset_id);
+            System.out.println("Asset Title: " + type);
             if(assetDataHolder.getAsset_type().equalsIgnoreCase(type)) {
                 asset_id = assetDataHolder.getAsset_id();
                 service_name = assetDataHolder.getAsset_title();
