@@ -77,7 +77,7 @@
                         android:layout_marginStart="@dimen/margin_8"
                         android:layout_marginTop="@dimen/margin_8"
                         android:lines="1"
-                        android:textColor="@color/aluminum"
+                        android:textColor="@color/accent"
                         android:fontFamily="@font/trebuc"
                         android:layout_gravity="left"
                         android:padding="@dimen/default_gap"
@@ -99,7 +99,7 @@
                         android:padding="@dimen/default_gap"
                         android:text="No of Beds : 70"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/aluminum" />
+                        android:textColor="@color/accent" />
                     <TextView
                         android:id="@+id/textView_ServiceDetails_2"
                         android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
                         android:padding="@dimen/default_gap"
                         android:text="The hospital has advanced equipments to serve you better. It has Emergency, MRI, CT Scan as well as out patient "
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/aluminum" />
+                        android:textColor="@color/accent" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -127,17 +127,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/default_gap">
+        android:padding="@dimen/default_gap"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_to_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:background="@drawable/button_style"
+            android:background="@drawable/rounded_rectangle_button"
             android:padding="@dimen/default_gap"
             android:text="@string/add_to_cart"
-            android:textColor="@color/iron" />
+            android:textColor="@color/accent" />
 
         <LinearLayout
             android:id="@+id/layio"
@@ -152,8 +155,8 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="@string/subtract_1"
-                    android:textColor="@color/iron"
-                    android:background="@drawable/button_style"
+                    android:textColor="@color/accent"
+                    android:background="@drawable/rounded_rectangle_button"
                     android:fontFamily="@font/trebuc"
                     android:layout_gravity="center"
                     android:textStyle="bold"
@@ -168,15 +171,15 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:text="0"
-                android:textColor="@color/iron"
+                android:textColor="@color/accent"
                 android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="@string/add_1"
-                    android:textColor="@color/iron"
-                    android:background="@drawable/button_style"
+                    android:textColor="@color/accent"
+                    android:background="@drawable/rounded_rectangle_button"
                     android:fontFamily="@font/trebuc"
                     android:layout_gravity="center"
                     android:textStyle="bold"

@@ -12,7 +12,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <ImageView android:src="@drawable/logo"
+        <ImageView android:src="@drawable/app_icon_transparent"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             android:layout_marginBottom="24dp"
@@ -55,14 +55,14 @@
                 android:layout_height="match_parent"
                 android:text="@string/user_type_user"
                 android:fontFamily="@font/trebuc"
-                android:textColor="@color/iron"
+                android:textColor="@color/accent"
                 android:id="@+id/login_user_type_user"
                 android:checked="true"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/user_type_service"
-                android:textColor="@color/iron"
+                android:textColor="@color/accent"
                 android:id="@+id/login_user_type_service"/>
         </RadioGroup>
 
@@ -74,7 +74,8 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="Login"
-            android:textColor="@color/iron"/>
+            android:textColor="@color/accent"
+            android:background="@drawable/rounded_rectangle_button"/>
 
         <TextView android:id="@+id/link_signup"
             android:layout_width="fill_parent"
@@ -82,7 +83,8 @@
             android:layout_marginBottom="24dp"
             android:text="No account yet? Create one"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="16dip"
+            android:textColor="@color/accent"/>
 
     </LinearLayout>
 </ScrollView>

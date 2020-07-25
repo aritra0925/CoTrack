@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:gravity="left"
     android:background="@android:color/background_dark"
-    android:textColor="@color/aluminum"
+    android:textColor="@color/accent"
     />

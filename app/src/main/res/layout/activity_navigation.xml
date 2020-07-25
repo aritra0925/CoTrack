@@ -19,7 +19,7 @@
             android:padding="@dimen/default_gap"
             android:layout_width="match_parent"
             android:layout_height="@dimen/titleBar_height"
-            android:src="@drawable/logo"
+            android:src="@drawable/app_icon_transparent"
             android:layout_gravity="center"
             android:elevation="@dimen/card_elevation"/>
     </LinearLayout>

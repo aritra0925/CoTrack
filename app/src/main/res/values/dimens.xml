@@ -7,8 +7,8 @@
     <dimen name="margin_4">4dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="service_image_width">120dp</dimen>
-    <dimen name="service_card_height">120dp</dimen>
+    <dimen name="service_image_width">80dp</dimen>
+    <dimen name="service_card_height">80dp</dimen>
     <dimen name="titleBar_height">80dp</dimen>
     <dimen name="card_rounded">8dp</dimen>
     <dimen name="card_elevation">4dp</dimen>

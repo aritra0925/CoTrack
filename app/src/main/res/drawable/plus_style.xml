@@ -6,7 +6,7 @@
                 android:color="@color/primary_darker" />
             <stroke
                 android:width="7dp"
-                android:color="@color/aluminum" />
+                android:color="@color/accent" />
             <corners
                 android:radius="3dp" />
             <padding

@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment {
                                 indiaActiveCount.setText(country.getNewConfirmed());
                                 indiaConfirmedCount.setText(country.getTotalConfirmed());
                                 if(Integer.parseInt(country.getNewConfirmed())>20000){
-                                    indiaActiveCount.setTextColor(getResources().getColor(R.color.primary));
+                                    indiaActiveCount.setTextColor(getResources().getColor(R.color.primary_dark));
                                 }
                                 Log.e("India", country.getNewConfirmed());
                             }

@@ -7,9 +7,9 @@
     </style>
 
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textColor">@color/aluminum</item>
+        <item name="android:textColor">@color/accent</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlNormal">@color/accent</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="colorAccent">@color/accent</item>
@@ -19,15 +19,15 @@
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/primary</item>
         <item name="colorAccent">@color/accent</item>
-
+        <item name="cardBackgroundColor">@color/jet</item>
         <item name="android:windowBackground">@color/primary</item>
 
-        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlNormal">@color/accent</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
+        <item name="android:textColorHint">@color/accent</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="colorButtonNormal">@color/primary_darker</item>
         <item name="android:colorButtonNormal">@color/primary_darker</item>
@@ -38,8 +38,8 @@
     </style>
 
     <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/accent</item>
         <item name="android:background">@color/primary</item>
     </style>
 

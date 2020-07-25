@@ -73,7 +73,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     @BindView(R.id.login_user_type)
     RadioGroup _radioGroup;
     boolean flag = false;
-    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
+    String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
     int PERMISSION_ALL = 1;
     String email;
     LoginService mLoginService;

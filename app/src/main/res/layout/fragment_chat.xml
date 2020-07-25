@@ -31,6 +31,7 @@
         android:id="@+id/layout_chatbox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_gap"
         android:minHeight="55dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,8 +41,8 @@
 
         <EditText
             android:id="@+id/edittext_chatbox"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/default_gap"
             android:layout_marginRight="@dimen/default_gap"
@@ -51,18 +52,20 @@
             android:maxLines="6"
             style="@style/AppTheme.Dark"
             android:textAlignment="center"
-            android:textColor="@color/aluminum"/>
+            android:textColor="@color/accent"/>
 
         <ImageButton
             android:id="@+id/button_chatbox_send"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:background="@drawable/send_message_icon_express"
+            android:background="@null"
+            android:src="@drawable/social_send_now"
             android:clickable="true"
             android:gravity="center"
             android:elevation="@dimen/card_elevation"
-            android:padding="@dimen/default_gap"/>
+            android:padding="@dimen/default_gap"
+            android:tint="@color/primary_dark"/>
 
     </LinearLayout>
 
