@@ -5,7 +5,7 @@
     <color name="primary">#1E2D51</color>
     <!--<color name="primary_dark">#E6586F</color>-->
     <color name="primary_dark">#EC297B</color>
-    <color name="primary_dark_transparent">#99EC297B</color>
+    <color name="primary_dark_transparent">#66EC297B</color>
     <color name="primary_darker">#EC297B</color>
     <color name="accent">#F5FAFA</color>
 
