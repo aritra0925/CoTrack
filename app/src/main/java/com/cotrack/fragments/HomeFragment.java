@@ -5,10 +5,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -37,10 +39,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONObject;
 
@@ -106,6 +114,61 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+
+    private void loadMarkers(ClusterManager<ClusterItem> manager, GoogleMap map, LatLng center, int count,
+                             double minDistance, double maxDistance) {
+        double minLat = Double.MAX_VALUE;
+        double maxLat = Double.MIN_VALUE;
+        double minLon = Double.MAX_VALUE;
+        double maxLon = Double.MIN_VALUE;
+        CircleOptions circleOptions= new CircleOptions()
+                .strokeWidth(4)
+                .radius(maxDistance*2)
+                .center(center)
+                .strokeColor(Color.parseColor(getResources().getString(R.color.primary_dark_transparent)))
+                .fillColor(Color.parseColor(getResources().getString(R.color.primary_dark_transparent)));
+
+
+
+        for (int i = 0; i < count; ++i) {
+            double distance = minDistance + Math.random() * maxDistance;
+            double heading = Math.random() * 360 - 180;
+
+            LatLng position = SphericalUtil.computeOffset(center, distance, heading);
+
+            ClusterItem marker = new ClusterItem() {
+                @NonNull
+                @Override
+                public LatLng getPosition() {
+                    return position;
+                }
+
+                @Nullable
+                @Override
+                public String getTitle() {
+                    return "Covid 19 Marker";
+                }
+
+                @Nullable
+                @Override
+                public String getSnippet() {
+                    return null;
+                }
+            };
+            manager.addItem(marker);
+            minLat = Math.min(minLat, position.latitude);
+            minLon = Math.min(minLon, position.longitude);
+            maxLat = Math.max(maxLat, position.latitude);
+            maxLon = Math.max(maxLon, position.longitude);
+        }
+        map.addCircle(circleOptions);
+        LatLng min = new LatLng(minLat, minLon);
+        LatLng max = new LatLng(maxLat, maxLon);
+        LatLngBounds bounds = new LatLngBounds(min, max);
+
+        //map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 17));
+    }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
@@ -213,10 +276,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
+        /*MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
-        googleMap.addMarker(markerOptions);
+        googleMap.addMarker(markerOptions);*/
+        ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
+        googleMap.setOnCameraIdleListener(clusterManager);
+        googleMap.setOnMarkerClickListener(clusterManager);
+        loadMarkers(clusterManager, googleMap, latLng, 10, 20,50);
     }
 
     @Override
