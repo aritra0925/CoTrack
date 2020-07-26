@@ -129,7 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Specialties separated by comma (Optional)"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textSize="12sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Signup Button -->
@@ -141,7 +142,8 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="Add Service"
-            android:textColor="@color/accent" />
+            android:textColor="@color/accent"
+            android:background="@drawable/rounded_rectangle_button"/>
 
     </LinearLayout>
 </ScrollView>

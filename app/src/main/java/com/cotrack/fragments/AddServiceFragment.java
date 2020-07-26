@@ -338,6 +338,7 @@ public class AddServiceFragment extends Fragment {
                 // Set up the input quantity
                 ambulanceQuantity = new EditText(view.getContext());
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                ambulanceQuantity.setPadding(2,2,2,2);
                 ambulanceQuantity.setInputType(InputType.TYPE_CLASS_TEXT);
                 ambulanceQuantity.setHint(assetPrimaryQuantityKey);
                 builder.setView(ambulanceQuantity);
@@ -399,6 +400,7 @@ public class AddServiceFragment extends Fragment {
                 // Set up the input quantity
                 availableTests = new EditText(view.getContext());
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                availableTests.setPadding(2,2,2,2);
                 availableTests.setInputType(InputType.TYPE_CLASS_TEXT);
                 availableTests.setHint(assetPrimaryQuantityKey + " (Comma Separated)");
                 builder.setView(availableTests);
