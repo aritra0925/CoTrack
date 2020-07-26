@@ -118,6 +118,20 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/input_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Specialties separated by comma (Optional)"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Signup Button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_service"
