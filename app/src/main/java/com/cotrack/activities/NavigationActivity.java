@@ -1,6 +1,7 @@
 package com.cotrack.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +35,9 @@ import com.cotrack.global.AssetDataHolder;
 import com.cotrack.helpers.Session;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.hibernate.hql.internal.ast.tree.BinaryLogicOperatorNode;
+
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,6 +49,7 @@ public class NavigationActivity  extends AppCompatActivity {
     @BindView(R.id.userNavigationLayout)
     RelativeLayout userNavigationLayout;
     ProgressBar progressBar;
+    Toolbar toolbar;
 
     // Listeners
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -72,10 +78,13 @@ public class NavigationActivity  extends AppCompatActivity {
         new DataLoadTask().execute("");
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
+        toolbar = findViewById(R.id.toolbar);
+
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_home);
             openFragment(HomeFragment.newInstance());
         }
+       // toolbar.inflateMenu(R.menu.overflow_menu);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
 
@@ -94,6 +103,7 @@ public class NavigationActivity  extends AppCompatActivity {
                 // do your sign-out stuff
                 Toast.makeText(this,"Logout Clicked", Toast.LENGTH_LONG);
                 System.out.println("LOGOUT....");
+                logout();
                 break;
             }
             // case blocks for other MenuItems (if any)
@@ -101,6 +111,23 @@ public class NavigationActivity  extends AppCompatActivity {
         return true;
     }
 
+    public void logout(){
+        LoginActivity l = new LoginActivity();
+        Intent intent = null;
+        try{
+            File file = this.getFileStreamPath(l.COOKIE_FILE_NAME);
+            if(file.exists()){
+                file.delete();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        }catch(Exception e){
+
+        }
+
+    }
 
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
