@@ -21,6 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/serviceDetailsPic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:elevation="@dimen/card_elevation"
@@ -47,20 +48,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/logoView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/feedView"
-                    android:layout_weight="2">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/logo" />
-                </LinearLayout>
-
-                <LinearLayout
+              <LinearLayout
                     android:id="@+id/feedView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -68,7 +56,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView_Service"
+                        android:id="@+id/textView_ProviderName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_8"
@@ -81,11 +69,10 @@
                         android:fontFamily="@font/trebuc"
                         android:layout_gravity="left"
                         android:padding="@dimen/default_gap"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:text="AMRI Hospital"/>
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
 
                     <TextView
-                        android:id="@+id/textView_ServiceDetails_1"
+                        android:id="@+id/textView_ProviderDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_8"
@@ -97,11 +84,10 @@
                         android:layout_gravity="left"
                         android:fontFamily="@font/trebuc"
                         android:padding="@dimen/default_gap"
-                        android:text="No of Beds : 70"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/accent" />
                     <TextView
-                        android:id="@+id/textView_ServiceDetails_2"
+                        android:id="@+id/textView_ProviderDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_8"
@@ -113,7 +99,38 @@
                         android:layout_gravity="left"
                         android:fontFamily="@font/trebuc"
                         android:padding="@dimen/default_gap"
-                        android:text="The hospital has advanced equipments to serve you better. It has Emergency, MRI, CT Scan as well as out patient "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/accent" />
+
+                    <TextView
+                        android:id="@+id/textView_ProviderContact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_marginRight="@dimen/margin_8"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:layout_gravity="left"
+                        android:fontFamily="@font/trebuc"
+                        android:padding="@dimen/default_gap"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/accent" />
+
+                    <TextView
+                        android:id="@+id/textView_ProviderEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_marginRight="@dimen/margin_8"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:layout_gravity="left"
+                        android:fontFamily="@font/trebuc"
+                        android:padding="@dimen/default_gap"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/accent" />
                 </LinearLayout>
@@ -151,20 +168,21 @@
             android:layout_gravity="right"
             android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/subtract_1"
-                    android:textColor="@color/accent"
-                    android:background="@drawable/rounded_rectangle_button"
-                    android:fontFamily="@font/trebuc"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="25dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/subtractServiceDetails"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/subtract_1"
+                android:textColor="@color/accent"
+                android:background="@drawable/rounded_rectangle_button"
+                android:fontFamily="@font/trebuc"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="25dp"/>
 
 
             <TextView
-                android:id="@+id/prnumber"
+                android:id="@+id/quantity"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,20 +192,20 @@
                 android:textColor="@color/accent"
                 android:textStyle="bold" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_1"
-                    android:textColor="@color/accent"
-                    android:background="@drawable/rounded_rectangle_button"
-                    android:fontFamily="@font/trebuc"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="25dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/addServiceDetails"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/add_1"
+                android:textColor="@color/accent"
+                android:background="@drawable/rounded_rectangle_button"
+                android:fontFamily="@font/trebuc"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="25dp"/>
 
         </LinearLayout>
 
 
     </RelativeLayout>
-
 </LinearLayout>

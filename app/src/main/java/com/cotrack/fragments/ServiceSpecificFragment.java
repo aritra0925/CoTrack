@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
-public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
+public class ServiceSpecificFragment extends Fragment implements OnItemClick {
 
     String asset_id;
     ProviderAdapter providerAdapter;
@@ -104,14 +104,14 @@ public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
         try {
             new DataLoadTask().execute("").get();
         } catch (ExecutionException e) {
-            Log.e("Fatal Error" , "Exception while retreiving data" ,e);
+            Log.e("Fatal Error", "Exception while retreiving data", e);
         } catch (InterruptedException e) {
-            Log.e("Fatal Error" , "Exception while retreiving data" ,e);
+            Log.e("Fatal Error", "Exception while retreiving data", e);
         }
         //Create new ProductsAdapter
         System.out.println("Asset ID: " + asset_id);
         System.out.println("Map: " + ServiceProviderDataHolder.getSpecificServiceDetails(asset_id));
-        providerAdapter = new ProviderAdapter(view.getContext(), ServiceProviderDataHolder.getSpecificServiceDetails(asset_id));
+        providerAdapter = new ProviderAdapter(view.getContext(), providerDetails);
 
         //Finally set the adapter
         recyclerViewProducts.setAdapter(providerAdapter);
@@ -120,7 +120,7 @@ public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
         endlessScrollListener.onLoadMore(0, 0);
         return view;
     }
-    
+
     //Load Data from your server here
     // loading data from server will make it very large
     // that's why i created data locally
@@ -177,7 +177,7 @@ public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
          */
         @Override
         public Boolean doInBackground(String... objects) {
-            ServiceProviderDataHolder.getSpecificServiceDetails(asset_id);
+            providerDetails = ServiceProviderDataHolder.getSpecificServiceDetails(asset_id);
             return true;
         }
 
@@ -189,11 +189,16 @@ public class ServiceSpecificFragment extends Fragment  implements OnItemClick {
 
     @Override
     public void onItemClicked(int position) {
-        providerAdapter.updateListLoading(ServiceProviderDataHolder.getSpecificServiceDetails(asset_id));
-        String service_id = ServiceProviderDataHolder.getSpecificServiceDetails(asset_id).get(position - 1).getService_id();
+        providerAdapter.updateListLoading(providerDetails);
+        String service_id = providerDetails.get(position).get_id();
+        for (int count = 0; count < providerDetails.size(); count++) {
+            Log.d("Position List", "Position: " + count);
+            Log.d("Position List", "Service _id: " + service_id);
+        }
+        Log.d("Service Id CLick", "CLicked on service id: " + service_id + "\n Clicked onposition: " + position);
         ServiceDetailsFragment serviceDetailsFragment = ServiceDetailsFragment.newInstance();
-        FragmentManager fragmentManager=getFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle args = new Bundle();
         args.putString("service_id", service_id);
         serviceDetailsFragment.setArguments(args);

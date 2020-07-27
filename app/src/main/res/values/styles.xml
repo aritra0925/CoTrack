@@ -23,7 +23,6 @@
         <item name="colorAccent">@color/accent</item>
         <item name="cardBackgroundColor">@color/jet</item>
         <item name="android:windowBackground">@color/primary</item>
-
         <item name="colorControlNormal">@color/accent</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
@@ -41,6 +40,10 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@color/accent</item>
         <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="customButtonStyle" parent="AppTheme.Dark">
+        <item name="background">@drawable/rounded_rectangle_button</item>
     </style>
 
 </resources>

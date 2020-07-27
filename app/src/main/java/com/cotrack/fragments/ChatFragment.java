@@ -31,15 +31,34 @@ import com.cotrack.utils.WatsonUtils;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Properties;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import com.cotrack.models.Global;
+import com.cotrack.models.Message;
+import com.cotrack.models.User;
+import com.cotrack.models.Messages;
+import com.cotrack.utils.CommonUtils;
+import com.cotrack.utils.JSONUtils;
+import com.cotrack.utils.WatsonUtils;
+import com.google.android.gms.common.util.JsonUtils;
+import android.util.Log;
+import android.content.Context;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,7 +102,14 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mMessageList = new ArrayList<>();
+        try (FileInputStream fis = getActivity().openFileInput("user3.json")) {
+            String oldMessageList=IOUtils.toString(fis,StandardCharsets.UTF_8);
+            mMessageList= JSONUtils.readObjectListFromFile(oldMessageList, Message.class);
+            mMessageList = new ArrayList<>(mMessageList);
+        }catch (IOException e){
+            e.printStackTrace();
+            mMessageList = new ArrayList<>();
+        }
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(view.getContext(), mMessageList);
@@ -106,6 +132,7 @@ public class ChatFragment extends Fragment {
                     message.setMessage(inputText);
                     message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
                     mMessageList.add(message);
+                    storeMessagesInCache(mMessageList);
                     mMessageAdapter.swapItems(mMessageList);
                     mMessageRecycler.smoothScrollToPosition(mMessageList.size());
                 }
@@ -128,6 +155,7 @@ public class ChatFragment extends Fragment {
                 message.setMessage(inputText);
                 message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
                 mMessageList.add(message);
+                storeMessagesInCache(mMessageList);
                 mMessageAdapter.swapItems(mMessageList);
                 mMessageRecycler.smoothScrollToPosition(mMessageList.size());
             }
@@ -256,9 +284,19 @@ public class ChatFragment extends Fragment {
             message.setMessage(text);
             message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
             mMessageList.add(message);
+            storeMessagesInCache(mMessageList);
             mMessageAdapter.swapItems(mMessageList);
             System.out.println("Message List: " + mMessageList);
 
+        }
+    }
+    public void storeMessagesInCache(List<Message> message){
+        try {
+            FileOutputStream fos =getActivity().openFileOutput("user3.json",Context.MODE_PRIVATE);
+            JSONUtils.saveObjectToJson(mMessageList,fos);
+            System.out.println("Chat message store Successfully");
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error Storing messages to Chache", e);
         }
     }
 }

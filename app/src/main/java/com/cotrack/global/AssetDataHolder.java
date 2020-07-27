@@ -18,6 +18,9 @@ public class AssetDataHolder implements Serializable {
     private String asset_title;
     private String asset_description;
     private int asset_available_services_count;
+    private String asset_count_key;
+
+
     private static List<AssetDataHolder> allInstances;
 
     public static List<AssetDataHolder> getAllInstances() {
@@ -30,6 +33,7 @@ public class AssetDataHolder implements Serializable {
                 holder.setAsset_title(assetDetails.asset_title);
                 holder.setAsset_description(assetDetails.asset_description);
                 holder.setAsset_type(assetDetails.asset_type);
+                holder.setAsset_count_key(assetDetails.getAsset_count_key());
                 holder.setAsset_available_services_count(CloudantServiceUtils.queryData(eq("asset_id", assetDetails.get_id())).getDocs().size());
                 allInstances.add(holder);
             }
@@ -47,6 +51,7 @@ public class AssetDataHolder implements Serializable {
             holder.setAsset_id(assetDetails.asset_id);
             holder.setAsset_title(assetDetails.asset_title);
             holder.setAsset_description(assetDetails.asset_description);
+            holder.setAsset_count_key(assetDetails.getAsset_count_key());
             holder.setAsset_type(assetDetails.asset_type);
             allInstances.add(holder);
         }
@@ -91,5 +96,13 @@ public class AssetDataHolder implements Serializable {
 
     public void setAsset_available_services_count(int asset_available_services_count) {
         this.asset_available_services_count = asset_available_services_count;
+    }
+
+    public String getAsset_count_key() {
+        return asset_count_key;
+    }
+
+    public void setAsset_count_key(String asset_count_key) {
+        this.asset_count_key = asset_count_key;
     }
 }

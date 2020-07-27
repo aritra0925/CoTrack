@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.cotrack.R;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LoginService;
@@ -76,11 +77,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Properties properties = getProperties();
                 if(properties.containsKey(USER_COOKIE) && (properties.getProperty(USER_COOKIE) != null) && !properties.getProperty(USER_COOKIE).isEmpty()){
                     userCookie = properties.getProperty(USER_COOKIE);
+                    UserDataHolder.USER_ID = userCookie;
                     session.setUserName(userCookie);
                 }
                 if(properties.containsKey(USER_TYPE_COOKIE) && (properties.getProperty(USER_TYPE_COOKIE) != null) && !properties.getProperty(USER_TYPE_COOKIE).isEmpty()){
                     userTypeCookie = properties.getProperty(USER_TYPE_COOKIE);
                     session.setUserType(userTypeCookie);
+                    UserDataHolder.USER_TYPE = userTypeCookie;
                     if(userTypeCookie.equalsIgnoreCase("service")){
                         isService = true;
                     }

@@ -83,7 +83,11 @@ public class RegisterServiceItemsAdapter extends RecyclerView.Adapter {
             ProductHolder productHolder = (ProductHolder) holder;
             //bind products information with view
             Picasso.with(mContext).load(currentProduct.getImageResource()).into(productHolder.imageViewProductThumb);
-            productHolder.textViewProductName.setText(currentProduct.getService_name());
+            String provider_name = currentProduct.getService_provider_name();
+            if(provider_name == null){
+                provider_name = "To be deleted";
+            }
+            productHolder.textViewProductName.setText(provider_name);
             productHolder.textViewProductPrice.setText(currentProduct.getAddress_line() + "\n" + currentProduct.getCity() + "\n" + currentProduct.getState() + "\n" + currentProduct.getPostal_code());
             if (currentProduct.isNew())
                 productHolder.textViewNew.setVisibility(View.VISIBLE);

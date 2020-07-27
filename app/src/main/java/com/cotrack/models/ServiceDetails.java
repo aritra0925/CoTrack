@@ -2,6 +2,8 @@ package com.cotrack.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 // A Java type that can be serialized to JSON
@@ -9,49 +11,67 @@ public class ServiceDetails {
 
 
     @JsonProperty(value = "_id")
-    private String _id;
+    public String _id;
 
     @JsonProperty(value = "_rev")
-    private String _rev = null;
+    public String _rev = null;
 
     @JsonProperty(value = "type")
-    private String type;
+    public String type;
 
     @JsonProperty(value = "service_id")
-    private String service_id;
+    public String service_id;
 
     @JsonProperty(value = "service_name")
-    private String service_name;
+    public String service_name;
 
     @JsonProperty(value = "service_description")
-    private String service_description;
+    public String service_description;
 
     @JsonProperty(value = "asset_id")
-    private String asset_id;
+    public String asset_id;
 
     @JsonProperty(value = "sr_id")
-    private String sr_id;
+    public String sr_id;
 
     @JsonProperty(value = "city")
-    private String city;
+    public String city;
 
     @JsonProperty(value = "address_line")
-    private String address_line;
+    public String address_line;
 
     @JsonProperty(value = "state")
-    private String state;
+    public String state;
 
     @JsonProperty(value = "postal_code")
-    private String postal_code;
+    public String postal_code;
 
     @JsonProperty(value = "contact")
-    private String contact;
+    public String contact;
+
+    @JsonProperty(value = "primary_quantity")
+    public String primary_quantity;
+
+    @JsonProperty(value = "available_tests")
+    public List<String> available_tests;
+
+    @JsonProperty(value = "slots")
+    public List<Slots> slots;
+
+    @JsonProperty(value = "tags")
+    public List<String> tags;
 
     @JsonProperty(value = "isNew")
-    private String isNew = "true";
+    public String isNew = "true";
 
     @JsonProperty(value = "isLoading")
-    private String isLoading = "false";
+    public String isLoading = "false";
+
+    @JsonProperty(value = "rating")
+    public String rating;
+
+    @JsonProperty(value = "service_provider_name")
+    private String service_provider_name;
 
     public String get_id() {
         return _id;
@@ -173,7 +193,55 @@ public class ServiceDetails {
         isNew = aNew;
     }
 
-    public ServiceDetails(String _id, String type, String service_id, String service_name, String service_description, String asset_id, String sr_id, String address, String city, String state, String postalCode, String contact) {
+    public String getPrimary_quantity() {
+        return primary_quantity;
+    }
+
+    public void setPrimary_quantity(String primary_quantity) {
+        this.primary_quantity = primary_quantity;
+    }
+
+    public List<String> getAvailable_tests() {
+        return available_tests;
+    }
+
+    public void setAvailable_tests(List<String> available_tests) {
+        this.available_tests = available_tests;
+    }
+
+    public List<Slots> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(List<Slots> slots) {
+        this.slots = slots;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getService_provider_name() {
+        return service_provider_name;
+    }
+
+    public void setService_provider_name(String service_provider_name) {
+        this.service_provider_name = service_provider_name;
+    }
+
+    public ServiceDetails(String _id, String type, String service_id, String service_name, String service_description, String asset_id, String sr_id, String address, String city, String state, String postalCode, String contact, String service_provider_name) {
         this._id = _id;
         this.type = type;
         this.service_id = service_id;
@@ -186,6 +254,7 @@ public class ServiceDetails {
         this.state = state;
         this.postal_code = postalCode;
         this.contact = contact;
+        this.service_provider_name = service_provider_name;
     }
 
     @Override
@@ -204,6 +273,7 @@ public class ServiceDetails {
                 ", postal_code='" + postal_code + '\'' +
                 ", contact='" + contact + '\'' +
                 ", type='" + type + '\'' +
+                ", service_provider_name='" + service_provider_name + '\'' +
                 ", isNew='" + isNew + '\'' +
                 ", isLoading='" + isLoading + '\'' +
                 '}';
