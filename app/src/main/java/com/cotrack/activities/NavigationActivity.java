@@ -1,10 +1,13 @@
 package com.cotrack.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,9 +16,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -26,20 +32,16 @@ import com.cotrack.fragments.ServiceDetailsFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.fragments.ServiceSpecificFragment;
 import com.cotrack.global.AssetDataHolder;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
-import com.cotrack.models.ProviderDetails;
-import com.cotrack.models.UserDetails;
-import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.internal.LinkedTreeMap;
 
+import org.hibernate.hql.internal.ast.tree.BinaryLogicOperatorNode;
+
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
-
-import static com.cloudant.client.api.query.Expression.eq;
 
 public class NavigationActivity  extends AppCompatActivity {
     // Objects
@@ -47,6 +49,7 @@ public class NavigationActivity  extends AppCompatActivity {
     @BindView(R.id.userNavigationLayout)
     RelativeLayout userNavigationLayout;
     ProgressBar progressBar;
+    Toolbar toolbar;
 
     // Listeners
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -73,12 +76,57 @@ public class NavigationActivity  extends AppCompatActivity {
         setContentView(R.layout.activity_navigation);
         userNavigationLayout = (RelativeLayout) findViewById(R.id.userNavigationLayout);
         new DataLoadTask().execute("");
+
         bottomNavigation = findViewById(R.id.bottom_navigation);
+        toolbar = findViewById(R.id.toolbar);
+
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_home);
             openFragment(HomeFragment.newInstance());
         }
+       // toolbar.inflateMenu(R.menu.overflow_menu);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.overflow_menu,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout: {
+                // do your sign-out stuff
+                Toast.makeText(this,"Logout Clicked", Toast.LENGTH_LONG);
+                System.out.println("LOGOUT....");
+                logout();
+                break;
+            }
+            // case blocks for other MenuItems (if any)
+        }
+        return true;
+    }
+
+    public void logout(){
+        LoginActivity l = new LoginActivity();
+        Intent intent = null;
+        try{
+            File file = this.getFileStreamPath(l.COOKIE_FILE_NAME);
+            if(file.exists()){
+                file.delete();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        }catch(Exception e){
+
+        }
+
     }
 
     public void openFragment(Fragment fragment) {
@@ -129,8 +177,6 @@ public class NavigationActivity  extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
-            LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", UserDataHolder.USER_ID)).getDocs().get(0);
-            UserDataHolder.USER_NAME = treeMap.get("user_email").toString();
             return true;
         }
 

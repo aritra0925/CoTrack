@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,12 +18,34 @@
         android:background="@drawable/title_border">
         <ImageView
             android:padding="@dimen/default_gap"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="@dimen/titleBar_height"
-            android:src="@drawable/logo"
+            android:src="@drawable/app_icon_transparent"
             android:layout_gravity="center"
             android:elevation="@dimen/card_elevation"/>
+
+        <Toolbar
+            android:id="@+id/toolbar"
+            android:padding="@dimen/default_gap"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/titleBar_height"
+            android:src="@drawable/icon1"
+            android:layout_gravity="right"
+            android:elevation="@dimen/card_elevation"
+            >
+            <ImageView
+                android:id="@+id/expanded_menu"
+                android:padding="@dimen/default_gap"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/titleBar_height"
+                android:src="@drawable/icon1"
+                android:layout_gravity="right"
+                android:elevation="@dimen/card_elevation"/>
+        </Toolbar>
+
     </LinearLayout>
+
+
 
     <FrameLayout
         android:id="@+id/container"
@@ -45,3 +68,4 @@
         android:background="@drawable/bottom_navigation_border"/>
 
 </RelativeLayout>
+
