@@ -11,64 +11,64 @@ public class ServiceDetails {
 
 
     @JsonProperty(value = "_id")
-    private String _id;
+    public String _id;
 
     @JsonProperty(value = "_rev")
-    private String _rev = null;
+    public String _rev = null;
 
     @JsonProperty(value = "type")
-    private String type;
+    public String type;
 
     @JsonProperty(value = "service_id")
-    private String service_id;
+    public String service_id;
 
     @JsonProperty(value = "service_name")
-    private String service_name;
+    public String service_name;
 
     @JsonProperty(value = "service_description")
-    private String service_description;
+    public String service_description;
 
     @JsonProperty(value = "asset_id")
-    private String asset_id;
+    public String asset_id;
 
     @JsonProperty(value = "sr_id")
-    private String sr_id;
+    public String sr_id;
 
     @JsonProperty(value = "city")
-    private String city;
+    public String city;
 
     @JsonProperty(value = "address_line")
-    private String address_line;
+    public String address_line;
 
     @JsonProperty(value = "state")
-    private String state;
+    public String state;
 
     @JsonProperty(value = "postal_code")
-    private String postal_code;
+    public String postal_code;
 
     @JsonProperty(value = "contact")
-    private String contact;
+    public String contact;
 
     @JsonProperty(value = "primary_quantity")
-    private String primary_quantity;
+    public String primary_quantity;
 
     @JsonProperty(value = "available_tests")
-    private List<String> available_tests;
+    public List<String> available_tests;
 
     @JsonProperty(value = "slots")
-    private List<Slots> slots = new ArrayList<>();
+    public List<Slots> slots;
 
     @JsonProperty(value = "tags")
-    private List<String> tags = new ArrayList<>();
+    public List<String> tags;
 
     @JsonProperty(value = "isNew")
-    private String isNew = "true";
+    public String isNew = "true";
 
     @JsonProperty(value = "isLoading")
-    private String isLoading = "false";
+    public String isLoading = "false";
 
     @JsonProperty(value = "rating")
-    private String rating;
+    public String rating;
 
     @JsonProperty(value = "service_provider_name")
     private String service_provider_name;

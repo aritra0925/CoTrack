@@ -19,7 +19,7 @@
             <ImageView
                 android:id="@+id/imageViewProductThumb"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="@dimen/service_image_width"
                 android:scaleType="fitCenter" />
 
             <TextView

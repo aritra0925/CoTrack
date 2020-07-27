@@ -45,7 +45,7 @@
             style="@style/AppTheme.Dark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/black">
+            app:cardBackgroundColor="@color/primary_dark">
 
             <RelativeLayout
                 android:layout_width="match_parent"
