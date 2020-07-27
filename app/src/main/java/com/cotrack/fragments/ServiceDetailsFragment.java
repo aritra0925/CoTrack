@@ -48,7 +48,7 @@ public class ServiceDetailsFragment  extends Fragment {
     private void loadData(Context context, String service_id) {
         for(ServiceProviderDataHolder holder : ServiceProviderDataHolder.getAllInstances()){
             String descr = holder.getService_description();
-            
+
         }
     }
 }
