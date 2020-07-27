@@ -1,5 +1,7 @@
 package com.cotrack.global;
 
+import android.util.Log;
+
 import com.cloudant.client.api.query.QueryResult;
 import com.cotrack.R;
 import com.cotrack.models.ServiceDetails;
@@ -267,6 +269,7 @@ public class ServiceProviderDataHolder {
             allInstances = new ArrayList<>();
             serviceSpecificDetails = new HashMap<>();
             QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
+            Log.d("Retrieved result", queryResult.toString());
             for (ServiceDetails serviceDetails : queryResult.getDocs()) {
                 String asset_id = serviceDetails.getAsset_id();
                 ServiceProviderDataHolder holder = new ServiceProviderDataHolder();
@@ -333,6 +336,7 @@ public class ServiceProviderDataHolder {
         allInstances = new ArrayList<>();
         serviceSpecificDetails = new HashMap<>();
         QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
+        Log.d("Retrieved result", queryResult.toString());
         for (ServiceDetails serviceDetails : queryResult.getDocs()) {
             String asset_id = serviceDetails.getAsset_id();
             ServiceProviderDataHolder holder = new ServiceProviderDataHolder();

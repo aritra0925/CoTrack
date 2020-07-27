@@ -129,7 +129,7 @@ public class NavigationActivity  extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
-            LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("provider_email", UserDataHolder.USER_ID)).getDocs().get(0);
+            LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", UserDataHolder.USER_ID)).getDocs().get(0);
             UserDataHolder.USER_NAME = treeMap.get("user_email").toString();
             return true;
         }
