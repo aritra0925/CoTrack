@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/card_rounded"
-    app:cardElevation="@dimen/card_elevation">
+    app:cardElevation="@dimen/card_elevation"
+    style="@style/AppTheme.Dark">
 
     <LinearLayout
         android:id="@+id/productContentService"
@@ -18,14 +19,14 @@
             <ImageView
                 android:id="@+id/imageViewProductThumbService"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/service_card_height"
                 android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/textViewNewService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/iron"
+                android:background="@color/accent"
                 android:paddingBottom="@dimen/margin_4"
                 android:paddingEnd="@dimen/margin_8"
                 android:paddingStart="@dimen/margin_8"
@@ -47,7 +48,7 @@
             android:layout_marginStart="@dimen/margin_8"
             android:layout_marginTop="@dimen/margin_8"
             android:lines="1"
-            android:textColor="@color/aluminum"
+            android:textColor="@color/accent"
             android:fontFamily="@font/trebuc"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
@@ -63,7 +64,7 @@
             android:layout_marginTop="@dimen/margin_4"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:fontFamily="@font/trebuc"
-            android:textColor="@color/aluminum" />
+            android:textColor="@color/accent" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

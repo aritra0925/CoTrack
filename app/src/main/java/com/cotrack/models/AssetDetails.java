@@ -14,6 +14,8 @@ public class AssetDetails {
     public String asset_title;
     @JsonProperty(value = "asset_description")
     public String asset_description;
+    @JsonProperty(value = "asset_count_key")
+    public String asset_count_key;
 
     public String get_id() {
         return _id;
@@ -55,6 +57,14 @@ public class AssetDetails {
         this.asset_description = asset_description;
     }
 
+    public String getAsset_count_key() {
+        return asset_count_key;
+    }
+
+    public void setAsset_count_key(String asset_count_key) {
+        this.asset_count_key = asset_count_key;
+    }
+
     @Override
     public String toString() {
         return "Service{" +
@@ -63,6 +73,7 @@ public class AssetDetails {
                 ", asset_type='" + asset_type + '\'' +
                 ", asset_title='" + asset_title + '\'' +
                 ", asset_description='" + asset_description + '\'' +
+                ", asset_count_key='" + asset_count_key + '\'' +
                 '}';
     }
 }

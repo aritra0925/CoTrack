@@ -3,7 +3,9 @@ package com.cotrack.global;
 import com.cloudant.client.api.query.QueryResult;
 import com.cotrack.R;
 import com.cotrack.models.ServiceDetails;
+import com.cotrack.models.Slots;
 import com.cotrack.utils.CloudantServiceUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +29,15 @@ public class ServiceProviderDataHolder {
     private boolean isNew;
     private boolean isLoading;
     private int imageResource;
+    private String rating;
+    private String primary_quantity;
+    private String service_provider_name;
+    private List<String> available_tests;
+    private List<Slots> slots;
+    private List<String> tags;
+
     private static Map<String, List<ServiceProviderDataHolder>> serviceSpecificDetails;
     private static Map<String, List<ServiceProviderDataHolder>> userSpecificDetails;
-
     private static List<ServiceProviderDataHolder> allInstances;
 
     public String get_id() {
@@ -152,6 +160,54 @@ public class ServiceProviderDataHolder {
         this.imageResource = imageResource;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getPrimary_quantity() {
+        return primary_quantity;
+    }
+
+    public void setPrimary_quantity(String primary_quantity) {
+        this.primary_quantity = primary_quantity;
+    }
+
+    public List<String> getAvailable_tests() {
+        return available_tests;
+    }
+
+    public void setAvailable_tests(List<String> available_tests) {
+        this.available_tests = available_tests;
+    }
+
+    public List<Slots> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(List<Slots> slots) {
+        this.slots = slots;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getService_provider_name() {
+        return service_provider_name;
+    }
+
+    public void setService_provider_name(String service_provider_name) {
+        this.service_provider_name = service_provider_name;
+    }
+
     public static List<ServiceProviderDataHolder> getAllInstances() {
         if (allInstances == null) {
             allInstances = new ArrayList<>();
@@ -164,12 +220,14 @@ public class ServiceProviderDataHolder {
                 holder.setCity(serviceDetails.getCity());
                 holder.setContact(serviceDetails.getContact());
                 holder.setPostal_code(serviceDetails.getPostal_code());
-                holder.setService_description(holder.getService_description());
+                holder.setService_description(serviceDetails.getService_description());
                 holder.setService_id(serviceDetails.getService_id());
                 holder.setService_name(serviceDetails.getService_name());
                 holder.setSr_id(serviceDetails.getSr_id());
                 holder.setState(serviceDetails.getType());
                 holder.setType(serviceDetails.getType());
+                holder.setRating(serviceDetails.getRating());
+                holder.setService_provider_name(serviceDetails.getService_provider_name());
                 switch (serviceDetails.getService_name().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
@@ -192,6 +250,10 @@ public class ServiceProviderDataHolder {
                     default:
                         holder.setImageResource(R.drawable.medical_icon);
                 }
+                holder.setTags(serviceDetails.getTags());
+                holder.setSlots(serviceDetails.getSlots());
+                holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+                holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
                 allInstances.add(holder);
                 holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
                 holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
@@ -201,7 +263,7 @@ public class ServiceProviderDataHolder {
     }
 
     public static Map<String, List<ServiceProviderDataHolder>> getAllServiceSpecificDetails() {
-        if(serviceSpecificDetails == null) {
+        if (serviceSpecificDetails == null) {
             allInstances = new ArrayList<>();
             serviceSpecificDetails = new HashMap<>();
             QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
@@ -214,7 +276,7 @@ public class ServiceProviderDataHolder {
                 holder.setCity(serviceDetails.getCity());
                 holder.setContact(serviceDetails.getContact());
                 holder.setPostal_code(serviceDetails.getPostal_code());
-                holder.setService_description(holder.getService_description());
+                holder.setService_description(serviceDetails.getService_description());
                 holder.setService_id(serviceDetails.getService_id());
                 holder.setService_name(serviceDetails.getService_name());
                 holder.setSr_id(serviceDetails.getSr_id());
@@ -222,6 +284,8 @@ public class ServiceProviderDataHolder {
                 holder.setType(serviceDetails.getType());
                 holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
                 holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+                holder.setRating(serviceDetails.getRating());
+                holder.setService_provider_name(serviceDetails.getService_provider_name());
                 switch (serviceDetails.getService_name().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
@@ -244,10 +308,14 @@ public class ServiceProviderDataHolder {
                     default:
                         holder.setImageResource(R.drawable.medical_icon);
                 }
+                holder.setTags(serviceDetails.getTags());
+                holder.setSlots(serviceDetails.getSlots());
+                holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+                holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
                 allInstances.add(holder);
 
-               // Grouping by service category
-                if(serviceSpecificDetails.containsKey(asset_id)){
+                // Grouping by service category
+                if (serviceSpecificDetails.containsKey(asset_id)) {
                     List<ServiceProviderDataHolder> serviceProviderDataHolders = serviceSpecificDetails.get(asset_id);
                     serviceProviderDataHolders.add(holder);
                     serviceSpecificDetails.replace(asset_id, serviceProviderDataHolders);
@@ -274,7 +342,7 @@ public class ServiceProviderDataHolder {
             holder.setCity(serviceDetails.getCity());
             holder.setContact(serviceDetails.getContact());
             holder.setPostal_code(serviceDetails.getPostal_code());
-            holder.setService_description(holder.getService_description());
+            holder.setService_description(serviceDetails.getService_description());
             holder.setService_id(serviceDetails.getService_id());
             holder.setService_name(serviceDetails.getService_name());
             holder.setSr_id(serviceDetails.getSr_id());
@@ -282,6 +350,8 @@ public class ServiceProviderDataHolder {
             holder.setType(serviceDetails.getType());
             holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+            holder.setRating(serviceDetails.getRating());
+            holder.setService_provider_name(serviceDetails.getService_provider_name());
             switch (serviceDetails.getService_name().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
@@ -304,10 +374,14 @@ public class ServiceProviderDataHolder {
                 default:
                     holder.setImageResource(R.drawable.medical_icon);
             }
+            holder.setTags(serviceDetails.getTags());
+            holder.setSlots(serviceDetails.getSlots());
+            holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+            holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
             allInstances.add(holder);
 
             // Grouping by service category
-            if(serviceSpecificDetails.containsKey(asset_id)){
+            if (serviceSpecificDetails.containsKey(asset_id)) {
                 List<ServiceProviderDataHolder> serviceProviderDataHolders = serviceSpecificDetails.get(asset_id);
                 serviceProviderDataHolders.add(holder);
                 serviceSpecificDetails.replace(asset_id, serviceProviderDataHolders);
@@ -321,7 +395,7 @@ public class ServiceProviderDataHolder {
     }
 
     public static Map<String, List<ServiceProviderDataHolder>> getAllUserSpecificDetails() {
-        if(userSpecificDetails == null) {
+        if (userSpecificDetails == null) {
             allInstances = new ArrayList<>();
             userSpecificDetails = new HashMap<>();
             QueryResult<ServiceDetails> queryResult = CloudantServiceUtils.getAllData();
@@ -335,7 +409,7 @@ public class ServiceProviderDataHolder {
                 holder.setCity(serviceDetails.getCity());
                 holder.setContact(serviceDetails.getContact());
                 holder.setPostal_code(serviceDetails.getPostal_code());
-                holder.setService_description(holder.getService_description());
+                holder.setService_description(serviceDetails.getService_description());
                 holder.setService_id(user_id);
                 holder.setService_name(serviceDetails.getService_name());
                 holder.setSr_id(serviceDetails.getSr_id());
@@ -343,6 +417,8 @@ public class ServiceProviderDataHolder {
                 holder.setType(serviceDetails.getType());
                 holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
                 holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+                holder.setRating(serviceDetails.getRating());
+                holder.setService_provider_name(serviceDetails.getService_provider_name());
                 switch (serviceDetails.getService_name().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
@@ -365,10 +441,14 @@ public class ServiceProviderDataHolder {
                     default:
                         holder.setImageResource(R.drawable.medical_icon);
                 }
+                holder.setTags(serviceDetails.getTags());
+                holder.setSlots(serviceDetails.getSlots());
+                holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+                holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
                 allInstances.add(holder);
 
                 // Grouping by service category
-                if(userSpecificDetails.containsKey(user_id)){
+                if (userSpecificDetails.containsKey(user_id)) {
                     List<ServiceProviderDataHolder> serviceProviderDataHolders = userSpecificDetails.get(user_id);
                     serviceProviderDataHolders.add(holder);
                     userSpecificDetails.replace(user_id, serviceProviderDataHolders);
@@ -396,7 +476,7 @@ public class ServiceProviderDataHolder {
             holder.setCity(serviceDetails.getCity());
             holder.setContact(serviceDetails.getContact());
             holder.setPostal_code(serviceDetails.getPostal_code());
-            holder.setService_description(holder.getService_description());
+            holder.setService_description(serviceDetails.getService_description());
             holder.setService_id(user_id);
             holder.setService_name(serviceDetails.getService_name());
             holder.setSr_id(serviceDetails.getSr_id());
@@ -404,6 +484,8 @@ public class ServiceProviderDataHolder {
             holder.setType(serviceDetails.getType());
             holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+            holder.setRating(serviceDetails.getRating());
+            holder.setService_provider_name(serviceDetails.getService_provider_name());
             switch (serviceDetails.getService_name().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
@@ -426,10 +508,14 @@ public class ServiceProviderDataHolder {
                 default:
                     holder.setImageResource(R.drawable.medical_icon);
             }
+            holder.setTags(serviceDetails.getTags());
+            holder.setSlots(serviceDetails.getSlots());
+            holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+            holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
             allInstances.add(holder);
 
             // Grouping by service category
-            if(serviceSpecificDetails.containsKey(user_id)){
+            if (userSpecificDetails.containsKey(user_id)) {
                 List<ServiceProviderDataHolder> serviceProviderDataHolders = userSpecificDetails.get(user_id);
                 serviceProviderDataHolders.add(holder);
                 userSpecificDetails.replace(user_id, serviceProviderDataHolders);
@@ -442,15 +528,15 @@ public class ServiceProviderDataHolder {
         return userSpecificDetails;
     }
 
-    public static List<ServiceProviderDataHolder> getSpecificServiceDetails(String asset_id){
-        if(serviceSpecificDetails == null){
+    public static List<ServiceProviderDataHolder> getSpecificServiceDetails(String asset_id) {
+        if (serviceSpecificDetails == null) {
             getAllServiceSpecificDetails();
         }
         return serviceSpecificDetails.get(asset_id);
     }
 
-    public static List<ServiceProviderDataHolder> getUserSpecificServiceDetails(String user_id){
-        if(userSpecificDetails == null){
+    public static List<ServiceProviderDataHolder> getUserSpecificServiceDetails(String user_id) {
+        if (userSpecificDetails == null) {
             getAllUserSpecificDetails();
         }
         return userSpecificDetails.get(user_id);
@@ -467,7 +553,7 @@ public class ServiceProviderDataHolder {
             holder.setCity(serviceDetails.getCity());
             holder.setContact(serviceDetails.getContact());
             holder.setPostal_code(serviceDetails.getPostal_code());
-            holder.setService_description(holder.getService_description());
+            holder.setService_description(serviceDetails.getService_description());
             holder.setService_id(serviceDetails.getService_id());
             holder.setService_name(serviceDetails.getService_name());
             holder.setSr_id(serviceDetails.getSr_id());
@@ -475,6 +561,8 @@ public class ServiceProviderDataHolder {
             holder.setType(serviceDetails.getType());
             holder.setNew(Boolean.parseBoolean(serviceDetails.isNew()));
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
+            holder.setRating(serviceDetails.getRating());
+            holder.setService_provider_name(serviceDetails.getService_provider_name());
             switch (serviceDetails.getService_name().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
@@ -497,6 +585,10 @@ public class ServiceProviderDataHolder {
                 default:
                     holder.setImageResource(R.drawable.medical_icon);
             }
+            holder.setTags(serviceDetails.getTags());
+            holder.setSlots(serviceDetails.getSlots());
+            holder.setAvailable_tests(serviceDetails.getAvailable_tests());
+            holder.setPrimary_quantity(serviceDetails.getPrimary_quantity());
             allInstances.add(holder);
         }
         return allInstances;

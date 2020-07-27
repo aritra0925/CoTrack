@@ -5,7 +5,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"
-        style="@style/Theme.Base.CoTrack.Light"
+        style="@style/AppTheme.Dark"
         android:layout_width="match_parent"
         android:layout_height="@dimen/service_card_height"
         android:layout_gravity="center">
@@ -23,9 +23,13 @@
                 <ImageView
                     android:id="@+id/imageView1"
                     android:layout_width="@dimen/service_image_width"
-                    android:layout_height="match_parent"
+                    android:layout_height="80dp"
                     android:layout_gravity="left"
-                    android:padding="@dimen/default_gap"/>
+                    android:padding="@dimen/default_gap"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:layout_marginTop="@dimen/default_gap"
+                    android:layout_marginBottom="@dimen/default_gap"/>
 
             </RelativeLayout>
 

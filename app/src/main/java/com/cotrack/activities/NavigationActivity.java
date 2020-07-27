@@ -26,13 +26,20 @@ import com.cotrack.fragments.ServiceDetailsFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.fragments.ServiceSpecificFragment;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
+import com.cotrack.models.ProviderDetails;
+import com.cotrack.models.UserDetails;
+import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
+
+import static com.cloudant.client.api.query.Expression.eq;
 
 public class NavigationActivity  extends AppCompatActivity {
     // Objects
@@ -122,6 +129,8 @@ public class NavigationActivity  extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
+            LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("provider_email", UserDataHolder.USER_ID)).getDocs().get(0);
+            UserDataHolder.USER_NAME = treeMap.get("user_email").toString();
             return true;
         }
 

@@ -1,6 +1,7 @@
 package com.cotrack.fragments;
 
-import android.content.Context;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
-import android.util.Log;
+import android.speech.RecognizerIntent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,41 +18,47 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cotrack.BuildConfig;
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
-import com.cotrack.models.Global;
 import com.cotrack.models.Message;
-import com.cotrack.models.Messages;
 import com.cotrack.models.User;
-import com.cotrack.utils.CommonUtils;
-import com.cotrack.utils.JSONUtils;
 import com.cotrack.utils.WatsonUtils;
-import com.google.android.gms.common.util.JsonUtils;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Properties;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import com.cotrack.models.Global;
+import com.cotrack.models.Message;
+import com.cotrack.models.User;
+import com.cotrack.models.Messages;
+import com.cotrack.utils.CommonUtils;
+import com.cotrack.utils.JSONUtils;
+import com.cotrack.utils.WatsonUtils;
+import com.google.android.gms.common.util.JsonUtils;
+import android.util.Log;
+import android.content.Context;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +79,7 @@ public class ChatFragment extends Fragment {
     public ArrayAdapter<String> msgList;
     public ListView msgView;
     Assistant assistant;
-
+    private final int REQ_CODE = 100;
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -103,7 +110,6 @@ public class ChatFragment extends Fragment {
             e.printStackTrace();
             mMessageList = new ArrayList<>();
         }
-
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(view.getContext(), mMessageList);
@@ -154,7 +160,42 @@ public class ChatFragment extends Fragment {
                 mMessageRecycler.smoothScrollToPosition(mMessageList.size());
             }
         });
+
+        ImageView speak = (ImageView) view.findViewById(R.id.iv_Mic);
+        speak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Need to speak");
+                try {
+                    startActivityForResult(intent, REQ_CODE);
+                } catch (ActivityNotFoundException a) {
+                    Toast.makeText(getContext(),
+                            "Sorry your device not supported",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return view;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_CODE: {
+                if (resultCode == getActivity().RESULT_OK && null != data) {
+                    ArrayList result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    input.setText(result.get(0).toString());
+                }
+                break;
+            }
+        }
     }
 
     public void displayMsg(MessageResponse msg) {
@@ -249,7 +290,6 @@ public class ChatFragment extends Fragment {
 
         }
     }
-
     public void storeMessagesInCache(List<Message> message){
         try {
             FileOutputStream fos =getActivity().openFileOutput("user3.json",Context.MODE_PRIVATE);

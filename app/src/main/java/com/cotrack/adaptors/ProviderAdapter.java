@@ -82,7 +82,11 @@ public class ProviderAdapter extends RecyclerView.Adapter {
             ProductHolder productHolder = (ProductHolder) holder;
             //bind products information with view
             Picasso.with(mContext).load(currentProduct.getImageResource()).into(productHolder.imageViewProductThumb);
-            productHolder.textViewProductName.setText(currentProduct.getService_name());
+            String provider_name = currentProduct.getService_provider_name();
+            if(provider_name == null){
+                provider_name = "To be deleted";
+            }
+            productHolder.textViewProductName.setText(provider_name);
             productHolder.textViewProductPrice.setText(currentProduct.getAddress_line() + "\n" + currentProduct.getCity() + "\n" + currentProduct.getState() + "\n" + currentProduct.getPostal_code());
             if (currentProduct.isNew())
                 productHolder.textViewNew.setVisibility(View.VISIBLE);
@@ -94,7 +98,11 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        if(mProducts == null || !mProducts.isEmpty()) {
+            return mProducts.size();
+        } else {
+            return 0;
+        }
     }
 
     //Holds view of product with information
