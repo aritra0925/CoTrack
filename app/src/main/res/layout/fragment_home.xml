@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +10,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/feedView"
+        android:layout_above="@id/cardView"
         android:layout_alignParentTop="true"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            style="@style/Theme.Base.CoTrack.Light"
+            style="@style/AppTheme.Dark"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -26,201 +26,247 @@
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap"
+                android:layout_marginLeft="@dimen/default_gap" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_weight="2"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            style="@style/Theme.Base.CoTrack.Light"
+            style="@style/AppTheme.Dark"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/primary_dark">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/feedView"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/covidTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_bottom"
-                    android:elevation="@dimen/card_elevation">
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/default_gap"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:layout_marginTop="@dimen/default_gap"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:paddingTop="@dimen/default_gap"
+                    android:paddingLeft="@dimen/default_gap"
+                    android:paddingRight="@dimen/default_gap"
+                    android:elevation="@dimen/card_elevation"
+                    app:cardCornerRadius="@dimen/card_rounded"
+                    app:cardBackgroundColor="@color/primary_dark"
+                    android:padding="0dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:layout_marginBottom="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_card_title"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_medium"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/default_gap"
+                            android:layout_marginTop="@dimen/default_gap"
+                            android:layout_marginBottom="@dimen/default_gap"
+                            android:fontFamily="@font/trebuc"
+                            android:text="@string/home_fragment_card_title"
+                            android:textColor="@color/accent"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
 
-                <LinearLayout
-                    android:id="@+id/covidStatus"
-                    android:layout_width="wrap_content"
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/feedView"
-                    android:orientation="horizontal">
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:layout_marginBottom="@dimen/default_gap"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:layout_marginTop="@dimen/default_gap"
+                    android:paddingBottom="@dimen/default_gap"
+                    android:paddingLeft="@dimen/default_gap"
+                    android:paddingRight="@dimen/default_gap"
+                    android:elevation="@dimen/card_elevation"
+                    app:cardCornerRadius="@dimen/card_rounded"
+                   android:paddingTop="@dimen/default_gap"
+                    app:cardBackgroundColor="@color/jet"
+                    android:layout_below="@id/covidTitle">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_status_text"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
 
-                    <TextView
-                        android:id="@+id/covidStatusText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="SAFE"
-                        android:textColor="@color/download_success_green"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/covidTotalCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/covidStatus"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/covidStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/default_gap">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_covid__global_active"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="@string/home_fragment_status_text"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/globalActiveCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                            <TextView
+                                android:id="@+id/covidStatusText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="SAFE"
+                                android:textColor="@android:color/holo_green_light"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/covidIndiaCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/covidTotalCount"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/covidTotalCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/covidStatus"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/default_gap">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_covid_india_active"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="@string/home_fragment_covid__global_active"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/indiaActiveCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                            <TextView
+                                android:id="@+id/globalActiveCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/covidGlobalConfirmedCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/covidIndiaCount"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/covidIndiaCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/covidTotalCount"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/default_gap">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_covid__global_confirmed"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="@string/home_fragment_covid_india_active"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/globalConfirmedCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                            <TextView
+                                android:id="@+id/indiaActiveCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/covidIndiaConfirmedCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/covidGlobalConfirmedCount"
-                    android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/covidGlobalConfirmedCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/covidIndiaCount"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/default_gap">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:text="@string/home_fragment_covid_india_confirmed"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="@string/home_fragment_covid__global_confirmed"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/indiaConfirmedCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/default_gap"
-                        android:layout_marginTop="@dimen/default_gap"
-                        android:fontFamily="@font/trebuc"
-                        android:textColor="@color/iron"
-                        android:textSize="@dimen/text_size_micro"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                            <TextView
+                                android:id="@+id/globalConfirmedCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/covidIndiaConfirmedCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/covidGlobalConfirmedCount"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/default_gap">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:text="@string/home_fragment_covid_india_confirmed"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/indiaConfirmedCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/default_gap"
+                                android:layout_marginTop="@dimen/default_gap"
+                                android:fontFamily="@font/trebuc"
+                                android:textColor="@color/accent"
+                                android:textSize="@dimen/text_size_micro"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 

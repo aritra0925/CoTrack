@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,17 +24,36 @@ import com.cotrack.R;
 import com.cotrack.fragments.AddServiceFragment;
 import com.cotrack.fragments.ChatFragment;
 import com.cotrack.fragments.HomeFragment;
+import com.cotrack.fragments.OrdersFragment;
 import com.cotrack.fragments.RegisteredServicesFragment;
+import com.cotrack.fragments.RequestedServicesFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.fragments.ServiceSpecificFragment;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.OrderDataHolder;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
+import com.cotrack.models.ProviderDetails;
+import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.internal.LinkedTreeMap;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import javax.persistence.spi.ProviderUtil;
 
 import butterknife.BindView;
 
+import static com.cloudant.client.api.query.Expression.eq;
+
 public class ServiceNavigationActivity extends AppCompatActivity {
     // Objects
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
     BottomNavigationView bottomNavigation;
     @BindView(R.id.serviceNavigationLayout)
     RelativeLayout serviceNavigationLayout;
@@ -49,6 +69,9 @@ public class ServiceNavigationActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_services_service:
                             openFragment(RegisteredServicesFragment.newInstance());
+                            return true;
+                        case R.id.navigation_orders_services:
+                            openFragment(RequestedServicesFragment.newInstance());
                             return true;
                     }
                     return false;
@@ -117,6 +140,9 @@ public class ServiceNavigationActivity extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
+            OrderDataHolder.getAllUserSpecificDetails();
+            LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("provider_email", getProperties().getProperty(USER_COOKIE).toString())).getDocs().get(0);
+            UserDataHolder.USER_NAME = treeMap.get("provider_name").toString();
             return true;
         }
 
@@ -124,6 +150,19 @@ public class ServiceNavigationActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
+    }
+
+    public Properties getProperties(){
+        Properties props = new Properties();
+        try {
+            FileInputStream fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 
 }

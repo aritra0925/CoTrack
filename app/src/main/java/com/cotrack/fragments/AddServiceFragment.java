@@ -1,9 +1,12 @@
 package com.cotrack.fragments;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +14,26 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.cotrack.R;
 import com.cotrack.activities.ServiceNavigationActivity;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.models.ProviderDetails;
 import com.cotrack.models.ServiceDetails;
+import com.cotrack.models.Slots;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CloudantServiceUtils;
 import com.cotrack.utils.CommonUtils;
@@ -29,7 +41,9 @@ import com.cotrack.utils.CommonUtils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,15 +65,31 @@ public class AddServiceFragment extends Fragment {
     EditText _postalCode;
     @BindView(R.id.btn_add_service)
     Button _addServiceButton;
-    @BindView(R.id.serviceType)
+    @BindView(R.id.serviceTypeRegistration)
     AutoCompleteTextView _serviceTypeText;
     @BindView(R.id.decription_service)
     EditText _descriptionText;
     @BindView(R.id.serviceState)
     AutoCompleteTextView _stateText;
-
+    @BindView(R.id.input_tags)
+    EditText _tags;
+    EditText ambulanceQuantity;
+    EditText startTime;
+    EditText endTime;
+    EditText availableTests;
+    CheckBox sunday;
+    CheckBox monday;
+    CheckBox tuesday;
+    CheckBox wednesday;
+    CheckBox thursday;
+    CheckBox friday;
+    CheckBox saturday;
     private static AddServiceFragment instance = null;
     View view;
+    private String primary_quantity;
+    private List<String> available_tests = new ArrayList<>();
+    private List<Slots> slots = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
     public AddServiceFragment() {
         // Required empty public constructor
@@ -101,11 +131,15 @@ public class AddServiceFragment extends Fragment {
         _mobileText = (EditText) view.findViewById(R.id.input_mobile_service);
         _postalCode = (EditText) view.findViewById(R.id.postal_code_service);
         _descriptionText = (EditText) view.findViewById(R.id.decription_service);
+        _tags = (EditText) view.findViewById(R.id.input_tags);
         _addServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                addService(view.getContext());
+                if (!validate()) {
+                    onServiceAdditionFailed(view.getContext());
+                    return;
+                }
+                showServiceSpecificFields(view);
             }
         });
         return view;
@@ -114,10 +148,6 @@ public class AddServiceFragment extends Fragment {
     public void addService(Context context) {
         Log.d(TAG, "Adding service");
 
-        if (!validate()) {
-            onServiceAdditionFailed(context);
-            return;
-        }
         _addServiceButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(context,
@@ -133,7 +163,12 @@ public class AddServiceFragment extends Fragment {
         String description = _descriptionText.getText().toString();
         String postalCode = _postalCode.getText().toString();
         String city = _cityText.getText().toString();
-
+        String tagsText = _tags.getText().toString();
+        if(tags.contains(",")){
+            tags = Arrays.asList(tagsText.split(","));
+        } else {
+            tags.add(tagsText);
+        }
         // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
@@ -143,6 +178,7 @@ public class AddServiceFragment extends Fragment {
                         // depending on success
                         if (addService(context, serviceType, description, address, mobile, state, city, postalCode)) {
                             onServiceAdditionSuccess(view.getContext());
+                            ServiceProviderDataHolder.refreshAllUserSpecificDetails();
                         } else {
                             onServiceAdditionFailed(view.getContext());
                         }
@@ -163,7 +199,7 @@ public class AddServiceFragment extends Fragment {
         _postalCode.getText().clear();
         _addressText.getText().clear();
         _mobileText.getText().clear();
-     }
+    }
 
     public void onServiceAdditionFailed(Context context) {
         Toast.makeText(context, "Service addition failed", Toast.LENGTH_LONG).show();
@@ -251,22 +287,30 @@ public class AddServiceFragment extends Fragment {
         }
         String asset_id = "";
         String service_name = "";
-        for (AssetDataHolder assetDataHolder: AssetDataHolder.getAllInstances()){
-            if(assetDataHolder.getAsset_type().equalsIgnoreCase(type)) {
+
+        for (AssetDataHolder assetDataHolder : AssetDataHolder.getAllInstances()) {
+            System.out.println("Asset ID: " + asset_id);
+            System.out.println("Asset Title: " + type);
+            if (assetDataHolder.getAsset_type().equalsIgnoreCase(type)) {
                 asset_id = assetDataHolder.getAsset_id();
                 service_name = assetDataHolder.getAsset_title();
             }
         }
-        ServiceDetails serviceDetails = new ServiceDetails(_id, type, getProperties(context).getProperty(USER_COOKIE), service_name, service_description, asset_id, _id, address, city, state, postalCode, phone);
+
+        ServiceDetails serviceDetails = new ServiceDetails(_id, type, getProperties(context).getProperty(USER_COOKIE), service_name, service_description, asset_id, _id, address, city, state, postalCode, phone, UserDataHolder.USER_NAME);
+        serviceDetails.setSlots(slots);
+        serviceDetails.setPrimary_quantity(primary_quantity);
+        serviceDetails.setAvailable_tests(available_tests);
+        serviceDetails.setTags(tags);
         CloudantServiceUtils.insertDocument(serviceDetails);
         flag = true;
         return flag;
     }
 
-    public Properties getProperties(Context context){
+    public Properties getProperties(Context context) {
         Properties props = new Properties();
         try {
-            FileInputStream fin= context.openFileInput(COOKIE_FILE_NAME);
+            FileInputStream fin = context.openFileInput(COOKIE_FILE_NAME);
             props.load(fin);
         } catch (FileNotFoundException e) {
             Log.e("File Error", "Error reading properties file", e);
@@ -274,5 +318,188 @@ public class AddServiceFragment extends Fragment {
             Log.e("File Error", "Error reading properties file", e);
         }
         return props;
+    }
+
+    private void showServiceSpecificFields(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(), R.style.AppTheme_Dark_Dialog);
+        builder.setTitle("Additional Details");
+        builder.setCancelable(false);
+        String serviceType = _serviceTypeText.getText().toString();
+        String assetPrimaryQuantityKey = "";
+        for (AssetDataHolder holder : AssetDataHolder.getAllInstances()) {
+            if (holder.getAsset_type().equalsIgnoreCase(serviceType)) {
+                assetPrimaryQuantityKey = holder.getAsset_count_key();
+                break;
+            }
+        }
+        switch (serviceType.toUpperCase()) {
+            case "AMBULANCE":
+            case "HOSPITAL":
+                // Set up the input quantity
+                ambulanceQuantity = new EditText(view.getContext());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                ambulanceQuantity.setPadding(2,2,2,2);
+                ambulanceQuantity.setInputType(InputType.TYPE_CLASS_TEXT);
+                ambulanceQuantity.setHint(assetPrimaryQuantityKey);
+                builder.setView(ambulanceQuantity);
+                break;
+            case "DOCTOR":
+                // get prompts.xml view
+                LayoutInflater layoutInflater = LayoutInflater.from(view.getContext());
+                View promptView = layoutInflater.inflate(R.layout.layout_doctor_additional_details, null);
+
+                startTime = (EditText) promptView.findViewById(R.id.startTime_doctor);
+                endTime = (EditText) promptView.findViewById(R.id.endTime_doctor);
+                sunday = (CheckBox) promptView.findViewById(R.id.sunday);
+                monday = (CheckBox) promptView.findViewById(R.id.monday);
+                tuesday = (CheckBox) promptView.findViewById(R.id.tuesday);
+                wednesday = (CheckBox) promptView.findViewById(R.id.wednesday);
+                thursday = (CheckBox) promptView.findViewById(R.id.thursday);
+                friday = (CheckBox) promptView.findViewById(R.id.friday);
+                saturday = (CheckBox) promptView.findViewById(R.id.saturday);
+                startTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                        int minute = mcurrentTime.get(Calendar.MINUTE);
+                        TimePickerDialog mTimePicker;
+                        mTimePicker = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour,
+                                                  int selectedMinute) {
+                                startTime.setText(selectedHour + ":" + selectedMinute);
+                            }
+                        }, hour, minute, true);//Yes 24 hour time
+                        mTimePicker.setTitle("Start Time");
+                        mTimePicker.show();
+                    }
+                });
+
+                endTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                        int minute = mcurrentTime.get(Calendar.MINUTE);
+                        TimePickerDialog mTimePicker;
+                        mTimePicker = new TimePickerDialog(view.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour,
+                                                  int selectedMinute) {
+                                endTime.setText(selectedHour + ":" + selectedMinute);
+                            }
+                        }, hour, minute, true);//Yes 24 hour time
+                        mTimePicker.setTitle("End Time");
+                        mTimePicker.show();
+                    }
+                });
+                builder.setView(promptView);
+                break;
+            case "PATHOLOGY":
+                // Set up the input quantity
+                availableTests = new EditText(view.getContext());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                availableTests.setPadding(2,2,2,2);
+                availableTests.setInputType(InputType.TYPE_CLASS_TEXT);
+                availableTests.setHint(assetPrimaryQuantityKey + " (Comma Separated)");
+                builder.setView(availableTests);
+                break;
+            case "DISINFECT":
+            case "MEDICINE":
+            default:
+        }
+
+
+        // Set up the buttons
+        builder.setPositiveButton("Add Service", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //m_Text = input.getText().toString();
+                // Finish the registration screen and return to the Login activity
+
+                switch (serviceType.toUpperCase()) {
+                    case "HOSPITAL":
+                    case "AMBULANCE":
+                        primary_quantity = ambulanceQuantity.getText().toString();
+                        break;
+                    case "DOCTOR":
+                        String startTimeText = startTime.getText().toString();
+                        String endTimeText = endTime.getText().toString();
+                        if(sunday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(sunday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(monday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(monday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(tuesday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(tuesday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(wednesday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(wednesday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(thursday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(thursday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(friday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(friday.getText().toString());
+                            slots.add(slot);
+                        }
+                        if(saturday.isChecked()){
+                            Slots slot = new Slots();
+                            slot.setStartTime(startTimeText);
+                            slot.setEndTime(endTimeText);
+                            slot.setDay(saturday.getText().toString());
+                            slots.add(slot);
+                        }
+                        break;
+                    case "PATHOLOGY":
+                        String tests = availableTests.getText().toString();
+                        if(tests.contains(",")){
+                            available_tests = Arrays.asList(tests.split(","));
+                        } else {
+                            available_tests.add(tests);
+                        }
+                        break;
+                    case "DISINFECT":
+                        break;
+                    case "MEDICINE":
+                        break;
+                    default:
+                }
+                addService(view.getContext());
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

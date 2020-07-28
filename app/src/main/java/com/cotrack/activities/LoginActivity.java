@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LoginService;
@@ -73,11 +74,9 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     @BindView(R.id.login_user_type)
     RadioGroup _radioGroup;
     boolean flag = false;
-    String[] PERMISSIONS = {Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
-    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION };
+    int PERMISSION_ALL = 101;
     String email;
-    LoginService mLoginService;
-    Intent mServiceIntent;
     public String userCookie;
     public String userTypeCookie;
 
@@ -88,15 +87,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         session = new Session(this);
         setContentView(R.layout.activity_login);
-        mLoginService = new LoginService();
-        mServiceIntent = new Intent(this, mLoginService.getClass());
-        if (!isMyServiceRunning(mLoginService.getClass())) {
-            System.out.println("Service is already running");
-            startService(mServiceIntent);
-            System.out.println("Service started");
-        } else {
-            System.out.println("Service is already running");
-        }
         ButterKnife.bind(this);
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -115,25 +105,43 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
-        if (!hasPermissions(this, PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-            System.out.println("Checking permission request");
-        }
-        if(session.getusername() != null && !session.getusername().isEmpty()
+        askFotLocationPermission();
+        if (session.getusername() != null && !session.getusername().isEmpty()
                 && session.getUserType() != null && !session.getUserType().isEmpty()) {
             email = session.getusername();
             onSessionActive();
         }
     }
 
+    public void askFotLocationPermission(){
+        boolean foreground = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if (foreground) {
+            boolean background = ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+            if (background) {
+                //handleLocationUpdates();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_ALL);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_ALL);
+        }
+    }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        String userCookie =  savedInstanceState.getString(USER_COOKIE);
-        if(!TextUtils.isEmpty(userCookie)) {
+        String userCookie = savedInstanceState.getString(USER_COOKIE);
+        if (!TextUtils.isEmpty(userCookie)) {
             this.userCookie = userCookie;
         }
-        String userTypeCookie =  savedInstanceState.getString(USER_TYPE_COOKIE);
-        if(!TextUtils.isEmpty(userTypeCookie)) {
+        String userTypeCookie = savedInstanceState.getString(USER_TYPE_COOKIE);
+        if (!TextUtils.isEmpty(userTypeCookie)) {
             this.userTypeCookie = userTypeCookie;
         }
         super.onRestoreInstanceState(savedInstanceState);
@@ -216,18 +224,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onDestroy();
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
-                return true;
-            }
-        }
-        Log.i ("Service status", "Not running");
-        return false;
-    }
-
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
         setResult(RESULT_OK, null);
@@ -268,6 +264,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("service");
             userCookie = email;
             userTypeCookie = "service";
+            UserDataHolder.USER_ID = email;
+            UserDataHolder.USER_TYPE = "service";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "service");
 
@@ -281,6 +279,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("regular");
             userCookie = email;
             userTypeCookie = "regular";
+            UserDataHolder.USER_ID = email;
+            UserDataHolder.USER_TYPE = "regular";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "regular");
         }
@@ -399,22 +399,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    public boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                int selfPermission = ActivityCompat.checkSelfPermission(context, permission);
-                int permissionGrantedCode = PackageManager.PERMISSION_GRANTED;
-                System.out.println("Permission status: " + selfPermission);
-                System.out.println("Permission Granted: " + permissionGrantedCode);
-                if (selfPermission != permissionGrantedCode) {
-                    System.out.println("App permmission not working");
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -423,11 +407,16 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             // for each permission check if the user granted/denied them
             // you may want to group the rationale in a single dialog,
             // this is just an example
+            boolean flag = false;
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     // user rejected the permission
-                    showExplanation("Permission Required", "This app will not work without the permissions", permission, PERMISSION_ALL);
+                    if(!flag) {
+                        showExplanation("Permission Required", "In order to keep you safe we need to know you location even when you are not using the app. " +
+                                "Please note that your location data will not be made public. This is for our use only", permission, PERMISSION_ALL);
+                    }
+                    flag = true;
                     boolean showRationale = shouldShowRequestPermissionRationale(permission);
                     if (!showRationale) {
                         // user also CHECKED "never ask again"
@@ -463,17 +452,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 PERMISSIONS, permissionRequestCode);
     }
 
-    public Properties writeProperties(String key, String value){
+    public Properties writeProperties(String key, String value) {
         Properties props = new Properties();
         try {
             File file = this.getFileStreamPath(COOKIE_FILE_NAME);
-            if(!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
             }
-            FileInputStream  fin= openFileInput(COOKIE_FILE_NAME);
+            FileInputStream fin = openFileInput(COOKIE_FILE_NAME);
             props.load(fin);
             props.put(key, value);
-            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME,Context.MODE_PRIVATE);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME, Context.MODE_PRIVATE);
             props.store(fOut, "Cookie Data");
             System.out.println("Properties was written successfully");
         } catch (FileNotFoundException e) {

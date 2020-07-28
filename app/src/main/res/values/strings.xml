@@ -25,12 +25,27 @@
     <string name="home_fragment_status_text" translatable="false">Your Status: </string>
     <string name="navigation_menu_services" translatable="false">Services</string>
     <string name="navigation_menu_chat" translatable="false">Chat</string>
+    <string name="navigation_menu_orders">Your Reuqests</string>
     <string name="services_navigation_menu_home" translatable="false">Add Service</string>
     <string name="services_navigation_menu_registered_service" translatable="false">Registered Services</string>
+    <string name="navigation_menu_orders_services">Requested Services</string>
     <string name="userRegistration" translatable="false">Register as user</string>
     <string name="serviceRegistration" translatable="false">Register as service</string>
     <string name="tab_text_1" translatable="false">Services</string>
     <string name="tab_text_2" translatable="false">Home</string>
+
+
+    <string-array name="schedule">
+        <item>Weekly</item>
+        <item>Weekends</item>
+        <item>Weekdays</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
     <string-array name="service_types">
         <item>Hospital</item>
         <item>Disinfectant</item>

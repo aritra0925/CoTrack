@@ -28,6 +28,8 @@ public class ProviderAdapter extends RecyclerView.Adapter {
     int LoadingItemPos;
     public boolean loading = false;
     private OnItemClick itemClick;
+    ServiceProviderDataHolder currentProduct;
+
     public OnItemClick getItemClick() {
         return itemClick;
     }
@@ -52,7 +54,7 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        ServiceProviderDataHolder currentProduct = mProducts.get(position);
+        currentProduct = mProducts.get(position);
         if (currentProduct.isLoading()) {
             return LOADING_ITEM;
         } else {
@@ -64,25 +66,48 @@ public class ProviderAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         //Check which view has to be populated
-        if (viewType == LOADING_ITEM) {
-            View row = inflater.inflate(R.layout.custom_row_loading, parent, false);
-            return new LoadingHolder(row);
-        } else if (viewType == PRODUCT_ITEM) {
-            View row = inflater.inflate(R.layout.custome_row_service, parent, false);
-            return new ProductHolder(row, viewType);
-        }
-        return null;
+        View row = inflater.inflate(R.layout.custome_row_service, parent, false);
+        return new ProductHolder(row);
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //get current product
-        final ServiceProviderDataHolder currentProduct = mProducts.get(position);
+        currentProduct = mProducts.get(position);
         if (holder instanceof ProductHolder) {
             ProductHolder productHolder = (ProductHolder) holder;
+            productHolder.position = position;
             //bind products information with view
             Picasso.with(mContext).load(currentProduct.getImageResource()).into(productHolder.imageViewProductThumb);
-            productHolder.textViewProductName.setText(currentProduct.getService_name());
+            String provider_name = currentProduct.getService_provider_name();
+            if (provider_name == null) {
+                provider_name = "To be deleted";
+            }
+            String serviceName = currentProduct.getType().toUpperCase();
+            switch (serviceName.toUpperCase()) {
+                case "AMBULANCE":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.ambulance_icon);
+                    break;
+                case "DOCTOR":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.doctor_icon);
+                    break;
+                case "PATHOLOGY CENTERS":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.pathology_icon);
+                    break;
+                case "DISINFECTANT":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.disinfect_icon);
+                    break;
+                case "MEDICINE":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.medicine_icon);
+                    break;
+                case "HOSPITAL":
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.hospital_icon);
+                    break;
+                default:
+                    productHolder.imageViewProductThumb.setImageResource(R.drawable.medical_icon);
+            }
+            productHolder.textViewProductName.setText(currentProduct.getService_provider_name());
             productHolder.textViewProductPrice.setText(currentProduct.getAddress_line() + "\n" + currentProduct.getCity() + "\n" + currentProduct.getState() + "\n" + currentProduct.getPostal_code());
             if (currentProduct.isNew())
                 productHolder.textViewNew.setVisibility(View.VISIBLE);
@@ -94,7 +119,11 @@ public class ProviderAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        if (mProducts == null || !mProducts.isEmpty()) {
+            return mProducts.size();
+        } else {
+            return 0;
+        }
     }
 
     //Holds view of product with information
@@ -104,13 +133,12 @@ public class ProviderAdapter extends RecyclerView.Adapter {
         int position;
 
 
-        public ProductHolder(View itemView, int position) {
+        public ProductHolder(View itemView) {
             super(itemView);
             imageViewProductThumb = itemView.findViewById(R.id.imageViewProductThumb);
             textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
             textViewNew = itemView.findViewById(R.id.textViewNew);
-            this.position = position;
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
         }
