@@ -51,25 +51,35 @@ public class OrdersAdapter  extends BaseAdapter {
         return position;
     }
 
-    public class Holder implements Button.OnClickListener {
+    public class Holder implements View.OnClickListener {
         TextView orderIdComponent;
         TextView orderStatusComponent;
+        TextView orderedQty;
+        TextView serviceId;
         ImageView img;
-        Button askForUpdate;
+        TextView askForUpdate;
+        TextView deleteOrder;
         int postion;
 
         public Holder(TextView orderIdComponent,
                       TextView orderStatusComponent,
+                      TextView orderedQty,
+                      TextView serviceId,
                       ImageView img,
-                      Button askForUpdate,
+                      TextView askForUpdate,
+                      TextView deleteOrder,
                       int position) {
             this.orderIdComponent = orderIdComponent;
             this.orderStatusComponent = orderStatusComponent;
             this.img = img;
+            this.orderedQty = orderedQty;
             this.askForUpdate = askForUpdate;
+            this.deleteOrder = deleteOrder;
             this.postion = position;
+            this.serviceId = serviceId;
             askForUpdate.setClickable(true);
             askForUpdate.setOnClickListener(this);
+            deleteOrder.setOnClickListener(this);
         }
 
         @Override
@@ -85,15 +95,20 @@ public class OrdersAdapter  extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.layout_order_list, null);
 
-        Button buttonComponent = (Button) rowView.findViewById(R.id.btn_askForUpdate);
+        TextView deleteComponent = (TextView) rowView.findViewById(R.id.removeOrder);
+        TextView buttonComponent = (TextView) rowView.findViewById(R.id.btn_askForUpdate);
         TextView orderIdComponent = (TextView) rowView.findViewById(R.id.orderId);
         TextView orderStatusComponent = (TextView) rowView.findViewById(R.id.orderStatus);
+        TextView orderedQty = (TextView) rowView.findViewById(R.id.orderedQuantity);
+        TextView serviceId = (TextView) rowView.findViewById(R.id.serviceId);
         ImageView imgComponent = (ImageView) rowView.findViewById(R.id.imageViewOrder);
 
-        Holder holder = new Holder(orderIdComponent, orderStatusComponent, imgComponent, buttonComponent, position);
+        Holder holder = new Holder(orderIdComponent, orderStatusComponent, orderedQty, serviceId, imgComponent, buttonComponent, deleteComponent, position);
 
         String orderId = orderDetailsModels.get(position).get_id();
         String orderStatus = orderDetailsModels.get(position).getOrder_status();
+        holder.orderedQty.setText(orderDetailsModels.get(position).getPrimaryQuantity());
+        holder.serviceId.setText(orderDetailsModels.get(position).getService_id());
         holder.orderIdComponent.setText(orderId);
         holder.orderStatusComponent.setText(orderStatus);
         holder.img.setImageResource(orderDetailsModels.get(position).getImgResource());

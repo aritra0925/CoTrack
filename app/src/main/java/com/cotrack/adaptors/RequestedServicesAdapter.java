@@ -21,6 +21,7 @@ public class RequestedServicesAdapter extends BaseAdapter {
     Context context;
     private static LayoutInflater inflater = null;
     private OnItemClick itemClick;
+
     public OnItemClick getItemClick() {
         return itemClick;
     }
@@ -54,22 +55,32 @@ public class RequestedServicesAdapter extends BaseAdapter {
     public class Holder implements Button.OnClickListener {
         TextView serviceTypeComponent;
         TextView orderStatusComponent;
+        TextView requestedQuantity;
+        TextView serviceId;
         ImageView img;
-        Button askForUpdate;
+        TextView askForUpdate;
+        TextView cancelOrder;
         int postion;
 
         public Holder(TextView serviceTypeComponent,
                       TextView orderStatusComponent,
+                      TextView requestedQuantity,
+                      TextView serviceId,
                       ImageView img,
-                      Button askForUpdate,
+                      TextView askForUpdate,
+                      TextView cancelOrder,
                       int position) {
             this.serviceTypeComponent = serviceTypeComponent;
             this.orderStatusComponent = orderStatusComponent;
+            this.requestedQuantity = requestedQuantity;
+            this.serviceId = serviceId;
             this.img = img;
             this.askForUpdate = askForUpdate;
+            this.cancelOrder = cancelOrder;
             this.postion = position;
             askForUpdate.setClickable(true);
             askForUpdate.setOnClickListener(this);
+            cancelOrder.setOnClickListener(this);
         }
 
         @Override
@@ -85,15 +96,27 @@ public class RequestedServicesAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.layout_requested_service_list, null);
 
-        Button buttonComponent = (Button) rowView.findViewById(R.id.btn_nextStatus);
+        TextView requestedQuantity = (TextView) rowView.findViewById(R.id.requestedQuantity);
+        TextView serviceId = (TextView) rowView.findViewById(R.id.requestedServiceId);
+        TextView cancelOrder = (TextView) rowView.findViewById(R.id.cancelOrder);
+        TextView buttonComponent = (TextView) rowView.findViewById(R.id.btn_nextStatus);
         TextView serviceTypeComponent = (TextView) rowView.findViewById(R.id.serviceTypeRequestedService);
         TextView orderStatusComponent = (TextView) rowView.findViewById(R.id.orderStatusRequestedService);
         ImageView imgComponent = (ImageView) rowView.findViewById(R.id.imageViewRequestedService);
 
-        Holder holder = new Holder(serviceTypeComponent, orderStatusComponent, imgComponent, buttonComponent, position);
+        Holder holder = new Holder(serviceTypeComponent,
+                orderStatusComponent,
+                requestedQuantity,
+                serviceId,
+                imgComponent,
+                buttonComponent,
+                cancelOrder,
+                position);
 
         String serviceType = orderDetailsModels.get(position).getService_type();
         String orderStatus = orderDetailsModels.get(position).getOrder_status();
+        holder.requestedQuantity.setText(orderDetailsModels.get(position).getPrimaryQuantity());
+        holder.serviceId.setText(orderDetailsModels.get(position).getService_id());
         holder.serviceTypeComponent.setText(serviceType);
         holder.orderStatusComponent.setText(orderStatus);
         holder.img.setImageResource(orderDetailsModels.get(position).getImgResource());
