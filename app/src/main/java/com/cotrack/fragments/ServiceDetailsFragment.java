@@ -73,6 +73,7 @@ public class ServiceDetailsFragment extends Fragment {
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
     FrameLayout progressBarHolder;
+    TextView appointmentSchedule;
 
     public ServiceDetailsFragment() {
         // Required empty public constructor
@@ -113,6 +114,8 @@ public class ServiceDetailsFragment extends Fragment {
         detailImage = view.findViewById(R.id.serviceDetailsPic);
         serviceDetailsLayout = view.findViewById(R.id.serviceDetailsLayout);
         progressBarHolder = (FrameLayout) view.findViewById(R.id.progressBarHolder);
+        appointmentSchedule = view.findViewById(R.id.appointmentView);
+        appointmentSchedule.setVisibility(View.INVISIBLE);
         subtractButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,9 +213,10 @@ public class ServiceDetailsFragment extends Fragment {
             case "DOCTOR":
                 detailImage.setImageResource(R.drawable.doctor_icon);
                 addToCart.setText("Confirm Appointment");
-                String text = primary_Count_Key + " : ";
+                String text = primary_Count_Key;
                 ArrayList<String> spinnerArray = new ArrayList<String>();
                 String spinnerText = "";
+                String allSpinnerText = "";
                 boolean flag = true;
                 if (dataHolder.getSlots() == null || dataHolder.getSlots().isEmpty()) {
                     text = "No published schedule";
@@ -225,12 +229,13 @@ public class ServiceDetailsFragment extends Fragment {
                     for (int count = 0; count < dataHolder.getSlots().size(); count++) {
                         Slots slot = dataHolder.getSlots().get(count);
                         spinnerText = slot.getDay() + " from " + slot.getStartTime() + " to " + slot.getEndTime();
-                        text = text + "\n" + spinnerText;
+                        allSpinnerText = allSpinnerText + "\n" + "\u2022  " + spinnerText;
                         spinnerArray.add(spinnerText);
-                        System.out.println("Spinner Text " + count +": " + spinnerText);
                     }
                 }
                 providerAssetCount.setText(text);
+                appointmentSchedule.setText(allSpinnerText);
+                appointmentSchedule.setVisibility(View.VISIBLE);
                 if (flag) {
                     spinner = new AppCompatSpinner(view.getContext());
                     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_layout, spinnerArray);
