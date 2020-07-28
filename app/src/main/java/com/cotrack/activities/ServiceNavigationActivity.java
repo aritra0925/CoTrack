@@ -132,8 +132,9 @@ public class ServiceNavigationActivity extends AppCompatActivity {
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
             OrderDataHolder.getAllServiceSpecificDetails();
+            System.out.println(CloudantProviderUtils.queryData(eq("provider_email", UserDataHolder.USER_ID)).getDocs());
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("provider_email", UserDataHolder.USER_ID)).getDocs().get(0);
-            UserDataHolder.USER_NAME = treeMap.get("provider_email").toString();
+            UserDataHolder.USER_NAME = treeMap.get("provider_name").toString();
             return true;
         }
 

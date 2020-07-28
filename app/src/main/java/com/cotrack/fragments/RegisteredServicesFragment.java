@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cotrack.R;
 import com.cotrack.adaptors.RegisterServiceItemsAdapter;
 import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import com.cotrack.helpers.Space;
 import com.cotrack.listeners.EndlessScrollListener;
@@ -125,8 +126,18 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
         } catch (InterruptedException e) {
             Log.e("Fatal Error" , "Exception while retreiving data" ,e);
         }
+
+
+        List<ServiceProviderDataHolder> userSpecificDetails = ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id);
+        if( userSpecificDetails == null ||  userSpecificDetails.isEmpty()){
+            Log.d("No Data For User", "Null or empty");
+            view = inflater.inflate(R.layout.layout_missing_data, container, false);
+            return view;
+        }  else {
+            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + userSpecificDetails);
+        }
         //Create new ProductsAdapter
-        registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext(), ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id));
+        registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext(), userSpecificDetails);
         //Finally set the adapter
         recyclerViewProducts.setAdapter(registerServiceItemsAdapter);
         registerServiceItemsAdapter.setItemClick(this);

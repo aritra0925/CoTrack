@@ -136,7 +136,7 @@ public class NavigationActivity  extends AppCompatActivity {
             AssetDataHolder.getAllInstances();
             OrderDataHolder.getAllUserSpecificDetails();
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", UserDataHolder.USER_ID)).getDocs().get(0);
-            UserDataHolder.USER_NAME = treeMap.get("user_email").toString();
+            UserDataHolder.USER_NAME = treeMap.get("user_name").toString();
             return true;
         }
 

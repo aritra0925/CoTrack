@@ -50,7 +50,7 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requested_services, container, false);
-        listView=(ListView) view.findViewById(R.id.listView);
+        listView=(ListView) view.findViewById(R.id.listViewRequestedServices);
         listView.setDivider(null);
         Map<String, List<OrderDataHolder>> serviceSpecificDetails = OrderDataHolder.getAllServiceSpecificDetails();
         if( serviceSpecificDetails == null ||  serviceSpecificDetails.isEmpty()){
