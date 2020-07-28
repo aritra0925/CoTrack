@@ -1,17 +1,13 @@
 package com.cotrack.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,8 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +22,6 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 
 import com.cotrack.R;
-import com.cotrack.activities.NavigationActivity;
 import com.cotrack.global.AssetDataHolder;
 import com.cotrack.global.OrderDataHolder;
 import com.cotrack.global.ServiceProviderDataHolder;
@@ -39,7 +32,6 @@ import com.cotrack.utils.CloudantOrderUtils;
 import com.cotrack.utils.CommonUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

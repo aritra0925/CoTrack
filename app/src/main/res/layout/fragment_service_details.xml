@@ -359,6 +359,7 @@
         android:background="@color/primary"
         android:elevation="30dp"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/margin_4"
         android:weightSum="1">
 
         <androidx.appcompat.widget.AppCompatButton
