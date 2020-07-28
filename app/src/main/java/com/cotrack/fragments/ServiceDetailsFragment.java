@@ -1,35 +1,52 @@
 package com.cotrack.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 
 import com.cotrack.R;
+import com.cotrack.activities.NavigationActivity;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.OrderDataHolder;
 import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.global.UserDataHolder;
+import com.cotrack.models.OrderDetails;
 import com.cotrack.models.Slots;
+import com.cotrack.utils.CloudantOrderUtils;
+import com.cotrack.utils.CommonUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class ServiceDetailsFragment extends Fragment {
 
     private static ServiceDetailsFragment instance = null;
+    private static final String TAG = "Service Details Fragment";
     View view;
     TextView providerName;
     TextView providerAssetCount;
@@ -43,8 +60,19 @@ public class ServiceDetailsFragment extends Fragment {
     LinearLayout buttonWrapperLayout;
     Button subtractButton;
     ImageView detailImage;
+    AppCompatSpinner spinner;
     int number = 0;
-
+    String primaryQuantity = "";
+    String scheduledAppointment = "";
+    String contact;
+    String email;
+    String serviceType;
+    String serviceId;
+    ProgressBar progressBar;
+    LinearLayout serviceDetailsLayout;
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+    FrameLayout progressBarHolder;
 
     public ServiceDetailsFragment() {
         // Required empty public constructor
@@ -68,6 +96,8 @@ public class ServiceDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         view = inflater.inflate(R.layout.fragment_service_details, container, false);
         providerName = view.findViewById(R.id.textView_ProviderName);
         providerAssetCount = view.findViewById(R.id.textView_ProviderDetails);
@@ -81,6 +111,8 @@ public class ServiceDetailsFragment extends Fragment {
         addToCart = view.findViewById(R.id.btn_add_to_cart);
         buttonWrapperLayout = view.findViewById(R.id.layio);
         detailImage = view.findViewById(R.id.serviceDetailsPic);
+        serviceDetailsLayout = view.findViewById(R.id.serviceDetailsLayout);
+        progressBarHolder = (FrameLayout) view.findViewById(R.id.progressBarHolder);
         subtractButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +126,12 @@ public class ServiceDetailsFragment extends Fragment {
             public void onClick(View view) {
                 number = number + 1;
                 quantityToBeAdded.setText(Integer.toString(number));
+            }
+        });
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addService(view.getContext());
             }
         });
         service_id = getArguments().getString("service_id");
@@ -116,9 +154,9 @@ public class ServiceDetailsFragment extends Fragment {
         if(pName == null){
             pName = "To be deleted";
         }
-        String contact = dataHolder.getContact();
-        String email = dataHolder.getService_id();
-        String serviceType = dataHolder.getType().toUpperCase();
+        contact = dataHolder.getContact();
+        email = dataHolder.getService_id();
+        serviceType = dataHolder.getType().toUpperCase();
         Log.d("Description", description);
         Log.d("PName", pName);
         Log.d("Contact", contact);
@@ -194,7 +232,7 @@ public class ServiceDetailsFragment extends Fragment {
                 }
                 providerAssetCount.setText(text);
                 if (flag) {
-                    AppCompatSpinner spinner = new AppCompatSpinner(view.getContext());
+                    spinner = new AppCompatSpinner(view.getContext());
                     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_layout, spinnerArray);
                     spinner.setAdapter(spinnerArrayAdapter);
                     buttonWrapperLayout.addView(spinner);
@@ -226,4 +264,86 @@ public class ServiceDetailsFragment extends Fragment {
                 break;
         }
     }
+
+    public void addService(Context context) {
+        Log.d(TAG, "Adding service");
+
+        addToCart.setEnabled(false);
+
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+
+        switch (serviceType) {
+            case "AMBULANCE":
+            case "HOSPITAL":
+                primaryQuantity = quantityToBeAdded.getText().toString();
+                break;
+            case "DOCTOR":
+                scheduledAppointment = spinner.getSelectedItem().toString();
+                break;
+            case "PATHOLOGY CENTERS":
+                break;
+            case "DISINFECTANT":
+                break;
+            case "MEDICINE":
+                break;
+            default:
+        }
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onS
+                        // ignupSuccess or onSignupFailed
+                        // depending on success
+
+                        if (requestService(context)) {
+                            onServiceRequestSuccess(view.getContext());
+                            ServiceProviderDataHolder.refreshAllUserSpecificDetails();
+                        } else {
+                            onServiceRequestFailure(view.getContext());
+                        }
+                        outAnimation = new AlphaAnimation(1f, 0f);
+                        outAnimation.setDuration(200);
+                        progressBarHolder.setAnimation(outAnimation);
+                        progressBarHolder.setVisibility(View.GONE);
+                        addToCart.setEnabled(true);
+                    }
+                }, 3000);
+    }
+
+    public void onServiceRequestSuccess(Context context){
+        OrderDataHolder.refreshAllUserSpecificDetails();
+        Toast.makeText(view.getContext(), "Service requested successfully. Request another", Toast.LENGTH_LONG).show();
+    }
+
+    public  void onServiceRequestFailure(Context context) {
+        Toast.makeText(view.getContext(), "There was some error requesting service. Please try again after some time", Toast.LENGTH_LONG).show();
+
+    }
+
+    public boolean requestService(Context context){
+        boolean flag = false;
+        try {
+            String id = CommonUtils.generateRandomDigits(8);
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.set_id("order:ORD" + id);
+            orderDetails.setUser_id(UserDataHolder.USER_ID);
+            orderDetails.setService_type(serviceType);
+            orderDetails.setService_id(email);
+            orderDetails.setOrder_status("Created");
+            orderDetails.setPrimary_quantity(primaryQuantity);
+            orderDetails.setScheduled_appointment(scheduledAppointment);
+            CloudantOrderUtils.insertDocument(orderDetails);
+            flag = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return flag;
+
+    }
+
 }

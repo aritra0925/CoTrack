@@ -8,4 +8,9 @@
         android:id="@+id/navigation_services_service"
         android:icon="@drawable/service_icon"
         android:title="@string/services_navigation_menu_registered_service" />
+    <item
+        android:id="@+id/navigation_orders_services"
+        android:icon="@drawable/shipping"
+        android:iconTint="@color/primary_dark"
+        android:title="@string/navigation_menu_orders_services" />
 </menu>

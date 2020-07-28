@@ -15,4 +15,9 @@
         android:icon="@drawable/chat_nav"
         android:iconTint="@color/primary_dark"
         android:title="@string/navigation_menu_chat" />
+    <item
+        android:id="@+id/navigation_orders"
+        android:icon="@drawable/orders"
+        android:iconTint="@color/primary_dark"
+        android:title="@string/navigation_menu_orders" />
 </menu>

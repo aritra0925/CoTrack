@@ -22,10 +22,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.cotrack.R;
 import com.cotrack.fragments.ChatFragment;
 import com.cotrack.fragments.HomeFragment;
+import com.cotrack.fragments.OrdersFragment;
 import com.cotrack.fragments.ServiceDetailsFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.fragments.ServiceSpecificFragment;
 import com.cotrack.global.AssetDataHolder;
+import com.cotrack.global.OrderDataHolder;
 import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.models.ProviderDetails;
@@ -61,6 +63,9 @@ public class NavigationActivity  extends AppCompatActivity {
                             return true;
                         case R.id.navigation_chat:
                             openFragment(ChatFragment.newInstance());
+                            return true;
+                        case R.id.navigation_orders:
+                            openFragment(OrdersFragment.newInstance());
                             return true;
                     }
                     return false;
@@ -129,6 +134,7 @@ public class NavigationActivity  extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.getAllInstances();
+            OrderDataHolder.getAllUserSpecificDetails();
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", UserDataHolder.USER_ID)).getDocs().get(0);
             UserDataHolder.USER_NAME = treeMap.get("user_email").toString();
             return true;

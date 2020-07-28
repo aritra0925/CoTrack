@@ -117,6 +117,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private void loadMarkers(ClusterManager<ClusterItem> manager, GoogleMap map, LatLng center, int count,
                              double minDistance, double maxDistance) {
+        map.clear();
+        manager.clearItems();
         double minLat = Double.MAX_VALUE;
         double maxLat = Double.MIN_VALUE;
         double minLon = Double.MAX_VALUE;
