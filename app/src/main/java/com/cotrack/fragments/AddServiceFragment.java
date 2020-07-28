@@ -390,7 +390,7 @@ public class AddServiceFragment extends Fragment {
                                 endTime.setText(selectedHour + ":" + selectedMinute);
                             }
                         }, hour, minute, true);//Yes 24 hour time
-                        mTimePicker.setTitle("Start Time");
+                        mTimePicker.setTitle("End Time");
                         mTimePicker.show();
                     }
                 });

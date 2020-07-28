@@ -285,7 +285,7 @@
                         android:gravity="left"
                         android:text="Requirement Details"
                         android:textColor="@color/accent"
-                        android:textSize="12dp" />
+                        android:textSize="18dp" />
                 </LinearLayout>
 
                 <View

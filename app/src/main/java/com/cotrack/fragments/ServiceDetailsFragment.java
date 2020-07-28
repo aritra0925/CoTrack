@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,13 +41,21 @@ import com.cotrack.utils.CloudantOrderUtils;
 import com.cotrack.utils.CloudantServiceUtils;
 import com.cotrack.utils.CommonUtils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 
 
 public class ServiceDetailsFragment extends Fragment {
+
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
 
     private static ServiceDetailsFragment instance = null;
     private static final String TAG = "Service Details Fragment";
@@ -161,7 +170,7 @@ public class ServiceDetailsFragment extends Fragment {
             }
         });
         service_id = getArguments().getString("service_id");
-        switch (UserDataHolder.USER_TYPE.toUpperCase()) {
+        switch (getProperties().getProperty(USER_TYPE_COOKIE).toUpperCase()) {
             case "SERVICE":
                 loadServiceData(view.getContext(), service_id);
                 break;
@@ -173,7 +182,6 @@ public class ServiceDetailsFragment extends Fragment {
     }
 
     private void loadData(Context context, String service_id) {
-        ServiceProviderDataHolder dataHolder = null;
         for (ServiceProviderDataHolder holder : ServiceProviderDataHolder.getAllInstances()) {
 
             if (holder.get_id().equalsIgnoreCase(service_id)) {
@@ -200,7 +208,6 @@ public class ServiceDetailsFragment extends Fragment {
         providerContact.setText("For any emergency please call us at : " + contact);
         providerEmail.setText("You can also reach out to us at : " + email);
         List<AssetDataHolder> assetDataHolderList = AssetDataHolder.getAllInstances();
-        String primary_Count_Key = "";
         for (AssetDataHolder asset : assetDataHolderList) {
             if (asset.getAsset_type().equalsIgnoreCase(dataHolder.getType())) {
                 primary_Count_Key = asset.getAsset_count_key();
@@ -334,7 +341,10 @@ public class ServiceDetailsFragment extends Fragment {
             }
         }
 
+        Log.d(TAG, "Selected Service Type: " + serviceType);
+
         Button button = new Button(view.getContext());
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 8);
         button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rounded_rectangle_button,
                 0,
                 0,
@@ -342,10 +352,9 @@ public class ServiceDetailsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateService(view.getContext());
+                showServiceSpecificFields(view);
             }
         });
-
         switch (serviceType) {
             case "PATHOLOGY":
                 AppCompatSpinner spinnerPath = new AppCompatSpinner(view.getContext());
@@ -395,7 +404,8 @@ public class ServiceDetailsFragment extends Fragment {
                     addToCart.setGravity(Gravity.CENTER);
                     Log.e("WARNING", "No slots provided " + dataHolder.getSlots() + " for service id: " + dataHolder.get_id());
                     flag = false;
-                    break;
+                    /*
+                    break;*/
                 } else {
                     for (int count = 0; count < dataHolder.getSlots().size(); count++) {
                         Slots slot = dataHolder.getSlots().get(count);
@@ -406,11 +416,11 @@ public class ServiceDetailsFragment extends Fragment {
                 providerAssetCount.setText(text);
                 appointmentSchedule.setText(allSpinnerText);
                 appointmentSchedule.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.INVISIBLE);
+                quantityToBeAdded.setVisibility(View.INVISIBLE);
+                subtractButton.setVisibility(View.INVISIBLE);
                 buttonWrapperLayout.addView(button);
-                addButton.setVisibility(View.GONE);
-                quantityToBeAdded.setVisibility(View.GONE);
-                subtractButton.setVisibility(View.GONE);
-
+                Log.d(TAG, "Added button view");
                 break;
             default:
                 detailImage.setImageResource(R.drawable.medical_icon);
@@ -421,18 +431,22 @@ public class ServiceDetailsFragment extends Fragment {
                 addToCart.setVisibility(View.GONE);
                 break;
         }
+
     }
 
     public void addService(Context context) {
-        switch (UserDataHolder.USER_TYPE.toUpperCase()) {
+        String userTypeCookie = getProperties().getProperty(USER_TYPE_COOKIE);
+        switch (userTypeCookie.toUpperCase()) {
             case "SERVICE":
                 switch (serviceType.toUpperCase()) {
-                    case "AMBULANCE":
-                    case "HOSPITAL":
-                        updateServiceDetails(context);
+
+                    case "DOCTOR":
+                    case "PATHOLOGY":
+
+                        showServiceSpecificFields(view);
                         break;
                     default:
-                        showServiceSpecificFields(view);
+                        updateServiceDetails(context);
                         break;
                 }
                 break;
@@ -607,7 +621,7 @@ public class ServiceDetailsFragment extends Fragment {
             String id = CommonUtils.generateRandomDigits(8);
             OrderDetails orderDetails = new OrderDetails();
             orderDetails.set_id("order:ORD" + id);
-            orderDetails.setUser_id(UserDataHolder.USER_ID);
+            orderDetails.setUser_id(getProperties().getProperty(USER_COOKIE));
             orderDetails.setService_type(serviceType);
             orderDetails.setService_id(email);
             orderDetails.setOrder_status("Created");
@@ -681,7 +695,7 @@ public class ServiceDetailsFragment extends Fragment {
                                 endTime.setText(selectedHour + ":" + selectedMinute);
                             }
                         }, hour, minute, true);//Yes 24 hour time
-                        mTimePicker.setTitle("Start Time");
+                        mTimePicker.setTitle("End Time");
                         mTimePicker.show();
                     }
                 });
@@ -773,7 +787,33 @@ public class ServiceDetailsFragment extends Fragment {
                         break;
                     default:
                 }
-                updateServiceDetails(view.getContext());
+
+                inAnimation = new AlphaAnimation(0f, 1f);
+                inAnimation.setDuration(200);
+                progressBarHolder.setAnimation(inAnimation);
+                progressBarHolder.setVisibility(View.VISIBLE);
+
+                //updateServiceDetails(view.getContext());
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                if(updateService(view.getContext())){
+                                    onServiceUpdateSuccess(view.getContext());
+                                } else {
+                                    onServiceUpdateFailure(view.getContext());
+                                }
+
+                                outAnimation = new AlphaAnimation(1f, 0f);
+                                outAnimation.setDuration(200);
+                                progressBarHolder.setAnimation(outAnimation);
+                                progressBarHolder.setVisibility(View.GONE);
+                                addToCart.setEnabled(true);
+
+                            }
+                        }, 3000);
+
+
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -820,5 +860,18 @@ public class ServiceDetailsFragment extends Fragment {
             Log.e("Updating Service", "Error thrown", e);
         }
         return flag;
+    }
+
+    public Properties getProperties() {
+        Properties props = new Properties();
+        try {
+            FileInputStream fin = view.getContext().openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 }
