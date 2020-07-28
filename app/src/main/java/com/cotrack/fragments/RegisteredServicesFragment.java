@@ -128,16 +128,16 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
         }
 
 
-        List<ServiceProviderDataHolder> userSpecificDetails = ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id);
-        if( userSpecificDetails == null ||  userSpecificDetails.isEmpty()){
+        providerDetails = ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id);
+        if( providerDetails == null ||  providerDetails.isEmpty()){
             Log.d("No Data For User", "Null or empty");
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
         }  else {
-            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + userSpecificDetails);
+            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + providerDetails.get(0).getType());
         }
         //Create new ProductsAdapter
-        registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext(), userSpecificDetails);
+        registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext(), providerDetails);
         //Finally set the adapter
         recyclerViewProducts.setAdapter(registerServiceItemsAdapter);
         registerServiceItemsAdapter.setItemClick(this);
@@ -202,7 +202,8 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
          */
         @Override
         public Boolean doInBackground(String... objects) {
-            ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id);
+            providerDetails = ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id);
+            System.out.println("User specific data" + providerDetails);
             return true;
         }
 
@@ -214,17 +215,23 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
 
     @Override
     public void onItemClicked(int position) {
-        registerServiceItemsAdapter.updateListLoading(ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id));
-        String service_id = ServiceProviderDataHolder.getUserSpecificServiceDetails(user_id).get(position - 1).getService_id();
+        registerServiceItemsAdapter.updateListLoading(providerDetails);
+        String service_id = providerDetails.get(position).get_id();
+        for (int count = 0; count < providerDetails.size(); count++) {
+            Log.d("Position List", "Position: " + count);
+            Log.d("Position List", "Service _id: " + service_id);
+        }
+        Log.d("Service Id CLick", "CLicked on service id: " + service_id + "\n Clicked onposition: " + position);
         ServiceDetailsFragment serviceDetailsFragment = ServiceDetailsFragment.newInstance();
-        FragmentManager fragmentManager=getFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle args = new Bundle();
         args.putString("service_id", service_id);
         serviceDetailsFragment.setArguments(args);
         fragmentTransaction.replace(R.id.containerService, serviceDetailsFragment);
         fragmentTransaction.commit();
     }
+
 
     public Properties getProperties(Context context){
         Properties props = new Properties();

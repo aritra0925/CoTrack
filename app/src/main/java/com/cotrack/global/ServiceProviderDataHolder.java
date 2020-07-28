@@ -230,7 +230,7 @@ public class ServiceProviderDataHolder {
                 holder.setType(serviceDetails.getType());
                 holder.setRating(serviceDetails.getRating());
                 holder.setService_provider_name(serviceDetails.getService_provider_name());
-                switch (serviceDetails.getService_name().toUpperCase()) {
+                switch (serviceDetails.getType().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
                         break;
@@ -289,7 +289,7 @@ public class ServiceProviderDataHolder {
                 holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
                 holder.setRating(serviceDetails.getRating());
                 holder.setService_provider_name(serviceDetails.getService_provider_name());
-                switch (serviceDetails.getService_name().toUpperCase()) {
+                switch (serviceDetails.getType().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
                         break;
@@ -356,7 +356,7 @@ public class ServiceProviderDataHolder {
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
             holder.setRating(serviceDetails.getRating());
             holder.setService_provider_name(serviceDetails.getService_provider_name());
-            switch (serviceDetails.getService_name().toUpperCase()) {
+            switch (serviceDetails.getType().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
                     break;
@@ -423,7 +423,7 @@ public class ServiceProviderDataHolder {
                 holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
                 holder.setRating(serviceDetails.getRating());
                 holder.setService_provider_name(serviceDetails.getService_provider_name());
-                switch (serviceDetails.getService_name().toUpperCase()) {
+                switch (serviceDetails.getType().toUpperCase()) {
                     case "AMBULANCE":
                         holder.setImageResource(R.drawable.ambulance_icon);
                         break;
@@ -490,7 +490,7 @@ public class ServiceProviderDataHolder {
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
             holder.setRating(serviceDetails.getRating());
             holder.setService_provider_name(serviceDetails.getService_provider_name());
-            switch (serviceDetails.getService_name().toUpperCase()) {
+            switch (serviceDetails.getType().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
                     break;
@@ -567,7 +567,7 @@ public class ServiceProviderDataHolder {
             holder.setLoading(Boolean.parseBoolean(serviceDetails.isLoading()));
             holder.setRating(serviceDetails.getRating());
             holder.setService_provider_name(serviceDetails.getService_provider_name());
-            switch (serviceDetails.getService_name().toUpperCase()) {
+            switch (serviceDetails.getType().toUpperCase()) {
                 case "AMBULANCE":
                     holder.setImageResource(R.drawable.ambulance_icon);
                     break;
