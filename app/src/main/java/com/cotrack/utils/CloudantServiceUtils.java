@@ -80,6 +80,13 @@ public class CloudantServiceUtils {
         return true;
     }
 
+    public static boolean updateDocument(ServiceDetails document) {
+        Database database = cloudantConnect();
+        database.update(document);
+        Log.d(LOG, "You have inserted the document");
+        return true;
+    }
+
     public static boolean checkEntry(String _id) {
         boolean flag = true;
         Database database = cloudantConnect();
@@ -90,6 +97,13 @@ public class CloudantServiceUtils {
         }
         Log.d(LOG, "Validating entry status: '" + flag + "' from " + DB + "'");
         return flag;
+    }
+
+    public static ServiceDetails getWithId(String _id) {
+        boolean flag = true;
+        Database database = cloudantConnect();
+        ServiceDetails object = database.find(ServiceDetails.class, _id);
+        return object;
     }
 
     public static boolean checkEntry(String key, String value) {

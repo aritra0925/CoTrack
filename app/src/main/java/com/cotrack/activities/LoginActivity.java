@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LoginService;
@@ -263,6 +264,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("service");
             userCookie = email;
             userTypeCookie = "service";
+            UserDataHolder.USER_ID = email;
+            UserDataHolder.USER_TYPE = "service";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "service");
 
@@ -276,6 +279,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("regular");
             userCookie = email;
             userTypeCookie = "regular";
+            UserDataHolder.USER_ID = email;
+            UserDataHolder.USER_TYPE = "regular";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "regular");
         }
