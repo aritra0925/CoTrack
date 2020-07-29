@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -56,8 +58,10 @@ import com.google.maps.android.clustering.ClusterManager;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,6 +80,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     LoginService mLoginService;
     Intent mServiceIntent;
     RadioGroup radioGroup;
+    RadioButton countryRadio;
+    String DEFAULT_COUNTRY = "India";
+    String country = "";
 
     /**
      * Use this factory method to create a new instance of
@@ -85,7 +92,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance() {
-        if(instance==null){
+        if (instance == null) {
             instance = new HomeFragment();
         }
         return instance;
@@ -109,6 +116,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
+        countryRadio = (RadioButton) view.findViewById(R.id.india);
         latLngList = new ArrayList<>();
         setUpMapIfNeeded();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
@@ -118,16 +126,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mServiceIntent = new Intent(view.getContext(), mLoginService.getClass());
         if (!isMyServiceRunning(mLoginService.getClass())) {
             System.out.println("Service is already running");
-            getActivity().startService(new Intent(getActivity(),mLoginService.getClass()));
+            getActivity().startService(new Intent(getActivity(), mLoginService.getClass()));
             System.out.println("Service started");
         } else {
             System.out.println("Service is already running");
         }
         // This overrides the radiogroup onCheckListener
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (!country.isEmpty()) {
+                    DEFAULT_COUNTRY = country;
+                    countryRadio.setText(DEFAULT_COUNTRY);
+                }
                 loadFeedData(view.getContext());
             }
         });
@@ -143,13 +153,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         double maxLat = Double.MIN_VALUE;
         double minLon = Double.MAX_VALUE;
         double maxLon = Double.MIN_VALUE;
-        CircleOptions circleOptions= new CircleOptions()
+        CircleOptions circleOptions = new CircleOptions()
                 .strokeWidth(4)
-                .radius(maxDistance*2)
+                .radius(maxDistance * 2)
                 .center(center)
                 .strokeColor(Color.parseColor(getResources().getString(R.color.primary_dark_transparent)))
                 .fillColor(Color.parseColor(getResources().getString(R.color.primary_dark_transparent)));
-
 
 
         for (int i = 0; i < count; ++i) {
@@ -191,6 +200,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 17));
         loadStatusData(view.getContext(), center, latLngList);
+        country = getCurrentLocationCountry(view.getContext(), center);
+        if (!country.isEmpty()) {
+            DEFAULT_COUNTRY = country;
+            countryRadio.setText(DEFAULT_COUNTRY);
+            loadFeedData(view.getContext());
+        }
+
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -216,22 +232,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    /*private void setUpMap() {
-        mMapFragment.getMapAsync(new OnMapReadyCallback(){
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                // Add a marker in Sydney and move the camera
-                Log.d("Map Debug", "Inside Map Ready");
-                LatLng sydney = new LatLng(-34, 151);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-            }
-        });
-    }*/
-
-    public void doGetCovidSummary(Context context, boolean isIndia) {
+    public void doGetCovidSummary(Context context, String countryName, boolean isCountry) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -249,9 +250,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         TextView covidRecoveredCount = (TextView) getActivity().findViewById(R.id.covidRecoveredCount);
                         TextView covidTotalCount = (TextView) getActivity().findViewById(R.id.covidTotalCount);
 
-                        if(isIndia) {
-                            for(Country country:globalData.getCountryList()){
-                                if(country.getCountry().equalsIgnoreCase("India")){
+                        if (isCountry) {
+                            for (Country country : globalData.getCountryList()) {
+                                if (country.getCountry().equalsIgnoreCase(countryName) || country.getCountry().contains(countryName) || countryName.contains(country.getCountry())) {
                                     covidActiveCount.setText(country.getNewConfirmed());
                                     covidDeceasedCount.setText(country.getTotalDeaths());
                                     covidRecoveredCount.setText(country.getTotalRecovered());
@@ -310,7 +311,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
         googleMap.setOnCameraIdleListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
-        loadMarkers(clusterManager, googleMap, latLng, 10, 20,50);
+        loadMarkers(clusterManager, googleMap, latLng, 10, 20, 50);
     }
 
     @Override
@@ -324,49 +325,63 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void loadFeedData(Context context){
-        boolean isIndia = false;
+    public void loadFeedData(Context context) {
+        boolean isCountry = false;
         radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
-        RadioButton radioButton = (RadioButton) view.findViewById(radioGroup.getCheckedRadioButtonId());
-        if (radioButton.getText().toString().equalsIgnoreCase("India")) {
-             isIndia = true;
+        //RadioButton radioButton = (RadioButton) view.findViewById(radioGroup.getCheckedRadioButtonId());
+        if (countryRadio.isChecked()) {
+            isCountry = true;
         }
-        doGetCovidSummary(context, isIndia);
+        doGetCovidSummary(context, DEFAULT_COUNTRY, isCountry);
     }
 
-    public void loadStatusData(Context context, LatLng centerLocation, List<LatLng> markers){
+    public void loadStatusData(Context context, LatLng centerLocation, List<LatLng> markers) {
         float minDistance = 500;
-        for (LatLng latLng: markers){
-            float distance = distance(latLng.latitude,latLng.longitude, centerLocation.latitude, centerLocation.longitude);
-            if(distance < minDistance){
+        for (LatLng latLng : markers) {
+            float distance = distance(latLng.latitude, latLng.longitude, centerLocation.latitude, centerLocation.longitude);
+            if (distance < minDistance) {
                 minDistance = distance;
             }
         }
         TextView status = view.findViewById(R.id.statusLocationBased);
         TextView distance = view.findViewById(R.id.riskDistance);
         MaterialCardView cardView = view.findViewById(R.id.statusCardView);
-        if(minDistance < 20){
+        if (minDistance < 20) {
             status.setText("At Risk");
             status.setTextColor(R.color.red);
         } else {
             status.setText("Safe");
         }
-        distance.setText( "~ " + (int)minDistance + " meters");
+        distance.setText("~ " + (int) minDistance + " meters");
     }
 
-    public float distance (double lat_a, double lng_a, double lat_b, double lng_b )
-    {
+    public float distance(double lat_a, double lng_a, double lat_b, double lng_b) {
         double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(lat_b-lat_a);
-        double lngDiff = Math.toRadians(lng_b-lng_a);
-        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+        double latDiff = Math.toRadians(lat_b - lat_a);
+        double lngDiff = Math.toRadians(lng_b - lng_a);
+        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
                 Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
-                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = earthRadius * c;
 
         int meterConversion = 1609;
 
         return new Float(distance * meterConversion).floatValue();
+    }
+
+    public String getCurrentLocationCountry(Context context, LatLng latLng) {
+        String countryName = "";
+        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(latLng.latitude, latLng.longitude, 1);
+        } catch (IOException e) {
+            Log.e("Address Issue", "Error getting address", e);
+        }
+        if (addresses.size() > 0) {
+            countryName = addresses.get(0).getCountryName();
+        }
+        return countryName;
     }
 }
