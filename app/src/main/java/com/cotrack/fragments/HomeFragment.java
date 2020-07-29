@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,11 +48,16 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.card.MaterialCardView;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,12 +67,15 @@ import org.json.JSONObject;
 @SuppressWarnings("ALL")
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
+
+    List<LatLng> latLngList;
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     final int REQUEST_CODE = 101;
     public static final String COVID_19_URL = "https://api.covid19api.com/summary";
     LoginService mLoginService;
     Intent mServiceIntent;
+    RadioGroup radioGroup;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,10 +108,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
+        latLngList = new ArrayList<>();
         setUpMapIfNeeded();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         fetchLocation(view.getContext());
-        doGetCovidSummary(view.getContext());
+        loadFeedData(view.getContext());
         mLoginService = new LoginService();
         mServiceIntent = new Intent(view.getContext(), mLoginService.getClass());
         if (!isMyServiceRunning(mLoginService.getClass())) {
@@ -111,6 +123,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         } else {
             System.out.println("Service is already running");
         }
+        // This overrides the radiogroup onCheckListener
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+                loadFeedData(view.getContext());
+            }
+        });
         return view;
     }
 
@@ -137,7 +157,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             double heading = Math.random() * 360 - 180;
 
             LatLng position = SphericalUtil.computeOffset(center, distance, heading);
-
+            latLngList.add(position);
             ClusterItem marker = new ClusterItem() {
                 @NonNull
                 @Override
@@ -170,6 +190,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         //map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 17));
+        loadStatusData(view.getContext(), center, latLngList);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -210,7 +231,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }*/
 
-    public void doGetCovidSummary(Context context) {
+    public void doGetCovidSummary(Context context, boolean isIndia) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -223,22 +244,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         Log.e("Response", response.toString());
                         Global globalData = JSONUtils.mapJsonObject(response.toString(), Global.class);
                         Log.e("Global", globalData.getGlobal().getNewConfirmed());
-                        TextView globalActiveCount = (TextView) getActivity().findViewById(R.id.globalActiveCount);
-                        TextView globalConfirmedCount = (TextView) getActivity().findViewById(R.id.globalConfirmedCount);
-                        TextView indiaActiveCount = (TextView) getActivity().findViewById(R.id.indiaActiveCount);
-                        TextView indiaConfirmedCount = (TextView) getActivity().findViewById(R.id.indiaConfirmedCount);
+                        TextView covidActiveCount = (TextView) getActivity().findViewById(R.id.covidActiveCount);
+                        TextView covidDeceasedCount = (TextView) getActivity().findViewById(R.id.covidDeceasedCount);
+                        TextView covidRecoveredCount = (TextView) getActivity().findViewById(R.id.covidRecoveredCount);
+                        TextView covidTotalCount = (TextView) getActivity().findViewById(R.id.covidTotalCount);
 
-                        globalActiveCount.setText(globalData.getGlobal().getNewConfirmed());
-                        globalConfirmedCount.setText(globalData.getGlobal().getTotalConfirmed());
-                        for(Country country:globalData.getCountryList()){
-                            if(country.getCountry().equalsIgnoreCase("India")){
-                                indiaActiveCount.setText(country.getNewConfirmed());
-                                indiaConfirmedCount.setText(country.getTotalConfirmed());
-                                if(Integer.parseInt(country.getNewConfirmed())>20000){
-                                    indiaActiveCount.setTextColor(getResources().getColor(R.color.primary_dark));
+                        if(isIndia) {
+                            for(Country country:globalData.getCountryList()){
+                                if(country.getCountry().equalsIgnoreCase("India")){
+                                    covidActiveCount.setText(country.getNewConfirmed());
+                                    covidDeceasedCount.setText(country.getTotalDeaths());
+                                    covidRecoveredCount.setText(country.getTotalRecovered());
+                                    covidTotalCount.setText(country.getTotalConfirmed());
                                 }
-                                Log.e("India", country.getNewConfirmed());
+
                             }
+                        } else {
+                            covidActiveCount.setText(globalData.getGlobal().getNewConfirmed());
+                            covidDeceasedCount.setText(globalData.getGlobal().getTotalDeaths());
+                            covidRecoveredCount.setText(globalData.getGlobal().getTotalRecovered());
+                            covidTotalCount.setText(globalData.getGlobal().getTotalConfirmed());
                         }
                     }
                 },
@@ -266,7 +291,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = location;
-                    Toast.makeText(context.getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context.getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(HomeFragment.this);
@@ -297,5 +322,51 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
                 break;
         }
+    }
+
+    public void loadFeedData(Context context){
+        boolean isIndia = false;
+        radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
+        RadioButton radioButton = (RadioButton) view.findViewById(radioGroup.getCheckedRadioButtonId());
+        if (radioButton.getText().toString().equalsIgnoreCase("India")) {
+             isIndia = true;
+        }
+        doGetCovidSummary(context, isIndia);
+    }
+
+    public void loadStatusData(Context context, LatLng centerLocation, List<LatLng> markers){
+        float minDistance = 500;
+        for (LatLng latLng: markers){
+            float distance = distance(latLng.latitude,latLng.longitude, centerLocation.latitude, centerLocation.longitude);
+            if(distance < minDistance){
+                minDistance = distance;
+            }
+        }
+        TextView status = view.findViewById(R.id.statusLocationBased);
+        TextView distance = view.findViewById(R.id.riskDistance);
+        MaterialCardView cardView = view.findViewById(R.id.statusCardView);
+        if(minDistance < 20){
+            status.setText("At Risk");
+            status.setTextColor(R.color.red);
+        } else {
+            status.setText("Safe");
+        }
+        distance.setText( "~ " + (int)minDistance + " meters");
+    }
+
+    public float distance (double lat_a, double lng_a, double lat_b, double lng_b )
+    {
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b-lat_a);
+        double lngDiff = Math.toRadians(lng_b-lng_a);
+        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
+                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Float(distance * meterConversion).floatValue();
     }
 }

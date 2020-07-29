@@ -121,7 +121,6 @@ public class ChatFragment extends Fragment {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-                    Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                     String inputText = input.getText().toString();
                     input.setText("");
                     new WatsonTask().execute(inputText);
@@ -144,7 +143,7 @@ public class ChatFragment extends Fragment {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                 String inputText = input.getText().toString();
                 input.setText("");
                 new WatsonTask().execute(inputText);
