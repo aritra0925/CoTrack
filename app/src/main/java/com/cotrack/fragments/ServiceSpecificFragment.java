@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cotrack.R;
 import com.cotrack.adaptors.ProviderAdapter;
 import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import com.cotrack.helpers.Space;
 import com.cotrack.listeners.EndlessScrollListener;
@@ -109,8 +110,14 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
             Log.e("Fatal Error", "Exception while retreiving data", e);
         }
         //Create new ProductsAdapter
-        System.out.println("Asset ID: " + asset_id);
-        System.out.println("Map: " + ServiceProviderDataHolder.getSpecificServiceDetails(asset_id));
+        providerDetails = ServiceProviderDataHolder.getSpecificServiceDetails(asset_id);
+        if( providerDetails == null ||  providerDetails.isEmpty()){
+            Log.d("No Data For User", "Null or empty");
+            view = inflater.inflate(R.layout.layout_missing_data, container, false);
+            return view;
+        }  else {
+            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + providerDetails.get(0).getType());
+        }
         providerAdapter = new ProviderAdapter(view.getContext(), providerDetails);
 
         //Finally set the adapter

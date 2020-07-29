@@ -1,27 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userNavigationLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.NavigationActivity"
-    android:id="@+id/userNavigationLayout"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context=".activities.NavigationActivity">
 
     <LinearLayout
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:background="@drawable/title_border"
         android:elevation="@dimen/card_elevation"
-        android:background="@drawable/title_border">
+        android:orientation="horizontal"
+        android:weightSum="5">
+
         <ImageView
-            android:padding="@dimen/default_gap"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="12dp"/>
+
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/titleBar_height"
-            android:src="@drawable/logo"
             android:layout_gravity="center"
-            android:elevation="@dimen/card_elevation"/>
+            android:layout_weight="3"
+            android:elevation="@dimen/card_elevation"
+            android:padding="@dimen/default_gap"
+            android:src="@drawable/logo" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="12dp">
+
+            <Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
     </LinearLayout>
 
     <FrameLayout
@@ -29,19 +54,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation"
-        android:layout_below="@id/titleBar"
-        />
+        android:layout_below="@id/titleBar" />
     <!-- Main content -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        style="@style/AppTheme.Dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
+        android:background="@drawable/bottom_navigation_border"
         app:itemIconTint="@drawable/selector"
         app:itemTextColor="@drawable/selector"
-        app:menu="@menu/navigation_menu"
-        style="@style/AppTheme.Dark"
-        android:background="@drawable/bottom_navigation_border"/>
+        app:menu="@menu/navigation_menu" />
+    <FrameLayout
+        android:id="@+id/progressBarHolder"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        android:alpha="0.4"
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_gravity="center" />
+    </FrameLayout>
 </RelativeLayout>

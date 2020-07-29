@@ -6,6 +6,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MyThemeOverlay_Toolbar" parent="Theme.AppCompat.NoActionBar">
+    <!-- color used by navigation icon and overflow icon -->
+    <item name="colorOnPrimary">@color/accent</item>
+    <item name="android:textColorSecondary">@color/black</item>
+    </style>
+
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/accent</item>
         <item name="android:background">@android:color/transparent</item>

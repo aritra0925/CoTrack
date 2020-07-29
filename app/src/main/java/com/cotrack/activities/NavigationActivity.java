@@ -1,6 +1,7 @@
 package com.cotrack.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -10,10 +11,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +41,7 @@ import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.internal.LinkedTreeMap;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,6 +62,10 @@ public class NavigationActivity  extends AppCompatActivity {
     @BindView(R.id.userNavigationLayout)
     RelativeLayout userNavigationLayout;
     ProgressBar progressBar;
+    Toolbar toolbar;
+    FrameLayout progressBarHolder;
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
 
     // Listeners
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -80,6 +89,33 @@ public class NavigationActivity  extends AppCompatActivity {
                 }
             };
 
+    Toolbar.OnMenuItemClickListener menuItemClickListener =
+            new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch(menuItem.getItemId()){
+                        case R.id.action_logout:
+                            logout();
+                        case R.id.action_refrsh:
+
+                            inAnimation = new AlphaAnimation(0f, 1f);
+                            inAnimation.setDuration(200);
+                            progressBarHolder.setAnimation(inAnimation);
+                            progressBarHolder.setVisibility(View.VISIBLE);
+
+                            new DataLoadTask().execute("");
+
+                            outAnimation = new AlphaAnimation(1f, 0f);
+                            outAnimation.setDuration(200);
+                            progressBarHolder.setAnimation(outAnimation);
+                            progressBarHolder.setVisibility(View.GONE);
+
+                            break;
+                    }
+                return true;
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +123,11 @@ public class NavigationActivity  extends AppCompatActivity {
         userNavigationLayout = (RelativeLayout) findViewById(R.id.userNavigationLayout);
         new DataLoadTask().execute("");
         bottomNavigation = findViewById(R.id.bottom_navigation);
+        progressBarHolder = (FrameLayout) findViewById(R.id.progressBarHolder);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Toolbar");
+        toolbar.inflateMenu(R.menu.overflow_menu);
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_home);
             openFragment(HomeFragment.newInstance());
@@ -167,5 +208,24 @@ public class NavigationActivity  extends AppCompatActivity {
         }
         return props;
     }
+
+    public void logout(){
+        LoginActivity l = new LoginActivity();
+        Intent intent = null;
+        try{
+            File file = this.getFileStreamPath(l.COOKIE_FILE_NAME);
+            if(file.exists()){
+                file.delete();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        }catch(Exception e){
+
+        }
+
+    }
+
 
 }
