@@ -1,8 +1,15 @@
 package com.cotrack.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Message {
+    @JsonProperty(value = "message")
     String message;
+
+    @JsonProperty(value = "sender")
     User sender;
+
+    @JsonProperty(value = "createdAt")
     long createdAt;
 
     public String getMessage() {
