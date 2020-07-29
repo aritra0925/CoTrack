@@ -96,6 +96,7 @@ public class NavigationActivity  extends AppCompatActivity {
                     switch(menuItem.getItemId()){
                         case R.id.action_logout:
                             logout();
+                            break;
                         case R.id.action_refrsh:
 
                             inAnimation = new AlphaAnimation(0f, 1f);
