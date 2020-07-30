@@ -33,11 +33,21 @@
                 <action android:name="restartservice" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receivers.NotificationRestarter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="restartNotificationService" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".services.LocationService"
             android:enabled="true">
             <!--android:foregroundServiceType="location">-->
         </service>
+        <service android:name=".services.NotificationService"
+            android:enabled="true" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"

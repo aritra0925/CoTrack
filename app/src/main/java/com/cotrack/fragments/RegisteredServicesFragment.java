@@ -1,6 +1,8 @@
 package com.cotrack.fragments;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -23,10 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cotrack.R;
 import com.cotrack.adaptors.RegisterServiceItemsAdapter;
 import com.cotrack.global.ServiceProviderDataHolder;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import com.cotrack.helpers.Space;
 import com.cotrack.listeners.EndlessScrollListener;
+import com.cotrack.services.NotificationService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,6 +49,7 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
     ProgressBar progressBar;
     FrameLayout frameLayout;
     String user_id;
+    NotificationService mNotificationService;
 
     View view;
 
@@ -73,6 +75,11 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_registered_service, container, false);
         //Bind RecyclerView from layout to recyclerViewProducts object
+        mNotificationService = new NotificationService();
+        Intent mServiceIntent = new Intent(view.getContext(), mNotificationService.getClass());
+        if (!isMyServiceRunning(mNotificationService.getClass())) {
+            getActivity().startService(mServiceIntent);
+        }
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProductsService);
         frameLayout = (FrameLayout) view.findViewById(R.id.registeredServiceFrameLayout);
         if(fileExists(view.getContext(), COOKIE_FILE_NAME)){
@@ -145,6 +152,18 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
         //load first page of recyclerview
         endlessScrollListener.onLoadMore(0, 0);
         return view;
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i("Service status", "Not running");
+        return false;
     }
 
     //Load Data from your server here
