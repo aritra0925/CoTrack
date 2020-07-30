@@ -109,9 +109,46 @@ public class RequestedServicesAdapter extends BaseAdapter {
             this.postion = position;
             this.progressBarHolder = progressBarHolder;
             this.orderId = orderId;
-            /*askForUpdate.setClickable(true);
-            askForUpdate.setOnClickListener(this);
-            cancelOrder.setOnClickListener(this);*/
+            askForUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inAnimation = new AlphaAnimation(0f, 1f);
+                    inAnimation.setDuration(200);
+                    progressBarHolder.setAnimation(inAnimation);
+                    progressBarHolder.setVisibility(View.VISIBLE);
+                    new ProcessOrder().execute(orderId);
+                    outAnimation = new AlphaAnimation(1f, 0f);
+                    outAnimation.setDuration(200);
+                    progressBarHolder.setAnimation(outAnimation);
+                    progressBarHolder.setVisibility(View.GONE);
+                    orderDetailsModels.get(position).setOrder_status("Approved");
+                    notifyDataSetChanged();
+                    askForUpdate.setText("Process Order");
+                    askForUpdate.setClickable(true);
+                    askForUpdate.setEnabled(false);
+                    askForUpdate.setTextColor(view.getResources().getColor(R.color.redBg) );
+                    Toast.makeText(context, "Order approved successfully - Order ID: " + orderId, Toast.LENGTH_LONG).show();
+                }
+            });
+            cancelOrder.setClickable(true);
+            cancelOrder.setEnabled(true);
+            cancelOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inAnimation = new AlphaAnimation(0f, 1f);
+                    inAnimation.setDuration(200);
+                    progressBarHolder.setAnimation(inAnimation);
+                    progressBarHolder.setVisibility(View.VISIBLE);
+                    new DeleteOrder().execute(orderId);
+                    outAnimation = new AlphaAnimation(1f, 0f);
+                    outAnimation.setDuration(200);
+                    progressBarHolder.setAnimation(outAnimation);
+                    progressBarHolder.setVisibility(View.GONE);
+                    orderDetailsModels.remove(position);
+                    notifyDataSetChanged();
+                    Toast.makeText(context, "Order cancelled successfully Order ID: " + orderId, Toast.LENGTH_LONG).show();
+                }
+            });
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -125,7 +162,6 @@ public class RequestedServicesAdapter extends BaseAdapter {
                     outAnimation.setDuration(200);
                     progressBarHolder.setAnimation(outAnimation);
                     progressBarHolder.setVisibility(View.GONE);
-                    Toast.makeText(view.getContext(), "Status updated successfully fpr order: " + orderId, Toast.LENGTH_LONG);
                 }
 
                 @Override
@@ -158,7 +194,15 @@ public class RequestedServicesAdapter extends BaseAdapter {
         FrameLayout progressBarHolder = (FrameLayout) rowView.findViewById(R.id.progressBarHolder);
         Spinner spinner = (Spinner) rowView.findViewById(R.id.testStatusUpdate);
         String orderId = orderDetailsModels.get(position).get_id();
-
+        if(orderDetailsModels.get(position).getOrder_status().equalsIgnoreCase("APPROVED")){
+            buttonComponent.setText("Process Order");
+            buttonComponent.setClickable(false);
+            buttonComponent.setEnabled(false);
+            buttonComponent.setTextColor(rowView.getResources().getColor(R.color.redBg) );
+        } else {
+            buttonComponent.setClickable(true);
+            buttonComponent.setEnabled(true);
+        }
         Holder holder = new Holder(serviceTypeComponent,
                 orderStatusComponent,
                 requestedQuantity,
@@ -185,7 +229,9 @@ public class RequestedServicesAdapter extends BaseAdapter {
                 ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(rowView.getContext(), simple_spinner_item, spinnerArray);
                 holder.spinner.setAdapter(adapter);
                 int spinnerPosition = spinnerAdapter.getPosition(orderDetailsModels.get(position).getTests().getTest_status());
-                holder.spinner.setSelection(spinnerPosition);
+                if(holder.spinner.getSelectedItemPosition() != spinnerPosition) {
+                    holder.spinner.setSelection(spinnerPosition);
+                }
             }
 
         }
@@ -199,7 +245,7 @@ public class RequestedServicesAdapter extends BaseAdapter {
         return rowView;
     }
 
-    class DBConnect extends AsyncTask<String, Void, String> {
+    class DBConnect extends AsyncTask<String, Void, Boolean> {
 
         private Exception exception;
 
@@ -208,10 +254,16 @@ public class RequestedServicesAdapter extends BaseAdapter {
          * @deprecated
          */
         @Override
-        protected String doInBackground(String[] objects) {
+        protected Boolean doInBackground(String[] objects) {
             OrderDetails orderDetails = CloudantOrderUtils.getWithId(objects[0]);
+            boolean flag = false;
             Test test = orderDetails.getTests();
             if (test != null) {
+                if(!test.getTest_status().equalsIgnoreCase(objects[1])){
+                    flag = true;
+                } else {
+                    return flag;
+                }
                 test.setTest_status(objects[1]);
             } else {
                 test = new Test();
@@ -222,6 +274,54 @@ public class RequestedServicesAdapter extends BaseAdapter {
             CloudantOrderUtils.updateDocument(orderDetails);
             OrderDataHolder.refreshAllServiceSpecificDetails();
             Log.d("Req Adaptor", "DB updated succesfully");
+            return flag;
+        }
+
+        protected void onPostExecute(Boolean feed) {
+            if(feed) {
+                Toast.makeText(context, "Status updated successfully for order", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    class DeleteOrder extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        protected String doInBackground(String[] objects) {
+            OrderDetails orderDetails = CloudantOrderUtils.getWithId(objects[0]);
+            CloudantOrderUtils.deleteDocument(orderDetails);
+            OrderDataHolder.refreshAllServiceSpecificDetails();
+            Log.d("Req Adaptor", "Document deleted succesfully");
+            return "";
+        }
+
+        protected void onPostExecute(String feed) {
+            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    class ProcessOrder extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        protected String doInBackground(String[] objects) {
+            OrderDetails orderDetails = CloudantOrderUtils.getWithId(objects[0]);
+            orderDetails.setOrder_status("Approved");
+            CloudantOrderUtils.updateDocument(orderDetails);
+            OrderDataHolder.refreshAllUserSpecificDetails();
+            Log.d("Ord Adaptor", "DB updated succesfully");
             return "";
         }
 

@@ -40,7 +40,14 @@ public class CloudantOrderUtils {
     public static boolean updateDocument(OrderDetails document) {
         Database database = cloudantConnect();
         database.update(document);
-        Log.d(LOG, "You have inserted the document");
+        Log.d(LOG, "You have updated the document");
+        return true;
+    }
+
+    public static boolean deleteDocument(OrderDetails document) {
+        Database database = cloudantConnect();
+        database.remove(document);
+        Log.d(LOG, "You have deleted the document");
         return true;
     }
 

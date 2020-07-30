@@ -41,14 +41,8 @@
                 android:textSize="@dimen/text_size_small" />
 
             <TextView
-                android:id="@+id/nextStatusLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_gap"
-                android:textColor="#4CAF50"
-                android:textSize="12sp" />
-
-            <TextView
+                android:layout_marginTop="@dimen/margin_4"
+                android:layout_marginBottom="@dimen/margin_4"
                 android:id="@+id/requestedServiceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +137,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="Remove"
+                android:text="Cancel"
                 android:textColor="@color/accent"
                 android:textSize="12dp" />
         </LinearLayout>
