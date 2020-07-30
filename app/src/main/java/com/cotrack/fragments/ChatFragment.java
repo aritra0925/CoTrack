@@ -120,6 +120,7 @@ public class ChatFragment extends Fragment {
             mMessageList = new ArrayList<>(mMessageList);
         } catch (IOException e) {
             mMessageList = new ArrayList<>();
+            new WatsonTask().execute("");
         }
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(view.getContext(), mMessageList);
@@ -155,6 +156,7 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 //Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                 String inputText = input.getText().toString();
+                System.out.println("****** Feeding input ****** "+inputText);
                 input.setText("");
                 new WatsonTask().execute(inputText);
                 Message message = new Message();
@@ -261,7 +263,7 @@ public class ChatFragment extends Fragment {
         @Override
         protected MessageResponse doInBackground(String... strings) {
             MessageResponse messageResponse = WatsonUtils.startService(BuildConfig.WATSON_API_KEY, BuildConfig.WATSON_ASSISTANT_URL, BuildConfig.WATSON_WORKSPACE, strings[0]);
-            System.out.println("Response: " + messageResponse.toString());
+            //System.out.println("Response: " + messageResponse.toString());
             return messageResponse;
         }
 
@@ -270,6 +272,7 @@ public class ChatFragment extends Fragment {
             Message message = new Message();
             User sender = new User();
             String jsonString = feed.getOutput().toString();
+            //System.out.println(jsonString);
             JSONObject jsonRootObject;
             String text = null;
 
@@ -278,17 +281,12 @@ public class ChatFragment extends Fragment {
                 JSONArray jsonArray = jsonRootObject.getJSONArray("generic");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    /*JSONArray jsonArray1 = jsonObject.getJSONArray("options");
-                    for(int j=i; j<=jsonArray1.length();j++){
-
-                    }*/
                     text = jsonObject.optString("text").toString();
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println(text);
             sender.setNickname("Halo");
             message.setSender(sender);
             message.setMessage(text);
@@ -297,7 +295,6 @@ public class ChatFragment extends Fragment {
             storeMessagesInCache(mMessageList);
             mMessageAdapter.swapItems(mMessageList);
             System.out.println("Message List: " + mMessageList);
-
         }
     }
 

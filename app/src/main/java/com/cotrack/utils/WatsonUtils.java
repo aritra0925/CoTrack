@@ -101,12 +101,16 @@ public class WatsonUtils {
         MessageResponse response = service.message(messageOptions).execute().getResult();
 
         // Print the output from dialog, if any. Assumes a single text response.
-        List<RuntimeResponseGeneric> responseGeneric = response.getOutput().getGeneric();
+        /*List<RuntimeResponseGeneric> responseGeneric = response.getOutput().getGeneric();
+        //System.out.println(responseGeneric.toString());
+        for(RuntimeResponseGeneric responseGeneric1: responseGeneric){
+            System.out.println(responseGeneric1.text());
+        }
         if (responseGeneric.size() > 0) {
             if (responseGeneric.get(0).responseType().equals("text")) {
-                System.out.println(responseGeneric.get(0).text());
+                //System.out.println(responseGeneric.get(0).text());
             }
-        }
+        }*/
         // We're done, so we delete the session.
         DeleteSessionOptions deleteSessionOptions = new DeleteSessionOptions.Builder(assistantId, sessionId).build();
         service.deleteSession(deleteSessionOptions).execute();
