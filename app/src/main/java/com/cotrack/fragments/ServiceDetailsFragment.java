@@ -614,6 +614,7 @@ public class ServiceDetailsFragment extends Fragment {
                 String updatedQuant = Integer.toString(Integer.parseInt(dataHolder.getPrimary_quantity()) + Integer.parseInt(primaryQuantity));
                 providerAssetCount.setText(primary_Count_Key + " : " + updatedQuant);
                 primaryQuantity = quantityToBeAdded.getText().toString();
+                quantityToBeAdded.setText(primaryQuantity);
                 break;
             case "DOCTOR":
                 String spinnerText = "";
