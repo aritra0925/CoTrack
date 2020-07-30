@@ -52,7 +52,7 @@
     </string-array>
     <string-array name="service_types">
         <item>Hospital</item>
-        <item>Disinfectant</item>
+        <item>Disinfect</item>
         <item>Doctor</item>
         <item>Ambulance</item>
         <item>Pathology</item>
