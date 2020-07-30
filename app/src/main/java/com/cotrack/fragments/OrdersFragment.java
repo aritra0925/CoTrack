@@ -84,9 +84,11 @@ public class OrdersFragment  extends Fragment implements OnItemClick {
     }
 
     public void disableBackButton(ImageView backButton){
-        backButton.setBackgroundColor(getResources().getColor(R.color.primary));
-        backButton.setColorFilter(getResources().getColor(R.color.primary));
-        backButton.setEnabled(false);
+        if(backButton != null) {
+            backButton.setBackgroundColor(getResources().getColor(R.color.primary));
+            backButton.setColorFilter(getResources().getColor(R.color.primary));
+            backButton.setEnabled(false);
+        }
     }
 
     @Override

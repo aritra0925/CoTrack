@@ -2,6 +2,7 @@ package com.cotrack.fragments;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -200,6 +201,7 @@ public class ChatFragment extends Fragment {
                 if (resultCode == getActivity().RESULT_OK && null != data) {
                     ArrayList result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     input.setText(result.get(0).toString());
+                    input.setTextColor(getResources().getColor(R.color.primary));
                 }
                 break;
             }
