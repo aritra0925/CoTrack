@@ -335,7 +335,7 @@ public class ChatFragment extends Fragment {
                                 "Description : "+dataHolder.getService_description() +"\n"+
                                 "Email : "+dataHolder.getService_id() +"\n"+
                                 "Contact No : "+dataHolder.getContact() +"\n"+
-                                "No of Ambulances : "+dataHolder.getAvailable_tests()+"\n" +
+                                "Available Tests : "+dataHolder.getAvailable_tests()+"\n" +
                                 "**************************************\n";
                     }
                 }
