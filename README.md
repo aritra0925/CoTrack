@@ -1,7 +1,7 @@
 # CoTrack
 Covid-19 Tracking App
 
-**Project name
+**Project name**
 CoTracker- Unique community collaboration Solutions
 
 **Short description**
@@ -18,4 +18,4 @@ Among other information, it provides a summary view of the status of the pandemi
 This solution has been developed using Android studio, JAVA, IBM Watson Service, NoSQL Database Cloudant Services from IBM, Google Map, Covid 19 APIs.
 
 **Features**
-![alt text](https://github.com/aritra0925/CoTrack/blob/master/feature.png?raw=true)
+![alt text](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
