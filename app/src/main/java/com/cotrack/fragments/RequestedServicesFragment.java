@@ -61,7 +61,7 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requested_services, container, false);
-        ImageView backButton = getActivity().findViewById(R.id.backButton);
+        ImageView backButton = getActivity().findViewById(R.id.backButtonService);
         disableBackButton(backButton);
         listView=(ListView) view.findViewById(R.id.listViewRequestedServices);
         listView.setDivider(null);

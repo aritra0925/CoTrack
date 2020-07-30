@@ -611,10 +611,8 @@ public class ServiceDetailsFragment extends Fragment {
         switch (serviceType) {
             case "AMBULANCE":
             case "HOSPITAL":
-                String updatedQuant = Integer.toString(Integer.parseInt(dataHolder.getPrimary_quantity()) + Integer.parseInt(primaryQuantity));
-                providerAssetCount.setText(primary_Count_Key + " : " + updatedQuant);
+                providerAssetCount.setText(primary_Count_Key + " : " + primaryQuantity);
                 primaryQuantity = quantityToBeAdded.getText().toString();
-                quantityToBeAdded.setText(primaryQuantity);
                 break;
             case "DOCTOR":
                 String spinnerText = "";

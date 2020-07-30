@@ -85,6 +85,9 @@ public class ChatFragment extends Fragment {
     public ListView msgView;
     Assistant assistant;
     private final int REQ_CODE = 100;
+    private static String CHAT_JSON;
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
 
     public ChatFragment() {
         // Required empty public constructor
@@ -108,15 +111,15 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        try (FileInputStream fis = getActivity().openFileInput("user3.json")) {
+        view = inflater.inflate(R.layout.fragment_chat, container, false);
+        CHAT_JSON = getProperties().getProperty(USER_COOKIE).replaceAll("[^a-zA-Z0-9]+","") + ".json";
+        try (FileInputStream fis = getActivity().openFileInput(CHAT_JSON)) {
             String oldMessageList = IOUtils.toString(fis, StandardCharsets.UTF_8);
             mMessageList = JSONUtils.readObjectListFromFile(oldMessageList, Message.class);
             mMessageList = new ArrayList<>(mMessageList);
         } catch (IOException e) {
-            e.printStackTrace();
             mMessageList = new ArrayList<>();
         }
-        view = inflater.inflate(R.layout.fragment_chat, container, false);
         mMessageRecycler = (RecyclerView) view.findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(view.getContext(), mMessageList);
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -298,11 +301,23 @@ public class ChatFragment extends Fragment {
 
     public void storeMessagesInCache(List<Message> message) {
         try {
-            FileOutputStream fos = getActivity().openFileOutput("user3.json", Context.MODE_PRIVATE);
+            FileOutputStream fos = getActivity().openFileOutput(CHAT_JSON, Context.MODE_PRIVATE);
             JSONUtils.saveObjectToJson(mMessageList, fos);
             System.out.println("Chat message store Successfully");
         } catch (FileNotFoundException e) {
             Log.e("File Error", "Error Storing messages to Chache", e);
         }
+    }
+    public Properties getProperties(){
+        Properties props = new Properties();
+        try {
+            FileInputStream fin= view.getContext().openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 }

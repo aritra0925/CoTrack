@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,8 @@ public class OrdersAdapter  extends BaseAdapter {
         TextView askForUpdate;
         TextView deleteOrder;
         TextView testStatus;
+        LinearLayout askForUpdateLayout;
+        LinearLayout deleteOrderLayout;
         FrameLayout progressBarHolder;
         int postion;
 
@@ -83,6 +86,8 @@ public class OrdersAdapter  extends BaseAdapter {
                       TextView askForUpdate,
                       TextView deleteOrder,
                       TextView testStatus,
+                      LinearLayout askForUpdateLayout,
+                      LinearLayout deleteOrderLayout,
                       FrameLayout progressBarHolder,
                       String orderId,
                       int position) {
@@ -96,9 +101,11 @@ public class OrdersAdapter  extends BaseAdapter {
             this.serviceId = serviceId;
             this.serviceType = serviceType;
             this.testStatus = testStatus;
+            this.askForUpdateLayout = askForUpdateLayout;
+            this.deleteOrderLayout =deleteOrderLayout;
             this.progressBarHolder = progressBarHolder;
-            askForUpdate.setClickable(true);
-            askForUpdate.setOnClickListener(new View.OnClickListener() {
+            askForUpdateLayout.setClickable(true);
+            askForUpdateLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     inAnimation = new AlphaAnimation(0f, 1f);
@@ -115,8 +122,8 @@ public class OrdersAdapter  extends BaseAdapter {
                     notifyDataSetChanged();
                 }
             });
-            deleteOrder.setClickable(true);
-            deleteOrder.setOnClickListener(new View.OnClickListener() {
+            deleteOrderLayout.setClickable(true);
+            deleteOrderLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     inAnimation = new AlphaAnimation(0f, 1f);
@@ -158,13 +165,17 @@ public class OrdersAdapter  extends BaseAdapter {
         TextView testStatus = (TextView) rowView.findViewById(R.id.testStatusView);
         ImageView imgComponent = (ImageView) rowView.findViewById(R.id.imageViewOrder);
         FrameLayout progressBarHolder = (FrameLayout) rowView.findViewById(R.id.progressBarHolder);
+        LinearLayout askForUpdateLayout = (LinearLayout) rowView.findViewById(R.id.askForUpdateLayout);
+        LinearLayout deleteOrderLayout = (LinearLayout) rowView.findViewById(R.id.removeOrderLayout) ;
         String orderId = orderDetailsModels.get(position).get_id();
         Holder holder = new Holder(orderIdComponent, orderStatusComponent, orderedQty, serviceId, serviceType, imgComponent,
-                buttonComponent, deleteComponent, testStatus, progressBarHolder, orderId, position);
+                buttonComponent, deleteComponent, testStatus, askForUpdateLayout, deleteOrderLayout, progressBarHolder, orderId, position);
 
         String serviceTypeText = orderDetailsModels.get(position).getService_type();
 
         if(orderDetailsModels.get(position).getOrder_status().equalsIgnoreCase("Update Requested")) {
+            askForUpdateLayout.setClickable(false);
+            askForUpdateLayout.setEnabled(false);
             buttonComponent.setText("Update Requested");
             buttonComponent.setEnabled(false);
             buttonComponent.setClickable(false);

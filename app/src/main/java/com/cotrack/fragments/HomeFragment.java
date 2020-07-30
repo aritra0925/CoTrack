@@ -228,49 +228,53 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void doGetCovidSummary(Context context, String countryName, boolean isCountry) {
+        try {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                COVID_19_URL,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        System.out.println("Response: " + response.toString());
-                        Log.e("Response", response.toString());
-                        Global globalData = JSONUtils.mapJsonObject(response.toString(), Global.class);
-                        Log.e("Global", globalData.getGlobal().getNewConfirmed());
-                        TextView covidActiveCount = (TextView) getActivity().findViewById(R.id.covidActiveCount);
-                        TextView covidDeceasedCount = (TextView) getActivity().findViewById(R.id.covidDeceasedCount);
-                        TextView covidRecoveredCount = (TextView) getActivity().findViewById(R.id.covidRecoveredCount);
-                        TextView covidTotalCount = (TextView) getActivity().findViewById(R.id.covidTotalCount);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    COVID_19_URL,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println("Response: " + response.toString());
+                            Log.e("Response", response.toString());
+                            Global globalData = JSONUtils.mapJsonObject(response.toString(), Global.class);
+                            Log.e("Global", globalData.getGlobal().getNewConfirmed());
+                            TextView covidActiveCount = (TextView) getActivity().findViewById(R.id.covidActiveCount);
+                            TextView covidDeceasedCount = (TextView) getActivity().findViewById(R.id.covidDeceasedCount);
+                            TextView covidRecoveredCount = (TextView) getActivity().findViewById(R.id.covidRecoveredCount);
+                            TextView covidTotalCount = (TextView) getActivity().findViewById(R.id.covidTotalCount);
 
-                        if (isCountry) {
-                            for (Country country : globalData.getCountryList()) {
-                                if (country.getCountry().equalsIgnoreCase(countryName) || country.getCountry().contains(countryName) || countryName.contains(country.getCountry())) {
-                                    covidActiveCount.setText(country.getNewConfirmed());
-                                    covidDeceasedCount.setText(country.getTotalDeaths());
-                                    covidRecoveredCount.setText(country.getTotalRecovered());
-                                    covidTotalCount.setText(country.getTotalConfirmed());
+                            if (isCountry) {
+                                for (Country country : globalData.getCountryList()) {
+                                    if (country.getCountry().equalsIgnoreCase(countryName) || country.getCountry().contains(countryName) || countryName.contains(country.getCountry())) {
+                                        covidActiveCount.setText(country.getNewConfirmed());
+                                        covidDeceasedCount.setText(country.getTotalDeaths());
+                                        covidRecoveredCount.setText(country.getTotalRecovered());
+                                        covidTotalCount.setText(country.getTotalConfirmed());
+                                    }
+
                                 }
-
+                            } else {
+                                covidActiveCount.setText(globalData.getGlobal().getNewConfirmed());
+                                covidDeceasedCount.setText(globalData.getGlobal().getTotalDeaths());
+                                covidRecoveredCount.setText(globalData.getGlobal().getTotalRecovered());
+                                covidTotalCount.setText(globalData.getGlobal().getTotalConfirmed());
                             }
-                        } else {
-                            covidActiveCount.setText(globalData.getGlobal().getNewConfirmed());
-                            covidDeceasedCount.setText(globalData.getGlobal().getTotalDeaths());
-                            covidRecoveredCount.setText(globalData.getGlobal().getTotalRecovered());
-                            covidTotalCount.setText(globalData.getGlobal().getTotalConfirmed());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Response", error.toString());
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Response", error.toString());
-                    }
-                }
-        );
+            );
         requestQueue.add(jsonObjectRequest);
+        } catch (Exception e){
+            Log.d("Home Fragment", "Error received while loading Covid data. Check if API is available");
+        }
 
     }
 

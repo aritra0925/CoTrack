@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="@dimen/margin_4"
-    android:layout_marginTop="@dimen/margin_4">
+    android:layout_marginTop="@dimen/margin_8">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -116,7 +116,7 @@
         android:weightSum="2">
 
         <LinearLayout
-            android:id="@+id/layout_action1"
+            android:id="@+id/cancelOrderLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -148,7 +148,7 @@
             android:background="@color/black" />
 
         <LinearLayout
-            android:id="@+id/layout_action2"
+            android:id="@+id/nextStatusLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

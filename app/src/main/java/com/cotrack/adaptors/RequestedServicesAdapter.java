@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -82,6 +83,8 @@ public class RequestedServicesAdapter extends BaseAdapter {
         ImageView img;
         TextView askForUpdate;
         TextView cancelOrder;
+        LinearLayout askForUpdateLayout;
+        LinearLayout cancelOrderLayout;
         Spinner spinner;
         String orderId;
         FrameLayout progressBarHolder;
@@ -95,6 +98,8 @@ public class RequestedServicesAdapter extends BaseAdapter {
                       TextView askForUpdate,
                       TextView cancelOrder,
                       Spinner spinner,
+                      LinearLayout askForUpdateLayout,
+                      LinearLayout cancelOrderLayout,
                       FrameLayout progressBarHolder,
                       int position,
                       String orderId) {
@@ -105,11 +110,13 @@ public class RequestedServicesAdapter extends BaseAdapter {
             this.img = img;
             this.askForUpdate = askForUpdate;
             this.cancelOrder = cancelOrder;
+            this.askForUpdateLayout = askForUpdateLayout;
+            this.cancelOrderLayout = cancelOrderLayout;
             this.spinner = spinner;
             this.postion = position;
             this.progressBarHolder = progressBarHolder;
             this.orderId = orderId;
-            askForUpdate.setOnClickListener(new View.OnClickListener() {
+            askForUpdateLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     inAnimation = new AlphaAnimation(0f, 1f);
@@ -130,9 +137,9 @@ public class RequestedServicesAdapter extends BaseAdapter {
                     Toast.makeText(context, "Order approved successfully - Order ID: " + orderId, Toast.LENGTH_LONG).show();
                 }
             });
-            cancelOrder.setClickable(true);
-            cancelOrder.setEnabled(true);
-            cancelOrder.setOnClickListener(new View.OnClickListener() {
+            cancelOrderLayout.setClickable(true);
+            cancelOrderLayout.setEnabled(true);
+            cancelOrderLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     inAnimation = new AlphaAnimation(0f, 1f);
@@ -192,6 +199,8 @@ public class RequestedServicesAdapter extends BaseAdapter {
         ImageView imgComponent = (ImageView) rowView.findViewById(R.id.imageViewRequestedService);
         RelativeLayout spinnerHoldeer = (RelativeLayout) rowView.findViewById(R.id.spinnerHolder);
         FrameLayout progressBarHolder = (FrameLayout) rowView.findViewById(R.id.progressBarHolder);
+        LinearLayout askForUpdateLayout = (LinearLayout) rowView.findViewById(R.id.nextStatusLayout);
+        LinearLayout cancelOrderLayout = (LinearLayout) rowView.findViewById(R.id.cancelOrderLayout);
         Spinner spinner = (Spinner) rowView.findViewById(R.id.testStatusUpdate);
         String orderId = orderDetailsModels.get(position).get_id();
         if(orderDetailsModels.get(position).getOrder_status().equalsIgnoreCase("APPROVED")){
@@ -211,6 +220,8 @@ public class RequestedServicesAdapter extends BaseAdapter {
                 buttonComponent,
                 cancelOrder,
                 spinner,
+                askForUpdateLayout,
+                cancelOrderLayout,
                 progressBarHolder,
                 position,
                 orderId);
