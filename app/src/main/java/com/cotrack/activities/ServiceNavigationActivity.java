@@ -45,6 +45,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -59,6 +60,7 @@ public class ServiceNavigationActivity extends AppCompatActivity {
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
     final String USER_TYPE_COOKIE = "UserTypeCookie";
+    final String USER_NAME_COOKIE = "UserNameCookie";
     BottomNavigationView bottomNavigation;
     @BindView(R.id.serviceNavigationLayout)
     RelativeLayout serviceNavigationLayout;
@@ -183,7 +185,7 @@ public class ServiceNavigationActivity extends AppCompatActivity {
             OrderDataHolder.getAllUserSpecificDetails();
             OrderDataHolder.getAllServiceSpecificDetails();
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("provider_email", getProperties().getProperty(USER_COOKIE).toString())).getDocs().get(0);
-            UserDataHolder.USER_NAME = treeMap.get("provider_name").toString();
+            writeProperties(USER_NAME_COOKIE, treeMap.get("provider_name").toString());
             return true;
         }
 
@@ -191,6 +193,27 @@ public class ServiceNavigationActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
+    }
+
+    public Properties writeProperties(String key, String value){
+        Properties props = new Properties();
+        try {
+            File file = this.getFileStreamPath(COOKIE_FILE_NAME);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileInputStream  fin= openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+            props.put(key, value);
+            FileOutputStream fOut = openFileOutput(COOKIE_FILE_NAME,Context.MODE_PRIVATE);
+            props.store(fOut, "Cookie Data");
+            System.out.println("Properties was written successfully");
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 
     public Properties getProperties(){
@@ -207,19 +230,20 @@ public class ServiceNavigationActivity extends AppCompatActivity {
     }
 
     public void logout(){
-        LoginActivity l = new LoginActivity();
+        MainActivity l = new MainActivity();
         Intent intent = null;
         try{
-            File file = this.getFileStreamPath(l.COOKIE_FILE_NAME);
+            File file = getFileStreamPath(COOKIE_FILE_NAME);
             if(file.exists()){
+                getApplicationContext().deleteFile(COOKIE_FILE_NAME);
                 file.delete();
-                intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
 
         }catch(Exception e){
-
+            Log.e("Logout", "Unsuccessful for user portal");
         }
 
     }

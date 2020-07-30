@@ -11,6 +11,7 @@ import com.cloudant.client.api.query.Selector;
 import com.cloudant.client.org.lightcouch.NoDocumentException;
 import com.cotrack.BuildConfig;
 import com.cotrack.models.OrderDetails;
+import com.cotrack.models.ServiceDetails;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,6 +35,20 @@ public class CloudantOrderUtils {
         Database db = client.database(DB, false);
         Log.d(LOG, "Conneected to server version: ' " + client.serverVersion() + "' \nDatabase: '" + DB + "'");
         return db;
+    }
+
+    public static boolean updateDocument(OrderDetails document) {
+        Database database = cloudantConnect();
+        database.update(document);
+        Log.d(LOG, "You have inserted the document");
+        return true;
+    }
+
+    public static OrderDetails getWithId(String _id) {
+        boolean flag = true;
+        Database database = cloudantConnect();
+        OrderDetails object = database.find(OrderDetails.class, _id);
+        return object;
     }
 
     public static QueryResult<OrderDetails> queryData(Selector selector) {

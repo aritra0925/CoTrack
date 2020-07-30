@@ -17,8 +17,12 @@ import com.cotrack.global.OrderDataHolder;
 import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.OnItemClick;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class OrdersFragment  extends Fragment implements OnItemClick {
 
@@ -26,6 +30,9 @@ public class OrdersFragment  extends Fragment implements OnItemClick {
     private static OrdersFragment instance = null;
     View view;
     List<OrderDataHolder> orders;
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -50,27 +57,29 @@ public class OrdersFragment  extends Fragment implements OnItemClick {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_service, container, false);
-        listView=(ListView) view.findViewById(R.id.listView);
+        view = inflater.inflate(R.layout.fragment_orders, container, false);
+        listView=(ListView) view.findViewById(R.id.listViewOrders);
         listView.setDivider(null);
         Map<String, List<OrderDataHolder>> userSpecificDetails = OrderDataHolder.getAllUserSpecificDetails();
         if( userSpecificDetails == null ||  userSpecificDetails.isEmpty()){
             Log.d("No Data For User", "Null or empty");
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
-        } else if(userSpecificDetails.get(UserDataHolder.USER_ID) == null || userSpecificDetails.get(UserDataHolder.USER_ID).isEmpty()){
-            Log.d("No Data For User", "User ID: " + UserDataHolder.USER_ID  + " Data: " + userSpecificDetails);
+        } else if(userSpecificDetails.get(getProperties().getProperty(USER_COOKIE)) == null
+                || userSpecificDetails.get(getProperties().getProperty(USER_COOKIE)).isEmpty()){
+            Log.d("No Data For User", "User ID: " + getProperties().getProperty(USER_COOKIE)  + " Data: " + userSpecificDetails);
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
         } else {
-            Log.d("No Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + userSpecificDetails);
-            orders = userSpecificDetails.get(UserDataHolder.USER_ID);
+            Log.d("No Data For User", "Data present: " + getProperties().getProperty(USER_COOKIE) + " Data: " + userSpecificDetails);
+            orders = userSpecificDetails.get(getProperties().getProperty(USER_COOKIE));
         }
-        OrdersAdapter serviceAdapter = new OrdersAdapter(this.getContext(), orders);
+        OrdersAdapter serviceAdapter = new OrdersAdapter(view.getContext(), orders);
         listView.setAdapter(serviceAdapter);
         serviceAdapter.setItemClick(this);
         return view;
     }
+
 
     @Override
     public void onItemClicked(int position) {
@@ -83,5 +92,18 @@ public class OrdersFragment  extends Fragment implements OnItemClick {
         serviceDetailsFragment.setArguments(args);
         fragmentTransaction.replace(R.id.container, this);
         fragmentTransaction.commit();
+    }
+
+    public Properties getProperties(){
+        Properties props = new Properties();
+        try {
+            FileInputStream fin= view.getContext().openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 }

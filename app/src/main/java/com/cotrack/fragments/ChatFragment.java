@@ -31,9 +31,11 @@ import com.cotrack.utils.WatsonUtils;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -46,8 +48,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Properties;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
 import com.cotrack.models.Global;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
@@ -56,6 +60,7 @@ import com.cotrack.utils.CommonUtils;
 import com.cotrack.utils.JSONUtils;
 import com.cotrack.utils.WatsonUtils;
 import com.google.android.gms.common.util.JsonUtils;
+
 import android.util.Log;
 import android.content.Context;
 
@@ -80,6 +85,7 @@ public class ChatFragment extends Fragment {
     public ListView msgView;
     Assistant assistant;
     private final int REQ_CODE = 100;
+
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -103,10 +109,10 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         try (FileInputStream fis = getActivity().openFileInput("user3.json")) {
-            String oldMessageList=IOUtils.toString(fis,StandardCharsets.UTF_8);
-            mMessageList= JSONUtils.readObjectListFromFile(oldMessageList, Message.class);
+            String oldMessageList = IOUtils.toString(fis, StandardCharsets.UTF_8);
+            mMessageList = JSONUtils.readObjectListFromFile(oldMessageList, Message.class);
             mMessageList = new ArrayList<>(mMessageList);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             mMessageList = new ArrayList<>();
         }
@@ -265,7 +271,7 @@ public class ChatFragment extends Fragment {
             try {
                 jsonRootObject = new JSONObject(jsonString);
                 JSONArray jsonArray = jsonRootObject.getJSONArray("generic");
-                for(int i=0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     /*JSONArray jsonArray1 = jsonObject.getJSONArray("options");
                     for(int j=i; j<=jsonArray1.length();j++){
@@ -289,10 +295,11 @@ public class ChatFragment extends Fragment {
 
         }
     }
-    public void storeMessagesInCache(List<Message> message){
+
+    public void storeMessagesInCache(List<Message> message) {
         try {
-            FileOutputStream fos =getActivity().openFileOutput("user3.json",Context.MODE_PRIVATE);
-            JSONUtils.saveObjectToJson(mMessageList,fos);
+            FileOutputStream fos = getActivity().openFileOutput("user3.json", Context.MODE_PRIVATE);
+            JSONUtils.saveObjectToJson(mMessageList, fos);
             System.out.println("Chat message store Successfully");
         } catch (FileNotFoundException e) {
             Log.e("File Error", "Error Storing messages to Chache", e);

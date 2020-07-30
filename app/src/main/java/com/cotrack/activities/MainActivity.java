@@ -57,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 if(properties.containsKey(USER_COOKIE) && (properties.getProperty(USER_COOKIE) != null) && !properties.getProperty(USER_COOKIE).isEmpty()){
                     userCookie = properties.getProperty(USER_COOKIE);
                     session.setUserName(userCookie);
-                    UserDataHolder.USER_ID = userCookie;
                 }
                 if(properties.containsKey(USER_TYPE_COOKIE) && (properties.getProperty(USER_TYPE_COOKIE) != null) && !properties.getProperty(USER_TYPE_COOKIE).isEmpty()){
                     userTypeCookie = properties.getProperty(USER_TYPE_COOKIE);
-                    UserDataHolder.USER_TYPE = userTypeCookie;
                     if(userTypeCookie.equalsIgnoreCase("service")){
                         isService = true;
                     }
@@ -79,13 +77,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Properties properties = getProperties();
                 if(properties.containsKey(USER_COOKIE) && (properties.getProperty(USER_COOKIE) != null) && !properties.getProperty(USER_COOKIE).isEmpty()){
                     userCookie = properties.getProperty(USER_COOKIE);
-                    UserDataHolder.USER_ID = userCookie;
                     session.setUserName(userCookie);
                 }
                 if(properties.containsKey(USER_TYPE_COOKIE) && (properties.getProperty(USER_TYPE_COOKIE) != null) && !properties.getProperty(USER_TYPE_COOKIE).isEmpty()){
                     userTypeCookie = properties.getProperty(USER_TYPE_COOKIE);
                     session.setUserType(userTypeCookie);
-                    UserDataHolder.USER_TYPE = userTypeCookie;
                     if(userTypeCookie.equalsIgnoreCase("service")){
                         isService = true;
                     }

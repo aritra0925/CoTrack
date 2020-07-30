@@ -92,10 +92,10 @@ public class RegisterServiceItemsAdapter extends RecyclerView.Adapter {
                 case "DOCTOR":
                     productHolder.imageViewProductThumb.setImageResource(R.drawable.doctor_icon);
                     break;
-                case "PATHOLOGY CENTERS":
+                case "PATHOLOGY":
                     productHolder.imageViewProductThumb.setImageResource(R.drawable.pathology_icon);
                     break;
-                case "DISINFECTANT":
+                case "DISINFECT":
                     productHolder.imageViewProductThumb.setImageResource(R.drawable.disinfect_icon);
                     break;
                 case "MEDICINE":

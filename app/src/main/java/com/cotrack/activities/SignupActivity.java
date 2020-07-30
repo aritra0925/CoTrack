@@ -160,10 +160,7 @@ public class SignupActivity extends AppCompatActivity {
             session.setUserName(email);
             session.setUserType("service");
             writeProperties(USER_COOKIE, email);
-            UserDataHolder.USER_ID = email;
             writeProperties(USER_TYPE_COOKIE, "service");
-            UserDataHolder.USER_TYPE = "service";
-
         } else{
             intent = new Intent(this, NavigationActivity.class);
             Bundle bundle = new Bundle();
@@ -171,9 +168,7 @@ public class SignupActivity extends AppCompatActivity {
             intent.putExtras(bundle); //Put your id to your next Intent
             session = new Session(this);
             session.setUserName(email);
-            UserDataHolder.USER_ID = email;
             session.setUserType("regular");
-            UserDataHolder.USER_TYPE = "regular";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "regular");
         }

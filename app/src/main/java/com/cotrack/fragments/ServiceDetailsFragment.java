@@ -37,6 +37,7 @@ import com.cotrack.global.UserDataHolder;
 import com.cotrack.models.OrderDetails;
 import com.cotrack.models.ServiceDetails;
 import com.cotrack.models.Slots;
+import com.cotrack.models.Test;
 import com.cotrack.utils.CloudantOrderUtils;
 import com.cotrack.utils.CloudantServiceUtils;
 import com.cotrack.utils.CommonUtils;
@@ -58,7 +59,7 @@ public class ServiceDetailsFragment extends Fragment {
     final String USER_TYPE_COOKIE = "UserTypeCookie";
 
     private static ServiceDetailsFragment instance = null;
-    private static final String TAG = "Service Details Fragment";
+    private static final String TAG = "Order Details Fragment";
     View view;
     TextView providerName;
     TextView providerAssetCount;
@@ -98,6 +99,8 @@ public class ServiceDetailsFragment extends Fragment {
     CheckBox thursday;
     CheckBox friday;
     CheckBox saturday;
+    Test test;
+    AppCompatSpinner spinnerPath;
     private List<String> available_tests = new ArrayList<>();
     private List<Slots> slots = new ArrayList<>();
 
@@ -113,9 +116,7 @@ public class ServiceDetailsFragment extends Fragment {
      * @return A new instance of fragment ServiceFragment.
      */
     public static ServiceDetailsFragment newInstance() {
-        if (instance == null) {
-            instance = new ServiceDetailsFragment();
-        }
+        instance = new ServiceDetailsFragment();
         return instance;
     }
 
@@ -217,7 +218,7 @@ public class ServiceDetailsFragment extends Fragment {
 
         switch (serviceType) {
             case "PATHOLOGY":
-                AppCompatSpinner spinnerPath = new AppCompatSpinner(view.getContext());
+                spinnerPath = new AppCompatSpinner(view.getContext());
                 List<String> spinnerArrayTestTypes = dataHolder.getAvailable_tests();
                 if (spinnerArrayTestTypes == null) {
                     spinnerArrayTestTypes = new ArrayList<>();
@@ -225,12 +226,15 @@ public class ServiceDetailsFragment extends Fragment {
                 }
                 ArrayAdapter<String> spinnerArrayAdapterPath = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_layout, spinnerArrayTestTypes);
                 spinnerPath.setAdapter(spinnerArrayAdapterPath);
-                String textVal = primary_Count_Key + " : ";
+                String textVal = primary_Count_Key;
+                String allSpinnerTextPath = "";
                 for (String test : spinnerArrayTestTypes) {
-                    textVal = textVal + "\n" + test;
+                    allSpinnerTextPath = allSpinnerTextPath + "\n" + "\u2022  " + test;
                 }
                 providerAssetCount.setText(textVal.toString());
                 buttonWrapperLayout.addView(spinnerPath);
+                appointmentSchedule.setText(allSpinnerTextPath);
+                appointmentSchedule.setVisibility(View.VISIBLE);
                 addButton.setVisibility(View.GONE);
                 quantityToBeAdded.setVisibility(View.GONE);
                 subtractButton.setVisibility(View.GONE);
@@ -359,18 +363,19 @@ public class ServiceDetailsFragment extends Fragment {
             case "PATHOLOGY":
                 AppCompatSpinner spinnerPath = new AppCompatSpinner(view.getContext());
                 List<String> spinnerArrayTestTypes = dataHolder.getAvailable_tests();
+                String spinnerTextPath = "";
+                String allSpinnerTextPath = "";
                 if (spinnerArrayTestTypes == null) {
                     spinnerArrayTestTypes = new ArrayList<>();
                     spinnerArrayTestTypes.add("Data to be deleted");
                 }
                 String textVal = primary_Count_Key;
-                String pathSpinnerText = "";
                 for (String test : spinnerArrayTestTypes) {
-                    pathSpinnerText = pathSpinnerText + "\n" + "\u2022  " + test;
+                    allSpinnerTextPath = allSpinnerTextPath + "\n" + "\u2022  " + test;
                 }
-                providerAssetCount.setText(textVal.toString());
-                appointmentSchedule.setText(pathSpinnerText);
+                appointmentSchedule.setText(allSpinnerTextPath);
                 appointmentSchedule.setVisibility(View.VISIBLE);
+                providerAssetCount.setText(textVal.toString());
                 addButton.setVisibility(View.GONE);
                 quantityToBeAdded.setVisibility(View.GONE);
                 subtractButton.setVisibility(View.GONE);
@@ -473,6 +478,12 @@ public class ServiceDetailsFragment extends Fragment {
                 break;
             case "DOCTOR":
                 scheduledAppointment = spinner.getSelectedItem().toString();
+                break;
+            case "PATHOLOGY":
+                String selectedItem = spinnerPath.getSelectedItem().toString();
+                test = new Test();
+                test.setTest_type(selectedItem);
+                test.setTest_status("Requested");
                 break;
             default:
                 break;
@@ -627,7 +638,9 @@ public class ServiceDetailsFragment extends Fragment {
             orderDetails.setOrder_status("Created");
             orderDetails.setPrimary_quantity(primaryQuantity);
             orderDetails.setScheduled_appointment(scheduledAppointment);
+            orderDetails.setTests(test);
             CloudantOrderUtils.insertDocument(orderDetails);
+            Log.d(TAG, "Order Created. ID: " + id);
             flag = true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -797,7 +810,7 @@ public class ServiceDetailsFragment extends Fragment {
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
-                                if(updateService(view.getContext())){
+                                if (updateService(view.getContext())) {
                                     onServiceUpdateSuccess(view.getContext());
                                 } else {
                                     onServiceUpdateFailure(view.getContext());
@@ -811,7 +824,6 @@ public class ServiceDetailsFragment extends Fragment {
 
                             }
                         }, 3000);
-
 
 
             }

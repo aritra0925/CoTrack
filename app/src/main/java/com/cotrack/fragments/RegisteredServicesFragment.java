@@ -134,7 +134,7 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
         }  else {
-            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + providerDetails.get(0).getType());
+            Log.d("Data For User", "Data present: " + getProperties(view.getContext()).getProperty(USER_COOKIE) + " Data: " + providerDetails.get(0).getType());
         }
         //Create new ProductsAdapter
         registerServiceItemsAdapter = new RegisterServiceItemsAdapter(view.getContext(), providerDetails);

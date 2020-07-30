@@ -54,6 +54,8 @@ public class AddServiceFragment extends Fragment {
     private static final String TAG = "ServiceAdditionActivity";
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
+    final String USER_NAME_COOKIE = "UserNameCookie";
     Session session;
     @BindView(R.id.city_service)
     EditText _cityText;
@@ -164,7 +166,7 @@ public class AddServiceFragment extends Fragment {
         String postalCode = _postalCode.getText().toString();
         String city = _cityText.getText().toString();
         String tagsText = _tags.getText().toString();
-        if(tags.contains(",")){
+        if (tags.contains(",")) {
             tags = Arrays.asList(tagsText.split(","));
         } else {
             tags.add(tagsText);
@@ -297,7 +299,8 @@ public class AddServiceFragment extends Fragment {
             }
         }
 
-        ServiceDetails serviceDetails = new ServiceDetails(_id, type, getProperties(context).getProperty(USER_COOKIE), service_name, service_description, asset_id, _id, address, city, state, postalCode, phone, UserDataHolder.USER_NAME);
+        ServiceDetails serviceDetails = new ServiceDetails(_id, type, getProperties(context).getProperty(USER_COOKIE),
+                service_name, service_description, asset_id, _id, address, city, state, postalCode, phone, getProperties(view.getContext()).getProperty(USER_NAME_COOKIE));
         serviceDetails.setSlots(slots);
         serviceDetails.setPrimary_quantity(primary_quantity);
         serviceDetails.setAvailable_tests(available_tests);
@@ -338,7 +341,7 @@ public class AddServiceFragment extends Fragment {
                 // Set up the input quantity
                 ambulanceQuantity = new EditText(view.getContext());
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                ambulanceQuantity.setPadding(2,2,2,2);
+                ambulanceQuantity.setPadding(2, 2, 2, 2);
                 ambulanceQuantity.setInputType(InputType.TYPE_CLASS_TEXT);
                 ambulanceQuantity.setHint(assetPrimaryQuantityKey);
                 builder.setView(ambulanceQuantity);
@@ -400,7 +403,7 @@ public class AddServiceFragment extends Fragment {
                 // Set up the input quantity
                 availableTests = new EditText(view.getContext());
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                availableTests.setPadding(2,2,2,2);
+                availableTests.setPadding(2, 2, 2, 2);
                 availableTests.setInputType(InputType.TYPE_CLASS_TEXT);
                 availableTests.setHint(assetPrimaryQuantityKey + " (Comma Separated)");
                 builder.setView(availableTests);
@@ -426,49 +429,49 @@ public class AddServiceFragment extends Fragment {
                     case "DOCTOR":
                         String startTimeText = startTime.getText().toString();
                         String endTimeText = endTime.getText().toString();
-                        if(sunday.isChecked()){
+                        if (sunday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(sunday.getText().toString());
                             slots.add(slot);
                         }
-                        if(monday.isChecked()){
+                        if (monday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(monday.getText().toString());
                             slots.add(slot);
                         }
-                        if(tuesday.isChecked()){
+                        if (tuesday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(tuesday.getText().toString());
                             slots.add(slot);
                         }
-                        if(wednesday.isChecked()){
+                        if (wednesday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(wednesday.getText().toString());
                             slots.add(slot);
                         }
-                        if(thursday.isChecked()){
+                        if (thursday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(thursday.getText().toString());
                             slots.add(slot);
                         }
-                        if(friday.isChecked()){
+                        if (friday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
                             slot.setDay(friday.getText().toString());
                             slots.add(slot);
                         }
-                        if(saturday.isChecked()){
+                        if (saturday.isChecked()) {
                             Slots slot = new Slots();
                             slot.setStartTime(startTimeText);
                             slot.setEndTime(endTimeText);
@@ -478,7 +481,7 @@ public class AddServiceFragment extends Fragment {
                         break;
                     case "PATHOLOGY":
                         String tests = availableTests.getText().toString();
-                        if(tests.contains(",")){
+                        if (tests.contains(",")) {
                             available_tests = Arrays.asList(tests.split(","));
                         } else {
                             available_tests.add(tests);

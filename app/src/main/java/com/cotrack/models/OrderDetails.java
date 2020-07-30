@@ -19,6 +19,8 @@ public class OrderDetails {
     public String primary_quantity;
     @JsonProperty(value = "scheduled_appointment")
     public String scheduled_appointment;
+    @JsonProperty(value = "tests")
+    public Test tests;
 
     public String get_id() {
         return _id;
@@ -74,5 +76,13 @@ public class OrderDetails {
 
     public void setScheduled_appointment(String scheduled_appointment) {
         this.scheduled_appointment = scheduled_appointment;
+    }
+
+    public Test getTests() {
+        return tests;
+    }
+
+    public void setTests(Test tests) {
+        this.tests = tests;
     }
 }

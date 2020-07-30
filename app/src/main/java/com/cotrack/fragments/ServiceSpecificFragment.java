@@ -26,7 +26,11 @@ import com.cotrack.helpers.OnItemClick;
 import com.cotrack.helpers.Space;
 import com.cotrack.listeners.EndlessScrollListener;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
@@ -40,6 +44,9 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
     RecyclerView recyclerViewProducts;
     ProgressBar progressBar;
     FrameLayout frameLayout;
+    final String COOKIE_FILE_NAME = "Cookie.properties";
+    final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
 
     public ServiceSpecificFragment() {
         // Required empty public constructor
@@ -116,7 +123,7 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
         }  else {
-            Log.d("Data For User", "Data present: " + UserDataHolder.USER_ID + " Data: " + providerDetails.get(0).getType());
+            Log.d("Data For User", "Data present: " + getProperties().getProperty(USER_COOKIE) + " Data: " + providerDetails.get(0).getType());
         }
         providerAdapter = new ProviderAdapter(view.getContext(), providerDetails);
 
@@ -211,5 +218,18 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
         serviceDetailsFragment.setArguments(args);
         fragmentTransaction.replace(R.id.container, serviceDetailsFragment);
         fragmentTransaction.commit();
+    }
+
+    public Properties getProperties(){
+        Properties props = new Properties();
+        try {
+            FileInputStream fin= view.getContext().openFileInput(COOKIE_FILE_NAME);
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        } catch (IOException e) {
+            Log.e("File Error", "Error reading properties file", e);
+        }
+        return props;
     }
 }

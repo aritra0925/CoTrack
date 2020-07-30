@@ -5,6 +5,7 @@ import android.util.Log;
 import com.cloudant.client.api.query.QueryResult;
 import com.cotrack.R;
 import com.cotrack.models.OrderDetails;
+import com.cotrack.models.Test;
 import com.cotrack.utils.CloudantOrderUtils;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class OrderDataHolder {
     public int imgResource;
     public String primaryQuantity;
     public String scheduledAppointment;
+    public Test tests;
 
     private static List<OrderDataHolder> allInstances;
     private static Map<String, List<OrderDataHolder>> userSpecificOrderDetails;
@@ -78,6 +80,7 @@ public class OrderDataHolder {
         return primaryQuantity;
     }
 
+
     public void setPrimaryQuantity(String primaryQuantity) {
         this.primaryQuantity = primaryQuantity;
     }
@@ -88,6 +91,14 @@ public class OrderDataHolder {
 
     public void setScheduledAppointment(String scheduledAppointment) {
         this.scheduledAppointment = scheduledAppointment;
+    }
+
+    public Test getTests() {
+        return tests;
+    }
+
+    public void setTests(Test tests) {
+        this.tests = tests;
     }
 
     public static List<OrderDataHolder> getAllInstances() {
@@ -125,6 +136,7 @@ public class OrderDataHolder {
                     default:
                         holder.setImgResource(R.drawable.medical_icon);
                 }
+                holder.setTests(orderDetails.getTests());
                 allInstances.add(holder);
             }
         }
@@ -165,6 +177,7 @@ public class OrderDataHolder {
                 default:
                     holder.setImgResource(R.drawable.medical_icon);
             }
+            holder.setTests(orderDetails.getTests());
             allInstances.add(holder);
         }
         return allInstances;
@@ -208,6 +221,7 @@ public class OrderDataHolder {
                     default:
                         holder.setImgResource(R.drawable.medical_icon);
                 }
+                holder.setTests(orderDetails.getTests());
                 allInstances.add(holder);
 
                 // Grouping by service category
@@ -261,6 +275,7 @@ public class OrderDataHolder {
                 default:
                     holder.setImgResource(R.drawable.medical_icon);
             }
+            holder.setTests(orderDetails.getTests());
             allInstances.add(holder);
 
             // Grouping by service category
@@ -314,6 +329,7 @@ public class OrderDataHolder {
                     default:
                         holder.setImgResource(R.drawable.medical_icon);
                 }
+                holder.setTests(orderDetails.getTests());
                 allInstances.add(holder);
 
                 // Grouping by service category
@@ -367,6 +383,7 @@ public class OrderDataHolder {
                 default:
                     holder.setImgResource(R.drawable.medical_icon);
             }
+            holder.setTests(orderDetails.getTests());
             allInstances.add(holder);
 
             // Grouping by service category

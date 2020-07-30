@@ -264,8 +264,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("service");
             userCookie = email;
             userTypeCookie = "service";
-            UserDataHolder.USER_ID = email;
-            UserDataHolder.USER_TYPE = "service";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "service");
 
@@ -279,8 +277,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             session.setUserType("regular");
             userCookie = email;
             userTypeCookie = "regular";
-            UserDataHolder.USER_ID = email;
-            UserDataHolder.USER_TYPE = "regular";
             writeProperties(USER_COOKIE, email);
             writeProperties(USER_TYPE_COOKIE, "regular");
         }

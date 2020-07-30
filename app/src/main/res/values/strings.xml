@@ -34,7 +34,11 @@
     <string name="tab_text_1" translatable="false">Services</string>
     <string name="tab_text_2" translatable="false">Home</string>
 
-
+    <string-array name="testStatus">
+        <item>No Result</item>
+        <item>Negative</item>
+        <item>Positive</item>
+    </string-array>
     <string-array name="schedule">
         <item>Weekly</item>
         <item>Weekends</item>
