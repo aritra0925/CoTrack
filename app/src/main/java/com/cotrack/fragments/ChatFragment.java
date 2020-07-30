@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.cotrack.BuildConfig;
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
+import com.cotrack.global.ServiceProviderDataHolder;
+import com.cotrack.global.ServicesDataHolder;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
 import com.cotrack.utils.WatsonUtils;
@@ -289,7 +291,80 @@ public class ChatFragment extends Fragment {
             }
             sender.setNickname("Halo");
             message.setSender(sender);
-            message.setMessage(text);
+            List<ServiceProviderDataHolder> serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
+            String messageText = "Please refer the services below: \n";
+            if(text.contains("Doctor")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("DOCTOR")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name() + "\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact()+"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else if(text.contains("Hospital")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("HOSPITAL")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name()+"\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact() +"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else if(text.contains("Ambulance")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("AMBULANCE")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name()+"\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact() +"\n"+
+                                "No of Ambulances : "+dataHolder.getPrimary_quantity()+"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else if(text.contains("Pathology")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("PATHOLOGY")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name()+"\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact() +"\n"+
+                                "Available Tests : "+dataHolder.getAvailable_tests()+"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else if(text.contains("Medicine")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("MEDICINE")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name()+"\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact() +"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else if(text.contains("Disinfect")){
+                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
+                    if(dataHolder.getType().equalsIgnoreCase("DISINFECT")){
+                        messageText = messageText + "\n" +
+                                "Name : "+dataHolder.getService_provider_name()+"\n"+
+                                "Description : "+dataHolder.getService_description() +"\n"+
+                                "Email : "+dataHolder.getService_id() +"\n"+
+                                "Contact No : "+dataHolder.getContact() +"\n" +
+                                "**************************************\n";
+                    }
+                }
+            } else {
+                messageText = text;
+            }
+            message.setMessage(messageText);
             message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
             mMessageList.add(message);
             storeMessagesInCache(mMessageList);
