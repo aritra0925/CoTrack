@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -64,12 +65,20 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
         return instance;
     }
 
+    public void enableBackButton(ImageView backButton){
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setColorFilter(getResources().getColor(R.color.accent));
+        backButton.setEnabled(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         asset_id = getArguments().getString("asset_id");
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_specific_service, container, false);
+        ImageView backButton = getActivity().findViewById(R.id.backButton);
+        enableBackButton(backButton);
         //Bind RecyclerView from layout to recyclerViewProducts object
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
         frameLayout = view.findViewById(R.id.specificServiceFrameLayout);
@@ -216,8 +225,9 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
         Bundle args = new Bundle();
         args.putString("service_id", service_id);
         serviceDetailsFragment.setArguments(args);
-        fragmentTransaction.replace(R.id.container, serviceDetailsFragment);
+        fragmentTransaction.replace(R.id.container, serviceDetailsFragment).addToBackStack(null);
         fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null);
     }
 
     public Properties getProperties(){

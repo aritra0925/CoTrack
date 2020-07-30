@@ -15,6 +15,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toolbar;
@@ -68,6 +69,7 @@ public class NavigationActivity  extends AppCompatActivity {
     FrameLayout progressBarHolder;
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
+    ImageView backButton;
 
     // Listeners
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -131,11 +133,33 @@ public class NavigationActivity  extends AppCompatActivity {
         toolbar.setTitle("Toolbar");
         toolbar.inflateMenu(R.menu.overflow_menu);
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setVisibility(View.INVISIBLE);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         if(savedInstanceState == null){
             bottomNavigation.setSelectedItemId(R.id.navigation_home);
             openFragment(HomeFragment.newInstance());
         }
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() == 0) {
+            //backButton.setVisibility(View.GONE);
+            backButton.setBackgroundColor(getResources().getColor(R.color.primary));
+            backButton.setColorFilter(getResources().getColor(R.color.primary));
+            backButton.setEnabled(false);
+            super.onBackPressed();
+        }
+        else {
+            getFragmentManager().popBackStack();
+        }
     }
 
     public void openFragment(Fragment fragment) {

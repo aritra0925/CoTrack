@@ -15,6 +15,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toolbar;
@@ -66,6 +67,7 @@ public class ServiceNavigationActivity extends AppCompatActivity {
     RelativeLayout serviceNavigationLayout;
     ProgressBar progressBar;
     Toolbar toolbar;
+    ImageView backButton;
     FrameLayout progressBarHolder;
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
@@ -125,6 +127,14 @@ public class ServiceNavigationActivity extends AppCompatActivity {
         toolbar.setTitle("Toolbar");
         toolbar.inflateMenu(R.menu.overflow_menu);
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
+        backButton = (ImageView) findViewById(R.id.backButtonService);
+        backButton.setVisibility(View.INVISIBLE);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         new DataLoadTask().execute("");
         bottomNavigation = findViewById(R.id.bottom_navigationService);
         if(savedInstanceState == null){
@@ -132,6 +142,19 @@ public class ServiceNavigationActivity extends AppCompatActivity {
             openFragment(RegisteredServicesFragment.newInstance());
         }
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() == 0) {
+            backButton.setBackgroundColor(getResources().getColor(R.color.primary));
+            backButton.setColorFilter(getResources().getColor(R.color.primary));
+            backButton.setEnabled(false);
+            super.onBackPressed();
+        }
+        else {
+            getFragmentManager().popBackStack();
+        }
     }
 
     public void openFragment(Fragment fragment) {

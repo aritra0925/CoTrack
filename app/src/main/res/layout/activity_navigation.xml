@@ -20,10 +20,13 @@
         android:weightSum="5">
 
         <ImageView
+            android:id="@+id/backButton"
             android:layout_width="30dp"
-            android:layout_height="match_parent"
+            android:layout_height="20dp"
             android:layout_weight="1"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/back"
+            android:tint="@color/accent"/>
 
         <ImageView
             android:layout_width="wrap_content"

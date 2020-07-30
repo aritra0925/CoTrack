@@ -33,16 +33,16 @@ import com.google.android.gms.location.LocationServices;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LoginService extends Service  implements
+public class LocationService extends Service  implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    private static final String TAG = LoginService.class.getSimpleName();
+    private static final String TAG = LocationService.class.getSimpleName();
     GoogleApiClient mLocationClient;
     LocationRequest mLocationRequest = new LocationRequest();
 
 
-    public static final String ACTION_LOCATION_BROADCAST = LoginService.class.getName() + "LocationBroadcast";
+    public static final String ACTION_LOCATION_BROADCAST = LocationService.class.getName() + "LocationBroadcast";
     public static final String EXTRA_LATITUDE = "extra_latitude";
     public static final String EXTRA_LONGITUDE = "extra_longitude";
     public static final long LOCATION_INTERVAL = 10000;

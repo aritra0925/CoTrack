@@ -8,7 +8,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,10 +30,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
-import com.cotrack.services.LoginService;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
 

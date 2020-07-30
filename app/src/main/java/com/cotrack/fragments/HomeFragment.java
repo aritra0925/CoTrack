@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,9 +32,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.cotrack.R;
 import com.cotrack.models.Country;
-import com.cotrack.models.Countries;
 import com.cotrack.models.Global;
-import com.cotrack.services.LoginService;
+import com.cotrack.services.LocationService;
 import com.cotrack.utils.JSONUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,11 +41,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
@@ -56,7 +52,6 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +72,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     FusedLocationProviderClient fusedLocationProviderClient;
     final int REQUEST_CODE = 101;
     public static final String COVID_19_URL = "https://api.covid19api.com/summary";
-    LoginService mLoginService;
+    LocationService mLocationService;
     Intent mServiceIntent;
     RadioGroup radioGroup;
     RadioButton countryRadio;
@@ -122,11 +117,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         fetchLocation(view.getContext());
         loadFeedData(view.getContext());
-        mLoginService = new LoginService();
-        mServiceIntent = new Intent(view.getContext(), mLoginService.getClass());
-        if (!isMyServiceRunning(mLoginService.getClass())) {
+        mLocationService = new LocationService();
+        mServiceIntent = new Intent(view.getContext(), mLocationService.getClass());
+        if (!isMyServiceRunning(mLocationService.getClass())) {
             System.out.println("Service is already running");
-            getActivity().startService(new Intent(getActivity(), mLoginService.getClass()));
+            getActivity().startService(new Intent(getActivity(), mLocationService.getClass()));
             System.out.println("Service started");
         } else {
             System.out.println("Service is already running");

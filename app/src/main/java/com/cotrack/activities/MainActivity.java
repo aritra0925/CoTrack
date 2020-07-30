@@ -13,10 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.cotrack.R;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
-import com.cotrack.services.LoginService;
+import com.cotrack.services.LocationService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,7 +27,7 @@ import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     Context context;
-    LoginService mLoginService;
+    LocationService mLocationService;
     Intent mServiceIntent;
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
@@ -42,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLoginService = new LoginService();
-        mServiceIntent = new Intent(this, mLoginService.getClass());
+        mLocationService = new LocationService();
+        mServiceIntent = new Intent(this, mLocationService.getClass());
         /*if (!isMyServiceRunning(mLoginService.getClass())) {
             startService(mServiceIntent);
         }*/

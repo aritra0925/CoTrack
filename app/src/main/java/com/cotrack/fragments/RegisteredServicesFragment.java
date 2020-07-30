@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -228,8 +229,9 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
         Bundle args = new Bundle();
         args.putString("service_id", service_id);
         serviceDetailsFragment.setArguments(args);
-        fragmentTransaction.replace(R.id.containerService, serviceDetailsFragment);
+        fragmentTransaction.replace(R.id.containerService, serviceDetailsFragment).addToBackStack(null);;
         fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null);
     }
 
 

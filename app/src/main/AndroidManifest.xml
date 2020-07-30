@@ -34,7 +34,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".services.LoginService"
+            android:name=".services.LocationService"
             android:enabled="true">
             <!--android:foregroundServiceType="location">-->
         </service>

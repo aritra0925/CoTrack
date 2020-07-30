@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.cotrack.R;
 import com.cotrack.global.AssetDataHolder;
@@ -120,6 +121,12 @@ public class ServiceDetailsFragment extends Fragment {
         return instance;
     }
 
+    public void enableBackButton(ImageView backButton){
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setColorFilter(getResources().getColor(R.color.accent));
+        backButton.setEnabled(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -127,6 +134,13 @@ public class ServiceDetailsFragment extends Fragment {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         view = inflater.inflate(R.layout.fragment_service_details, container, false);
+        ImageView backButton = null;
+        if(getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")) {
+            backButton = getActivity().findViewById(R.id.backButtonService);
+        } else {
+            backButton = getActivity().findViewById(R.id.backButton);
+        }
+        enableBackButton(backButton);
         providerName = view.findViewById(R.id.textView_ProviderName);
         providerAssetCount = view.findViewById(R.id.textView_ProviderDetails);
         providerAssetDescription = view.findViewById(R.id.textView_ProviderDescription);

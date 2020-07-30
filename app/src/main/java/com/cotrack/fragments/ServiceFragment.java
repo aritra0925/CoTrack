@@ -78,7 +78,8 @@ public class ServiceFragment extends Fragment implements OnItemClick {
         Bundle args = new Bundle();
         args.putString("asset_id", asset_id);
         serviceDetailsFragment.setArguments(args);
-        fragmentTransaction.replace(R.id.container, serviceDetailsFragment);
+        fragmentTransaction.replace(R.id.container, serviceDetailsFragment).addToBackStack(null);
         fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null);
     }
 }
