@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -60,6 +61,8 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requested_services, container, false);
+        ImageView backButton = getActivity().findViewById(R.id.backButton);
+        disableBackButton(backButton);
         listView=(ListView) view.findViewById(R.id.listViewRequestedServices);
         listView.setDivider(null);
 
@@ -78,6 +81,12 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
         listView.setAdapter(serviceAdapter);
         serviceAdapter.setItemClick(this);
         return view;
+    }
+
+    public void disableBackButton(ImageView backButton){
+        backButton.setBackgroundColor(getResources().getColor(R.color.primary));
+        backButton.setColorFilter(getResources().getColor(R.color.primary));
+        backButton.setEnabled(false);
     }
 
     @Override

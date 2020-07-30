@@ -874,7 +874,11 @@ public class ServiceDetailsFragment extends Fragment {
                     ServiceProviderDataHolder.refreshAllUserSpecificDetails();
                     break;
                 case "DOCTOR":
-                    serviceDetails.setSlots(slots);
+                    List<Slots> previousSlots = serviceDetails.getSlots();
+                    for(Slots slot: slots){
+                        previousSlots.add(slot);
+                    }
+                    serviceDetails.setSlots(previousSlots);
                     CloudantServiceUtils.updateDocument(serviceDetails);
                     ServiceProviderDataHolder.refreshAllServiceSpecificDetails();
                     ServiceProviderDataHolder.refreshAllUserSpecificDetails();
