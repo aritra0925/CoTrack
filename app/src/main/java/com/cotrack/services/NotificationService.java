@@ -57,6 +57,7 @@ public class NotificationService extends Service {
     final String USER_TYPE_COOKIE = "UserTypeCookie";
     Notification notification;
     NotificationManager manager;
+    NotificationCompat.Builder notificationBuilder;
     Service service;
 
     public int counter = 0;
@@ -98,6 +99,7 @@ public class NotificationService extends Service {
         String userName = getProperties().getProperty(USER_COOKIE);
         Log.d("Notification Service", "Checking update requests");
         new DBConnect().execute(userName);
+        startForeground(1, notification);
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
         return START_STICKY;
     }
@@ -143,8 +145,8 @@ public class NotificationService extends Service {
         protected void onPostExecute(List<OrderDataHolder> feed) {
             if (!feed.isEmpty()) {
                 for (OrderDataHolder holder : feed) {
-                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
-                    notificationBuilder.setOngoing(true)
+                    notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
+                    notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
                             .setContentText("User " + holder.getUser_id() + " has requested update for order: " + holder.get_id())
                             .setPriority(NotificationManager.IMPORTANCE_HIGH)
