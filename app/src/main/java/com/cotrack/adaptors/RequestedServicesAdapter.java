@@ -239,9 +239,13 @@ public class RequestedServicesAdapter extends BaseAdapter {
                 spinnerArray.add(orderDetailsModels.get(position).getTests().getTest_status());
                 ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(rowView.getContext(), simple_spinner_item, spinnerArray);
                 holder.spinner.setAdapter(adapter);
-                int spinnerPosition = spinnerAdapter.getPosition(orderDetailsModels.get(position).getTests().getTest_status());
-                if(holder.spinner.getSelectedItemPosition() != spinnerPosition) {
-                    holder.spinner.setSelection(spinnerPosition);
+                try {
+                    int spinnerPosition = spinnerAdapter.getPosition(orderDetailsModels.get(position).getTests().getTest_status());
+                    if (holder.spinner.getSelectedItemPosition() != spinnerPosition) {
+                        holder.spinner.setSelection(spinnerPosition);
+                    }
+                } catch (Exception ex) {
+                    Log.d("Requested Service Adapter", "Exception thrown: " , ex);
                 }
             }
 

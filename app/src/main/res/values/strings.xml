@@ -38,6 +38,7 @@
         <item>No Result</item>
         <item>Negative</item>
         <item>Positive</item>
+        <item>Requested</item>
     </string-array>
     <string-array name="schedule">
         <item>Weekly</item>

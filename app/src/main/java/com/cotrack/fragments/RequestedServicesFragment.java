@@ -77,7 +77,7 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
         } else {
             orders = serviceSpecificDetails.get(getProperties().getProperty(USER_COOKIE));
         }
-        RequestedServicesAdapter serviceAdapter = new RequestedServicesAdapter(this.getContext(), orders);
+        RequestedServicesAdapter serviceAdapter = new RequestedServicesAdapter(view.getContext(), orders);
         listView.setAdapter(serviceAdapter);
         serviceAdapter.setItemClick(this);
         return view;
