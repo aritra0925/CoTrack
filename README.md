@@ -1,9 +1,10 @@
-# CoTrack ![Logo](https://github.com/aritra0925/CoTrack/blob/master/logo.png?raw=true)
+# CoTrack
 Covid-19 Tracking and Community Collaboration App
 
 **Project name:**  
   
-CoTracker- Unique community collaboration Solutions
+CoTracker- Unique community collaboration Solutions  
+![Logo](https://github.com/aritra0925/CoTrack/blob/master/logo.png?raw=true)  
 
 **Short description:**
     
