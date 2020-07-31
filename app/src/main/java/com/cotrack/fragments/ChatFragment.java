@@ -2,14 +2,11 @@ package com.cotrack.fragments;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.view.KeyEvent;
@@ -22,48 +19,31 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.cotrack.BuildConfig;
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
 import com.cotrack.global.ServiceProviderDataHolder;
-import com.cotrack.global.ServicesDataHolder;
 import com.cotrack.models.Message;
 import com.cotrack.models.User;
 import com.cotrack.utils.WatsonUtils;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.MessageContext;
 import com.ibm.watson.assistant.v2.model.MessageResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Properties;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-
-import com.cotrack.models.Global;
-import com.cotrack.models.Message;
-import com.cotrack.models.User;
-import com.cotrack.models.Messages;
-import com.cotrack.utils.CommonUtils;
 import com.cotrack.utils.JSONUtils;
-import com.cotrack.utils.WatsonUtils;
-import com.google.android.gms.common.util.JsonUtils;
-
 import android.util.Log;
 import android.content.Context;
 
@@ -156,7 +136,6 @@ public class ChatFragment extends Fragment {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                 String inputText = input.getText().toString();
                 System.out.println("****** Feeding input ****** "+inputText);
                 input.setText("");
@@ -212,28 +191,6 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    public void displayMsg(MessageResponse msg) {
-        final MessageResponse mssg = msg;
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                //from the WCS API response
-                //extract the text from output to display to the user
-                String text = mssg.getOutput().toString();//.get(0);
-
-                //now output the text to the UI to show the chat history
-                msgList.add(text);
-                msgView.setAdapter(msgList);
-                msgView.smoothScrollToPosition(msgList.getCount() - 1);
-
-                //set the context, so that the next time we call WCS we pass the accumulated context
-                context = mssg.getContext();
-            }
-        });
-
-    }
-
     @SuppressWarnings("deprecation")
     class DBConnect extends AsyncTask {
 
@@ -245,12 +202,10 @@ public class ChatFragment extends Fragment {
          */
         @Override
         protected String doInBackground(Object[] objects) {
-            //APIUtils.insertDocument("Test test text");
             return "";
         }
 
         protected void onPostExecute(String feed) {
-            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -265,19 +220,20 @@ public class ChatFragment extends Fragment {
         @Override
         protected MessageResponse doInBackground(String... strings) {
             MessageResponse messageResponse = WatsonUtils.startService(BuildConfig.WATSON_API_KEY, BuildConfig.WATSON_ASSISTANT_URL, BuildConfig.WATSON_WORKSPACE, strings[0]);
-            //System.out.println("Response: " + messageResponse.toString());
             return messageResponse;
         }
 
+        /**
+         * This method is used for displaying the Watson response to the application chatbot
+         * @param feed is message response from Watson assistant
+         */
         @Override
         protected void onPostExecute(MessageResponse feed) {
             Message message = new Message();
             User sender = new User();
             String jsonString = feed.getOutput().toString();
-            //System.out.println(jsonString);
             JSONObject jsonRootObject;
             String text = null;
-
             try {
                 jsonRootObject = new JSONObject(jsonString);
                 JSONArray jsonArray = jsonRootObject.getJSONArray("generic");
@@ -285,7 +241,6 @@ public class ChatFragment extends Fragment {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     text = jsonObject.optString("text").toString();
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -364,6 +319,7 @@ public class ChatFragment extends Fragment {
             } else {
                 messageText = text;
             }
+            // Setting the message response text from chatbot
             message.setMessage(messageText);
             message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
             mMessageList.add(message);

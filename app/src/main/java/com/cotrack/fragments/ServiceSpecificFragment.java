@@ -95,7 +95,6 @@ public class ServiceSpecificFragment extends Fragment implements OnItemClick {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (!providerAdapter.loading) {
-                    //feedData();
                 }
             }
 

@@ -423,8 +423,6 @@ public class ServiceDetailsFragment extends Fragment {
                     addToCart.setGravity(Gravity.CENTER);
                     Log.e("WARNING", "No slots provided " + dataHolder.getSlots() + " for service id: " + dataHolder.get_id());
                     flag = false;
-                    /*
-                    break;*/
                 } else {
                     for (int count = 0; count < dataHolder.getSlots().size(); count++) {
                         Slots slot = dataHolder.getSlots().get(count);
@@ -746,7 +744,6 @@ public class ServiceDetailsFragment extends Fragment {
         builder.setPositiveButton("Update Service", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //m_Text = input.getText().toString();
                 // Finish the registration screen and return to the Login activity
 
                 switch (serviceType.toUpperCase()) {
@@ -819,7 +816,6 @@ public class ServiceDetailsFragment extends Fragment {
                 progressBarHolder.setAnimation(inAnimation);
                 progressBarHolder.setVisibility(View.VISIBLE);
 
-                //updateServiceDetails(view.getContext());
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {

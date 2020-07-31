@@ -93,15 +93,6 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
 
     @Override
     public void onItemClicked(int position) {
-        /*String orderStatus = orders.get(position).getOrder_status();
-        ServiceSpecificFragment serviceDetailsFragment = ServiceSpecificFragment.newInstance();
-        FragmentManager fragmentManager=getFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        Bundle args = new Bundle();
-        args.putString("order_status", orderStatus);
-        serviceDetailsFragment.setArguments(args);
-        fragmentTransaction.replace(R.id.containerService, this);
-        fragmentTransaction.commit();*/
     }
 
     public Properties getProperties(){

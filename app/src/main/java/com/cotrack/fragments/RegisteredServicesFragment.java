@@ -104,7 +104,6 @@ public class RegisteredServicesFragment extends Fragment implements OnItemClick 
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (!registerServiceItemsAdapter.loading) {
-                    //feedData();
                 }
             }
 

@@ -192,7 +192,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         LatLng max = new LatLng(maxLat, maxLon);
         LatLngBounds bounds = new LatLngBounds(min, max);
 
-        //map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 17));
         loadStatusData(view.getContext(), center, latLngList);
         country = getCurrentLocationCountry(view.getContext(), center);
@@ -291,7 +290,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = location;
-                    // Toast.makeText(context.getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(HomeFragment.this);
@@ -303,10 +301,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        /*MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
-        googleMap.addMarker(markerOptions);*/
         ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
         googleMap.setOnCameraIdleListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
@@ -327,7 +321,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void loadFeedData(Context context) {
         boolean isCountry = false;
         radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
-        //RadioButton radioButton = (RadioButton) view.findViewById(radioGroup.getCheckedRadioButtonId());
         if (countryRadio.isChecked()) {
             isCountry = true;
         }
