@@ -90,7 +90,7 @@ public class LocationService extends Service implements
     private void startMyOwnForeground() {
         service = this;
         String channelName = "Background Service";
-        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
