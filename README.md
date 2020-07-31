@@ -17,6 +17,9 @@ The application is easy to navigate and very user friendly. One can avail variou
 Among other information, it provides a summary view of the status of the pandemic across the country and even globally. This includes total confirmed cases, recoveries, and deaths. There is a map that provides an overview of the situation in any country in the world based on your location. One can click on the map to get a better insight into the state or country they’re living in. For India, the website shows a graphical representation of the cases confirmed in every state along with age demographics. It also shows the distance between the user and the nearest COVID 19 confirmed case.
 This solution has been developed using Android studio, JAVA, IBM Watson Service, NoSQL Database Cloudant Services from IBM, Google Map, Covid 19 APIs.
 
+**Video Link**  
+[TO BE UPDATED]
+
 **Features:**  
 ![alt text](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
 
