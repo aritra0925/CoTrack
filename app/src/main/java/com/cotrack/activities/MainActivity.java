@@ -8,15 +8,12 @@ import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.services.LocationService;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
         mLocationService = new LocationService();
         mServiceIntent = new Intent(this, mLocationService.getClass());
-        /*if (!isMyServiceRunning(mLoginService.getClass())) {
-            startService(mServiceIntent);
-        }*/
         context = this;
         session = new Session(this);
         if(savedInstanceState!=null) {
@@ -148,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     @Override
     protected void onDestroy() {
-        //stopService(mServiceIntent);
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartservice");
         broadcastIntent.setClass(this, Restarter.class);

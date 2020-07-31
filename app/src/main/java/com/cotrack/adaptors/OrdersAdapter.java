@@ -8,20 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cotrack.R;
 import com.cotrack.global.OrderDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import com.cotrack.models.OrderDetails;
-import com.cotrack.models.Test;
 import com.cotrack.utils.CloudantOrderUtils;
-
 import java.util.List;
 
 public class OrdersAdapter  extends BaseAdapter {
@@ -222,7 +218,6 @@ public class OrdersAdapter  extends BaseAdapter {
         }
 
         protected void onPostExecute(String feed) {
-            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -244,7 +239,6 @@ public class OrdersAdapter  extends BaseAdapter {
         }
 
         protected void onPostExecute(String feed) {
-            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
         }
     }
 }

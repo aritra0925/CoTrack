@@ -19,40 +19,27 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toolbar;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.cotrack.R;
 import com.cotrack.fragments.ChatFragment;
 import com.cotrack.fragments.HomeFragment;
 import com.cotrack.fragments.OrdersFragment;
-import com.cotrack.fragments.ServiceDetailsFragment;
 import com.cotrack.fragments.ServiceFragment;
-import com.cotrack.fragments.ServiceSpecificFragment;
 import com.cotrack.global.AssetDataHolder;
 import com.cotrack.global.OrderDataHolder;
-import com.cotrack.global.UserDataHolder;
-import com.cotrack.helpers.Session;
-import com.cotrack.models.ProviderDetails;
-import com.cotrack.models.UserDetails;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.internal.LinkedTreeMap;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 import java.util.Properties;
-
 import butterknife.BindView;
-
 import static com.cloudant.client.api.query.Expression.eq;
 
 public class NavigationActivity  extends AppCompatActivity {
@@ -151,7 +138,6 @@ public class NavigationActivity  extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(getFragmentManager().getBackStackEntryCount() == 0) {
-            //backButton.setVisibility(View.GONE);
             backButton.setBackgroundColor(getResources().getColor(R.color.primary));
             backButton.setColorFilter(getResources().getColor(R.color.primary));
             backButton.setEnabled(false);

@@ -4,10 +4,6 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +13,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
-
 import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,27 +22,22 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 import static com.cloudant.client.api.query.Expression.eq;
 import static com.cloudant.client.api.query.Operation.and;
 
@@ -122,7 +112,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                     Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
             if (background) {
-                //handleLocationUpdates();
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, PERMISSION_ALL);
@@ -216,7 +205,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     @Override
     protected void onDestroy() {
-        //stopService(mServiceIntent);
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartservice");
         broadcastIntent.setClass(this, Restarter.class);
@@ -369,47 +357,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         this.setAccountAuthenticatorResult(intent.getExtras());
         this.setResult(RESULT_OK, intent);
         this.finish();
-    }
-
-    // method to retrieve account.
-    private boolean validateAccount() {
-        AccountManagerCallback<Bundle> callback = new AccountManagerCallback<Bundle>() {
-
-            @Override
-            public void run(AccountManagerFuture<Bundle> arg0) {
-                Log.e("calback", "msg");
-
-                try {
-                    Bundle b = arg0.getResult();
-                    if (b.getBoolean(AccountManager.KEY_ACCOUNT_MANAGER_RESPONSE)) {
-                        //User account exists!!..
-                    }
-                } catch (OperationCanceledException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        AccountManager accnt_manager = AccountManager
-                .get(getApplicationContext());
-
-        Account[] accounts = accnt_manager
-                .getAccountsByType(getString(R.string.account_type));
-
-        if (accounts.length <= 0) {
-            return false;
-        } else {
-            loginNameVal = accounts[0].name;
-            loginPswdVal = accnt_manager.getPassword(accounts[0]);
-            return true;
-        }
     }
 
 

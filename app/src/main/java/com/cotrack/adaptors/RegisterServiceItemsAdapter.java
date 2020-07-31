@@ -6,17 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.cotrack.R;
 import com.cotrack.global.ServiceProviderDataHolder;
 import com.cotrack.helpers.OnItemClick;
-import com.cotrack.models.ProviderDetails;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
@@ -40,7 +34,6 @@ public class RegisterServiceItemsAdapter extends RecyclerView.Adapter {
 
     public RegisterServiceItemsAdapter(Context mContext, List<ServiceProviderDataHolder> products) {
         this.mProducts = products;
-        //mProducts = new ArrayList<>();
         this.mContext = mContext;
     }
 
@@ -180,7 +173,7 @@ public class RegisterServiceItemsAdapter extends RecyclerView.Adapter {
     //method to hide loading
     public void updateListLoading(List<ServiceProviderDataHolder> serviceProviderDataHolders) {
         mProducts = serviceProviderDataHolders;
-        notifyDataSetChanged();//    notifyItemRemoved(LoadingItemPos);
+        notifyDataSetChanged();
         loading = false;
     }
 }

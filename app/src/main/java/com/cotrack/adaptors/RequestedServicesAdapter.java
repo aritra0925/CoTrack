@@ -18,21 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
 import com.cotrack.R;
 import com.cotrack.global.OrderDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import com.cotrack.models.OrderDetails;
 import com.cotrack.models.Test;
 import com.cotrack.utils.CloudantOrderUtils;
-import com.cotrack.utils.CloudantServiceUtils;
-import com.ibm.watson.assistant.v2.model.MessageResponse;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import static android.R.layout.simple_spinner_item;
 
 public class RequestedServicesAdapter extends BaseAdapter {

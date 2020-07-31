@@ -18,17 +18,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.cotrack.R;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.Session;
 import com.cotrack.models.ProviderDetails;
 import com.cotrack.models.UserDetails;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -295,9 +290,6 @@ public class SignupActivity extends AppCompatActivity {
             return "";
         }
 
-        protected void onPostExecute(String feed) {
-            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
-        }
     }
 
     public boolean registerUser(boolean isService, String provider_name, String provider_password, String provider_address1, String provider_city, String provider_state, String provider_zip, String provider_contact, String provider_email) {
