@@ -21,7 +21,7 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 ![alt text](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
 
 
-**Architecture Diagram**  
+**Architecture Diagram:**  
 ![alt text](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
 
 **Team Members:**  
