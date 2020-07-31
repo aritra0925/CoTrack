@@ -1,14 +1,11 @@
 package com.cotrack.global;
 
 import android.util.Log;
-
 import com.cloudant.client.api.query.QueryResult;
 import com.cotrack.R;
 import com.cotrack.models.ServiceDetails;
 import com.cotrack.models.Slots;
 import com.cotrack.utils.CloudantServiceUtils;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,13 +1,11 @@
 package com.cotrack.global;
 
 import android.util.Log;
-
 import com.cloudant.client.api.query.QueryResult;
 import com.cotrack.R;
 import com.cotrack.models.OrderDetails;
 import com.cotrack.models.Test;
 import com.cotrack.utils.CloudantOrderUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

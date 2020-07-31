@@ -1,11 +1,9 @@
 package com.cotrack.global;
 
 import com.cloudant.client.api.query.QueryResult;
-import com.cloudant.client.api.query.Selector;
 import com.cotrack.models.AssetDetails;
 import com.cotrack.utils.CloudantAssetUtils;
 import com.cotrack.utils.CloudantServiceUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
