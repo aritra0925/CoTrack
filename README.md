@@ -1,4 +1,4 @@
-# CoTrack
+# CoTrack ![Logo](https://github.com/aritra0925/CoTrack/blob/master/logo.png?raw=true)
 Covid-19 Tracking and Community Collaboration App
 
 **Project name:**  
@@ -22,15 +22,35 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 
 **Video Link**  
   
-[TO BE UPDATED]
+[![Video](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
 
 **Features:**  
   
-![alt text](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
+![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
 
 **Architecture Diagram:**  
     
-![alt text](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
+![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
+
+**Future Roadmap**  
+![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
+
+The solution is developed for android users to ensure they can avail all the required information related to COVID 19 in their locality based on location and avail various health services. It also provides avenues to the doctors, hospitals, health institutions to extend their services in the digitized platform.
+The below pictures gives a bird eye view of various readily available services which were developed as part of the hackathon event and the planned future enhancement.
+
+**Way Ahead** 
+* Payment Gateway integration
+* Develop the application for iOS user
+* Community chat
+* Testimonials/Videos/Experience sharing of recovered patients, doctors etc.
+* Plasma blood bank
+* Gateway for donations to Covid cause thru Govt agencies/registered NGOs etc.
+* E-Commerce – online medicine supply ( both retail & bulk)
+
+**Services Used**  
+This application is built using artificial intelligence and machine learning solutions offered by IBM - Watson Studio for chatbot conversion. 
+Also, the solution is built using IBM’s NOSQL database Cloudant to ensure unstructured data is stored securely and easily.  
+Apart from that Google Map SDK has enabled location based services to ensure each citizen is aware and informed anytime and anywhere. It has also used Covid 19 APIs as well.
 
 **Team Members:** 
    
