@@ -1,7 +1,6 @@
 package com.cotrack.utils;
 
 import android.util.Log;
-
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
@@ -11,13 +10,10 @@ import com.cloudant.client.api.query.Selector;
 import com.cloudant.client.org.lightcouch.NoDocumentException;
 import com.cotrack.BuildConfig;
 import com.cotrack.models.AssetDetails;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import static com.cloudant.client.api.query.Expression.eq;
 import static com.cloudant.client.api.query.Operation.not;
-import static com.cloudant.client.api.query.Operation.or;
 public class CloudantAssetUtils {
 
     private static final String LOG = "Asset DB Activity";

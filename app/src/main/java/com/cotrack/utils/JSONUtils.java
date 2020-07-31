@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-
 import org.apache.commons.codec.Charsets;
-
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,7 +21,6 @@ public class JSONUtils {
     public static <T> T mapJsonObject(String jsonString, Class<T> classObject){
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println("Unwrapping: " + jsonString);
-        //objectMapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         T mappedObject = null;
         try {
@@ -39,7 +36,6 @@ public class JSONUtils {
     public static <Type> void saveObjectToJson(Object object, FileOutputStream fileOutputStream) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            //FileOutputStream fileOutputStream = new FileOutputStream(filenamePath);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, Charsets.UTF_8.name());
             Writer writer = new BufferedWriter(outputStreamWriter);
             mapper.writeValue(writer, object);
@@ -58,9 +54,7 @@ public class JSONUtils {
         JavaType type = objectMapper.getTypeFactory().constructType(classObject);
         System.out.println("Unwrapping: " + jsonString);
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-       // objectMapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //List<T> mappedObject = null;
         Message[] messageArrayList=null;
         try {
             messageArrayList = objectMapper.readValue(jsonString, Message[].class);
