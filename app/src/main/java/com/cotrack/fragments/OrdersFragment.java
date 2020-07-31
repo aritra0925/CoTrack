@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+@SuppressWarnings("deprecation")
 public class OrdersFragment  extends Fragment implements OnItemClick {
 
     ListView listView;

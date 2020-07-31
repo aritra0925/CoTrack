@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import static com.cloudant.client.api.query.Expression.eq;
 import static com.cloudant.client.api.query.Operation.and;
 
-
+@SuppressWarnings("deprecation")
 public class LoginActivity extends AccountAuthenticatorActivity {
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
@@ -166,7 +166,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         if (radioButton.getText().toString().equalsIgnoreCase(getString(R.string.user_type_service))) {
             isService = true;
         }
-        // TODO: Implement your own authentication logic here.
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

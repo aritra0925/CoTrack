@@ -42,6 +42,7 @@ import java.util.Properties;
 import butterknife.BindView;
 import static com.cloudant.client.api.query.Expression.eq;
 
+@SuppressWarnings("deprecation")
 public class NavigationActivity  extends AppCompatActivity {
     // Objects
     final String COOKIE_FILE_NAME = "Cookie.properties";

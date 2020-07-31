@@ -49,6 +49,7 @@ import java.util.Properties;
 
 import butterknife.BindView;
 
+@SuppressWarnings("deprecation")
 public class AddServiceFragment extends Fragment {
 
     private static final String TAG = "ServiceAdditionActivity";
@@ -171,7 +172,6 @@ public class AddServiceFragment extends Fragment {
         } else {
             tags.add(tagsText);
         }
-        // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

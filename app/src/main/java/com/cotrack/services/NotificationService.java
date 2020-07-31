@@ -1,44 +1,26 @@
 package com.cotrack.services;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.cotrack.R;
 import com.cotrack.global.OrderDataHolder;
-import com.cotrack.models.OrderDetails;
-import com.cotrack.models.Test;
 import com.cotrack.receivers.NotificationRestarter;
-import com.cotrack.receivers.Restarter;
-import com.cotrack.utils.CloudantOrderUtils;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,9 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
 
+@SuppressWarnings("deprecation")
 public class NotificationService extends Service {
 
     private static final String TAG = NotificationService.class.getSimpleName();

@@ -52,7 +52,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 
-
+@SuppressWarnings("deprecation")
 public class ServiceDetailsFragment extends Fragment {
 
     final String COOKIE_FILE_NAME = "Cookie.properties";
@@ -504,9 +504,6 @@ public class ServiceDetailsFragment extends Fragment {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onS
-                        // ignupSuccess or onSignupFailed
-                        // depending on success
                         ServiceDetails serviceDetails = CloudantServiceUtils.getWithId(dataHolder.get_id());
                         if (requestService(context)) {
                             onServiceRequestSuccess(view.getContext());

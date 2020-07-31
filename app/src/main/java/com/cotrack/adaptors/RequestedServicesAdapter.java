@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import static android.R.layout.simple_spinner_item;
 
+@SuppressWarnings("deprecation")
 public class RequestedServicesAdapter extends BaseAdapter {
 
     List<OrderDataHolder> orderDetailsModels;

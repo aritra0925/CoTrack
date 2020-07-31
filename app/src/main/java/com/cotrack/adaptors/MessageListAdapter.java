@@ -14,6 +14,7 @@ import com.cotrack.models.Message;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Message> mMessageList;

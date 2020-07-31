@@ -127,7 +127,6 @@ public class SignupActivity extends AppCompatActivity {
         if (radioButton.getText().toString().equalsIgnoreCase(getString(R.string.user_type_service))) {
             isService = true;
         }
-        // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

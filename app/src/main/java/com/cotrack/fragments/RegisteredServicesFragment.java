@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("deprecation")
 public class RegisteredServicesFragment extends Fragment implements OnItemClick {
 
     final String COOKIE_FILE_NAME = "Cookie.properties";

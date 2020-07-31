@@ -14,6 +14,7 @@ import com.cotrack.global.AssetDataHolder;
 import com.cotrack.helpers.OnItemClick;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ServiceAdapter extends BaseAdapter{
     List<AssetDataHolder> serviceDetailsModels;
     Context context;

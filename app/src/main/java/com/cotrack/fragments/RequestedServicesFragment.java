@@ -7,17 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.cotrack.R;
-import com.cotrack.adaptors.OrdersAdapter;
 import com.cotrack.adaptors.RequestedServicesAdapter;
 import com.cotrack.global.OrderDataHolder;
-import com.cotrack.global.UserDataHolder;
 import com.cotrack.helpers.OnItemClick;
 
 import java.io.FileInputStream;
@@ -27,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+@SuppressWarnings("deprecation")
 public class RequestedServicesFragment  extends Fragment implements OnItemClick {
 
     ListView listView;

@@ -20,6 +20,7 @@ import com.cotrack.models.OrderDetails;
 import com.cotrack.utils.CloudantOrderUtils;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class OrdersAdapter  extends BaseAdapter {
 
     List<OrderDataHolder> orderDetailsModels;
