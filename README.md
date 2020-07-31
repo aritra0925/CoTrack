@@ -25,9 +25,10 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 ![alt text](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
 
 **Team Members:**  
-The email address of the team lead and other members are 
-*Aritra.Das3@cognizant.com (Team Lead)
-*Piu.Sau@cognizant.com
-*Soumik.Mazumder@cognizant.com
-•AbhishekKumar.Singh4@cognizant.com
-•Sumita.biswal@cognizant.com
+The email address of the team lead and other members are  
+
+* Aritra.Das3@cognizant.com (Team Lead)
+* Piu.Sau@cognizant.com
+* Soumik.Mazumder@cognizant.com
+• AbhishekKumar.Singh4@cognizant.com
+• Sumita.biswal@cognizant.com
