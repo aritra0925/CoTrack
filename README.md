@@ -29,6 +29,6 @@ The email address of the team lead and other members are
 
 * Aritra.Das3@cognizant.com  
 * Piu.Sau@cognizant.com  
-* Soumik.Mazumder@cognizant.com  
-• AbhishekKumar.Singh4@cognizant.com  
-• Sumita.biswal@cognizant.com  
+* Soumik.Mazumder@cognizant.com
+* AbhishekKumar.Singh4@cognizant.com  
+* Sumita.biswal@cognizant.com  
