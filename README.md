@@ -34,7 +34,7 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
 
 **Future Roadmap**  
-![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
+![Architecture](https://github.com/aritra0925/CoTrack/blob/master/roadmap.png?raw=true)
 
 The solution is developed for android users to ensure they can avail all the required information related to COVID 19 in their locality based on location and avail various health services. It also provides avenues to the doctors, hospitals, health institutions to extend their services in the digitized platform.
 The below pictures gives a bird eye view of various readily available services which were developed as part of the hackathon event and the planned future enhancement.
