@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -296,6 +298,7 @@ public class LocationService extends Service implements
             if (feed != null) {
                 if (feed.status) {
                     Log.d("Location Service", "Inside Covid + result");
+                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
                     notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
@@ -304,16 +307,19 @@ public class LocationService extends Service implements
                             .setPriority(NotificationManager.IMPORTANCE_HIGH)
                             .setCategory(Notification.CATEGORY_SERVICE)
                             .setSmallIcon(R.drawable.logo)
+                            .setSound(defaultSoundUri)
                             .setColor(getResources().getColor(R.color.primary_darker))
                             .build();
                     manager.notify(0, notificationBuilder.build());
                 } else {
+                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
                     notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
                             .setContentText("Your location " + "(latitude: " + feed.locationDetails.getLongitude() + ", longitude: "
                                     + feed.locationDetails.getLongitude() + ") has been updated")
                             .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                            .setSound(defaultSoundUri)
                             .setCategory(Notification.CATEGORY_SERVICE)
                             .setSmallIcon(R.drawable.logo)
                             .build();

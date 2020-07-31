@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -145,11 +147,13 @@ public class NotificationService extends Service {
         protected void onPostExecute(List<OrderDataHolder> feed) {
             if (!feed.isEmpty()) {
                 for (OrderDataHolder holder : feed) {
+                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
                     notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
                             .setContentText("User " + holder.getUser_id() + " has requested update for order: " + holder.get_id())
-                            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                            .setPriority(NotificationManager.IMPORTANCE_MAX)
+                            .setSound(defaultSoundUri)
                             .setCategory(Notification.CATEGORY_SERVICE)
                             .setSmallIcon(R.drawable.logo)
                             .build();
