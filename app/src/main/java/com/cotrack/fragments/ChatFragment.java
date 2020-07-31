@@ -24,7 +24,9 @@ import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
 import com.cotrack.global.ServiceProviderDataHolder;
 import com.cotrack.models.Message;
+import com.cotrack.models.OrderDetails;
 import com.cotrack.models.User;
+import com.cotrack.utils.CloudantOrderUtils;
 import com.cotrack.utils.WatsonUtils;
 import com.ibm.watson.assistant.v2.Assistant;
 import com.ibm.watson.assistant.v2.model.MessageContext;
@@ -43,6 +45,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
+import com.cotrack.utils.CommonUtils;
 import com.cotrack.utils.JSONUtils;
 import android.util.Log;
 import android.content.Context;
@@ -50,7 +53,7 @@ import android.content.Context;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link com.cotrack.fragments.ChatFragment#newInstance} factory method to
+ * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 @SuppressWarnings("ALL")
@@ -69,8 +72,10 @@ public class ChatFragment extends Fragment {
     Assistant assistant;
     private final int REQ_CODE = 100;
     private static String CHAT_JSON;
+    private ServiceProviderDataHolder serviceProvider;
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
+    List<ServiceProviderDataHolder> serviceProviderDataHolderList;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -116,7 +121,6 @@ public class ChatFragment extends Fragment {
                 if (keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
                     String inputText = input.getText().toString();
                     input.setText("");
-                    new WatsonTask().execute(inputText);
                     Message message = new Message();
                     User sender = new User();
                     sender.setNickname("Random");
@@ -136,6 +140,7 @@ public class ChatFragment extends Fragment {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(view.getContext(), "Clicked on chat", Toast.LENGTH_LONG).show();
                 String inputText = input.getText().toString();
                 System.out.println("****** Feeding input ****** "+inputText);
                 input.setText("");
@@ -191,6 +196,28 @@ public class ChatFragment extends Fragment {
         }
     }
 
+    public void displayMsg(MessageResponse msg) {
+        final MessageResponse mssg = msg;
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                //from the WCS API response
+                //extract the text from output to display to the user
+                String text = mssg.getOutput().toString();//.get(0);
+
+                //now output the text to the UI to show the chat history
+                msgList.add(text);
+                msgView.setAdapter(msgList);
+                msgView.smoothScrollToPosition(msgList.getCount() - 1);
+
+                //set the context, so that the next time we call WCS we pass the accumulated context
+                context = mssg.getContext();
+            }
+        });
+
+    }
+
     @SuppressWarnings("deprecation")
     class DBConnect extends AsyncTask {
 
@@ -202,10 +229,12 @@ public class ChatFragment extends Fragment {
          */
         @Override
         protected String doInBackground(Object[] objects) {
+            //APIUtils.insertDocument("Test test text");
             return "";
         }
 
         protected void onPostExecute(String feed) {
+            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -220,20 +249,20 @@ public class ChatFragment extends Fragment {
         @Override
         protected MessageResponse doInBackground(String... strings) {
             MessageResponse messageResponse = WatsonUtils.startService(BuildConfig.WATSON_API_KEY, BuildConfig.WATSON_ASSISTANT_URL, BuildConfig.WATSON_WORKSPACE, strings[0]);
+            serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
+            //System.out.println("Response: " + messageResponse.toString());
             return messageResponse;
         }
 
-        /**
-         * This method is used for displaying the Watson response to the application chatbot
-         * @param feed is message response from Watson assistant
-         */
         @Override
         protected void onPostExecute(MessageResponse feed) {
             Message message = new Message();
             User sender = new User();
             String jsonString = feed.getOutput().toString();
+            System.out.println(jsonString);
             JSONObject jsonRootObject;
             String text = null;
+
             try {
                 jsonRootObject = new JSONObject(jsonString);
                 JSONArray jsonArray = jsonRootObject.getJSONArray("generic");
@@ -241,71 +270,91 @@ public class ChatFragment extends Fragment {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     text = jsonObject.optString("text").toString();
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             sender.setNickname("Halo");
             message.setSender(sender);
-            List<ServiceProviderDataHolder> serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
-            String messageText = "Please refer the services below: \n";
-            if(text.contains("Doctor")){
-                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
-                    if(dataHolder.getType().equalsIgnoreCase("DOCTOR")){
+           // List<ServiceProviderDataHolder> serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
+            String messageText = "";
+            //Please refer the services below:
+            if (text.contains("Doctor")) {
+                for (ServiceProviderDataHolder dataHolder : serviceProviderDataHolderList) {
+                    if (dataHolder.getType().equalsIgnoreCase("DOCTOR")) {
                         messageText = messageText + "\n" +
-                                "Name : "+dataHolder.getService_provider_name() + "\n"+
-                                "Description : "+dataHolder.getService_description() +"\n"+
-                                "Email : "+dataHolder.getService_id() +"\n"+
-                                "Contact No : "+dataHolder.getContact()+"\n" +
+                                "Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Description : " + dataHolder.getService_description() + "\n" +
+                                "Email : " + dataHolder.getService_id() + "\n" +
+                                "Contact No : " + dataHolder.getContact() + "\n" +
                                 "**************************************\n";
                     }
                 }
-            } else if(text.contains("Hospital")){
-                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
-                    if(dataHolder.getType().equalsIgnoreCase("HOSPITAL")){
+            } else if (text.contains("Hospital")) {
+                for (ServiceProviderDataHolder dataHolder : serviceProviderDataHolderList) {
+                    if (dataHolder.getType().equalsIgnoreCase("HOSPITAL")) {
                         messageText = messageText + "\n" +
-                                "Name : "+dataHolder.getService_provider_name()+"\n"+
-                                "Description : "+dataHolder.getService_description() +"\n"+
-                                "Email : "+dataHolder.getService_id() +"\n"+
-                                "Contact No : "+dataHolder.getContact() +"\n" +
+                                "Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Description : " + dataHolder.getService_description() + "\n" +
+                                "Email : " + dataHolder.getService_id() + "\n" +
+                                "Contact No : " + dataHolder.getContact() + "\n" +
                                 "**************************************\n";
                     }
                 }
-            } else if(text.contains("Ambulance")){
-                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
-                    if(dataHolder.getType().equalsIgnoreCase("AMBULANCE")){
+            } else if (text.contains("Ambulance")) {
+                for (ServiceProviderDataHolder dataHolder : serviceProviderDataHolderList) {
+                    if (dataHolder.getType().equalsIgnoreCase("AMBULANCE")) {
                         messageText = messageText + "\n" +
-                                "Name : "+dataHolder.getService_provider_name()+"\n"+
-                                "Description : "+dataHolder.getService_description() +"\n"+
-                                "Email : "+dataHolder.getService_id() +"\n"+
-                                "Contact No : "+dataHolder.getContact() +"\n"+
-                                "No of Ambulances : "+dataHolder.getPrimary_quantity()+"\n" +
+                                "Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Description : " + dataHolder.getService_description() + "\n" +
+                                "Email : " + dataHolder.getService_id() + "\n" +
+                                "Contact No : " + dataHolder.getContact() + "\n" +
+                                "No of Ambulances : " + dataHolder.getPrimary_quantity() + "\n" +
                                 "**************************************\n";
                     }
                 }
-            } else if(text.contains("Pathology")){
-                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
-                    if(dataHolder.getType().equalsIgnoreCase("PATHOLOGY")){
+            } else if (text.contains("Pathology")) {
+                for (ServiceProviderDataHolder dataHolder : serviceProviderDataHolderList) {
+                    if (dataHolder.getType().equalsIgnoreCase("PATHOLOGY")) {
                         messageText = messageText + "\n" +
-                                "Name : "+dataHolder.getService_provider_name()+"\n"+
-                                "Description : "+dataHolder.getService_description() +"\n"+
-                                "Email : "+dataHolder.getService_id() +"\n"+
-                                "Contact No : "+dataHolder.getContact() +"\n"+
-                                "Available Tests : "+dataHolder.getAvailable_tests()+"\n" +
+                                "Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Description : " + dataHolder.getService_description() + "\n" +
+                                "Email : " + dataHolder.getService_id() + "\n" +
+                                "Contact No : " + dataHolder.getContact() + "\n" +
+                                "Available Tests : " + dataHolder.getAvailable_tests() + "\n" +
                                 "**************************************\n";
                     }
                 }
-            } else if(text.contains("Medicine")){
-                for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
-                    if(dataHolder.getType().equalsIgnoreCase("MEDICINE")){
+            } else if (text.contains("Medicine")) {
+                for (ServiceProviderDataHolder dataHolder : serviceProviderDataHolderList) {
+                    if (dataHolder.getType().equalsIgnoreCase("MEDICINE")) {
                         messageText = messageText + "\n" +
-                                "Name : "+dataHolder.getService_provider_name()+"\n"+
-                                "Description : "+dataHolder.getService_description() +"\n"+
-                                "Email : "+dataHolder.getService_id() +"\n"+
-                                "Contact No : "+dataHolder.getContact() +"\n" +
+                                "Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Description : " + dataHolder.getService_description() + "\n" +
+                                "Email : " + dataHolder.getService_id() + "\n" +
+                                "Contact No : " + dataHolder.getContact() + "\n" +
                                 "**************************************\n";
                     }
                 }
-            } else if(text.contains("Disinfect")){
+            } else if (text.contains("Disinfectent order")) {
+                System.out.println(serviceProviderDataHolderList.size());
+                for (ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList) {
+                    System.out.println(dataHolder.getType());
+                    if (dataHolder.getType().equalsIgnoreCase("DISINFECT")) {
+                        serviceProvider=dataHolder;
+                        messageText = "We have found a service near by." +"\n"+ "Service Provider Name : " + dataHolder.getService_provider_name() + "\n" +
+                                "Please Type Place order for the order to be placed or All Disinfect Services to List the all the services for Disinfect";
+                        break;
+                    }
+                }
+
+            }else if(text.contains("Place order")) {
+                //TO DO
+                String orderID=requestService();
+                messageText="Order Placed. Please check your orders with order ID: "+orderID;
+
+
+            } else if(text.contains("Disinfectent")) {
                 for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
                     if(dataHolder.getType().equalsIgnoreCase("DISINFECT")){
                         messageText = messageText + "\n" +
@@ -314,12 +363,12 @@ public class ChatFragment extends Fragment {
                                 "Email : "+dataHolder.getService_id() +"\n"+
                                 "Contact No : "+dataHolder.getContact() +"\n" +
                                 "**************************************\n";
+
                     }
                 }
-            } else {
+            }else{
                 messageText = text;
             }
-            // Setting the message response text from chatbot
             message.setMessage(messageText);
             message.setCreatedAt(Calendar.getInstance().getTimeInMillis());
             mMessageList.add(message);
@@ -349,5 +398,22 @@ public class ChatFragment extends Fragment {
             Log.e("File Error", "Error reading properties file", e);
         }
         return props;
+    }
+    public String requestService() {
+        OrderDetails orderDetails = null;
+        try {
+            String id = CommonUtils.generateRandomDigits(8);
+            orderDetails = new OrderDetails();
+            orderDetails.set_id("order:ORD" + id);
+            orderDetails.setUser_id(getProperties().getProperty(USER_COOKIE));
+            orderDetails.setService_type(serviceProvider.getType());
+            orderDetails.setService_id(serviceProvider.getService_id());
+            orderDetails.setOrder_status("Created");
+            CloudantOrderUtils.insertDocument(orderDetails);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return orderDetails.get_id();
     }
 }
