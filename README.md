@@ -31,6 +31,9 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
   
 ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
 
+* Chatbot get service information for all the relevant services
+  * ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_avail_services.gif?raw=true)
+
 **Architecture Diagram:**  
     
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)
