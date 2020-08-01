@@ -46,6 +46,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
@@ -297,7 +298,11 @@ public class HomeFragment extends Fragment {
                         public void onMapReady(GoogleMap googleMap) {
                             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
-                            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                            googleMap.setIndoorEnabled(true);
+                            googleMap.setBuildingsEnabled(true);
+                            googleMap.setTrafficEnabled(true);
+                            //googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(view.getContext(), R.raw.map_style));
                             googleMap.setOnCameraIdleListener(clusterManager);
                             googleMap.setOnMarkerClickListener(clusterManager);
                             googleMap.getUiSettings().setCompassEnabled(true);
