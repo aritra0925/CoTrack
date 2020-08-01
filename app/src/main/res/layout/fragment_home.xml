@@ -23,9 +23,7 @@
                 android:enabled="true"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:apiKey="@string/api_key">
-
-            </com.google.android.gms.maps.MapView>
+                android:apiKey="@string/api_key"/>
 
             <View
                 android:layout_width="match_parent"
