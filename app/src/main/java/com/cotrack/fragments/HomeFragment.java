@@ -39,8 +39,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -64,7 +66,7 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 @SuppressWarnings("ALL")
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment {
 
 
     List<LatLng> latLngList;
@@ -78,6 +80,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     RadioButton countryRadio;
     String DEFAULT_COUNTRY = "India";
     String country = "";
+    MapView mapView;
 
     /**
      * Use this factory method to create a new instance of
@@ -94,7 +97,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    SupportMapFragment mMapFragment;
     private GoogleMap mMap;
 
     private static HomeFragment instance = null;
@@ -110,12 +112,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        mapView = (MapView) view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.setFocusable(true);
+        mapView.setHorizontalScrollBarEnabled(true);
+        mapView.setRevealOnFocusHint(true);
+        mapView.setFocusedByDefault(true);
+        //mapView.getMapAsync(this);
+        //mapView.setOnMa
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
+        //fetchLocation(view.getContext());
         radioGroup = (RadioGroup) view.findViewById(R.id.covidSelection);
         countryRadio = (RadioButton) view.findViewById(R.id.india);
         latLngList = new ArrayList<>();
-        setUpMapIfNeeded();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         fetchLocation(view.getContext());
+        MapsInitializer.initialize(view.getContext());
         loadFeedData(view.getContext());
         mLocationService = new LocationService();
         mServiceIntent = new Intent(view.getContext(), mLocationService.getClass());
@@ -215,17 +226,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return false;
     }
 
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the
-        // map.
-        if (mMapFragment == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMapFragment = ((SupportMapFragment) getParentFragmentManager().findFragmentById(R.id.map));
-
-        }
-
-    }
-
     public void doGetCovidSummary(Context context, String countryName, boolean isCountry) {
         try {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -284,27 +284,40 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
         }
+//        mapView.getMapAsync(this);
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = location;
-                    SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                    assert supportMapFragment != null;
-                    supportMapFragment.getMapAsync(HomeFragment.this);
+                    assert mapView != null;
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
+                            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                            googleMap.setOnCameraIdleListener(clusterManager);
+                            googleMap.setOnMarkerClickListener(clusterManager);
+                            googleMap.getUiSettings().setCompassEnabled(true);
+                            googleMap.getUiSettings().setIndoorLevelPickerEnabled(true);
+                            googleMap.getUiSettings().setMapToolbarEnabled(true);
+                            googleMap.getUiSettings().setTiltGesturesEnabled(true);
+                            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+                            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+                            googleMap.getUiSettings().setAllGesturesEnabled(true);
+                            googleMap.getUiSettings().setZoomControlsEnabled(true);
+                            googleMap.getUiSettings().setZoomGesturesEnabled(true);
+                            googleMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(true);
+                            googleMap.setMyLocationEnabled(true);
+                            loadMarkers(clusterManager, googleMap, latLng, 10, 20, 50);
+                            mapView.onResume();
+                        }
+                    });
                 }
             }
         });
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
-        googleMap.setOnCameraIdleListener(clusterManager);
-        googleMap.setOnMarkerClickListener(clusterManager);
-        loadMarkers(clusterManager, googleMap, latLng, 10, 20, 50);
     }
 
     @Override
@@ -312,7 +325,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLocation(getContext());
+                    fetchLocation(view.getContext());
                 }
                 break;
         }
