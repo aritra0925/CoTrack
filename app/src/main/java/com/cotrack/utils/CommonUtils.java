@@ -1,6 +1,7 @@
 package com.cotrack.utils;
 
-import java.util.Base64;
+import android.util.Base64;
+
 import java.util.Random;
 
 public class CommonUtils {
@@ -13,11 +14,12 @@ public class CommonUtils {
     }
 
     public static String decode(String encodedString){
-        return new String(Base64.getDecoder().decode(encodedString));
+        return new String(Base64.decode(encodedString, Base64.DEFAULT));
     }
 
     public static String encode(String text){
-        return new String(Base64.getEncoder().encode(text.getBytes()));
+
+        return Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
     }
 
 }
