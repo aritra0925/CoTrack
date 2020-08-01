@@ -31,6 +31,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.cotrack.R;
+import com.cotrack.helpers.ClusterRenderer;
+import com.cotrack.helpers.CustomClusterItem;
 import com.cotrack.models.Country;
 import com.cotrack.models.Global;
 import com.cotrack.services.LocationService;
@@ -53,6 +55,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.ui.IconGenerator;
 
 import org.json.JSONObject;
 
@@ -152,10 +155,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void loadMarkers(ClusterManager<ClusterItem> manager, GoogleMap map, LatLng center, int count,
+    private void loadMarkers(ClusterManager<CustomClusterItem> manager, GoogleMap map, LatLng center, int count,
                              double minDistance, double maxDistance) {
         map.clear();
         manager.clearItems();
+        manager.setAnimation(true);
+        manager.setRenderer(new ClusterRenderer(view.getContext(), map, manager));
         double minLat = Double.MAX_VALUE;
         double maxLat = Double.MIN_VALUE;
         double minLon = Double.MAX_VALUE;
@@ -174,25 +179,7 @@ public class HomeFragment extends Fragment {
 
             LatLng position = SphericalUtil.computeOffset(center, distance, heading);
             latLngList.add(position);
-            ClusterItem marker = new ClusterItem() {
-                @NonNull
-                @Override
-                public LatLng getPosition() {
-                    return position;
-                }
-
-                @Nullable
-                @Override
-                public String getTitle() {
-                    return "Covid 19 Marker";
-                }
-
-                @Nullable
-                @Override
-                public String getSnippet() {
-                    return null;
-                }
-            };
+            CustomClusterItem marker = new CustomClusterItem(position.latitude, position.longitude, "Covid +", "Marker for covid patients");
             manager.addItem(marker);
             minLat = Math.min(minLat, position.latitude);
             minLon = Math.min(minLon, position.longitude);
@@ -297,7 +284,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
                             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            ClusterManager<ClusterItem> clusterManager = new ClusterManager<ClusterItem>(view.getContext(), googleMap);
+                            ClusterManager<CustomClusterItem> clusterManager = new ClusterManager<CustomClusterItem>(view.getContext(), googleMap);
                             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                             googleMap.setIndoorEnabled(true);
                             googleMap.setBuildingsEnabled(true);
@@ -394,4 +381,5 @@ public class HomeFragment extends Fragment {
         }
         return countryName;
     }
+
 }
