@@ -29,7 +29,8 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
     
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)  
 
-**Services Used**  
+# Services Used
+  
 This application is built using artificial intelligence and machine learning solutions offered by IBM - Watson Studio for chatbot conversion. 
 Also, the solution is built using IBM’s NOSQL database Cloudant to ensure unstructured data is stored securely and easily.  
 Apart from that Google Map SDK has enabled location based services to ensure each citizen is aware and informed anytime and anywhere. It has also used Covid 19 APIs as well.
@@ -45,7 +46,7 @@ The below pictures gives a bird eye view of various readily available services w
   
 ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
   
-# Screen clipping of features not covered in video  
+# Screen clippings  
 * **Permission request flow (Even if the user allows location access while using this app. Our services flow will work fine)**  
 
    ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/permission_view.gif?raw=true)
