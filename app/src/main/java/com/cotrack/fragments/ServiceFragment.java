@@ -117,7 +117,7 @@ public class ServiceFragment extends Fragment implements OnItemClick {
          */
         @Override
         public Boolean doInBackground(String... objects) {
-            assets = AssetDataHolder.refreshAllInstances();
+            assets = AssetDataHolder.getAllInstances();
             return true;
         }
 

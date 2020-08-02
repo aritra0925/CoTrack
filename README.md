@@ -100,6 +100,7 @@ The below pictures gives a bird eye view of various readily available services w
 * You are good to go
 
 **Devices Tested On** 
+
 * One plus 8 - Android 10
 * Poco X2 - MIUI 11
 * Google Pixel 3A - API29 (Emulator)

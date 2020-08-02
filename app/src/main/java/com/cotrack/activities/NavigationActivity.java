@@ -30,6 +30,7 @@ import com.cotrack.fragments.OrdersFragment;
 import com.cotrack.fragments.ServiceFragment;
 import com.cotrack.global.AssetDataHolder;
 import com.cotrack.global.OrderDataHolder;
+import com.cotrack.global.ServiceProviderDataHolder;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.internal.LinkedTreeMap;
@@ -197,6 +198,7 @@ public class NavigationActivity  extends AppCompatActivity {
         @Override
         public Boolean doInBackground(String... objects) {
             AssetDataHolder.refreshAllInstances();
+            ServiceProviderDataHolder.refreshAllServiceSpecificDetails();
             OrderDataHolder.refreshAllUserSpecificDetails();
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", getProperties().getProperty(USER_COOKIE).toString())).getDocs().get(0);
             writeProperties(USER_NAME_COOKIE, treeMap.get("user_name").toString());
