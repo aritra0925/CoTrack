@@ -67,6 +67,7 @@ public class LocationService extends Service implements
     final String NOTIFICATION_CHANNEL_ID = "com.cotrack";
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
+    final String USER_TYPE_COOKIE = "UserTypeCookie";
     Location location;
     NotificationCompat.Builder notificationBuilder;
     NotificationManager manager;
@@ -268,6 +269,9 @@ public class LocationService extends Service implements
         protected LocationMap doInBackground(Location[] objects) {
             Location location = objects[0];
             LocationMap locationMap = null;
+            if(getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")){
+                return locationMap;
+            }
             try {
                 String latitude = Double.toString(location.getLatitude());
                 String longitude = Double.toString(location.getLongitude());
@@ -296,6 +300,9 @@ public class LocationService extends Service implements
         }
 
         protected void onPostExecute(LocationMap feed) {
+            if(getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")){
+                return;
+            }
             if (feed != null) {
                 if (feed.status) {
                     Log.d("Location Service", "Inside Covid + result");
