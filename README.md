@@ -104,12 +104,10 @@ The below pictures gives a bird eye view of various readily available services w
 * Poco X2 - MIUI 11
 * Google Pixel 3A - API29 (Emulator)
 
-**Team Members:** 
-   
-The email address of the team lead and other members are  
+**Team Members:**  
 
-* Aritra.Das3@cognizant.com (Team Lead)
-* Piu.Sau@cognizant.com
-* Soumik.Mazumder@cognizant.com
-* AbhishekKumar.Singh4@cognizant.com
-* Sumita.biswal@cognizant.com
+* <a href="mailto:Aritra.Das3@cognizant.com">Aritra Das</a> 
+* <a href="mailto:Piu.Sau@cognizant.com">Piu Sau</a>
+* <a href="mailto:Soumik.Mazumder@cognizant.com">Soumik Mazumder</a>
+* <a href="mailto:AbhishekKumar.Singh4@cognizant.com">Abhishek Kumar Singh</a>
+* <a href="mailto:Sumita.biswal@cognizant.com">Sumita Biswal</a>
