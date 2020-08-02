@@ -32,9 +32,25 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
   
 **Features not covered in video**  
-* **Chatbot get service information for all the relevant services**  
+* **Chatbot flow to get service information for all the relevant services**  
 
-   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_avail_services.gif?raw=true)
+   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_service_flow.gif?raw=true)
+
+* **Chatbot order placement for selected categories(Which has a callback request option)**  
+
+   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_order_flow.gif?raw=true)
+
+* **Location view**  
+
+   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/location_view.gif?raw=true)
+
+* **Alternate location view(Exact location details can be masked to ensure user safety in this view)**  
+
+   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/location_alternate_view.gif?raw=true)
+
+* **Permission request flow (Even if the user allows location access while using this app. Our services flow will work fine)**  
+
+   ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/clippings/permission_view.gif?raw=true)
 
 **Architecture Diagram:**  
     
