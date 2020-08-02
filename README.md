@@ -10,7 +10,7 @@ CoTracker- Unique community collaboration Solutions
 
 **Short description:**
     
-Connecting citizens on health services options to combat COVID 19
+Digital collaboration of health-services with larger communities to beat pandemic
 
 **Long description:**  
   
@@ -32,6 +32,10 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
   
 **Features not covered in video**  
+* **Permission request flow (Even if the user allows location access while using this app. Our services flow will work fine)**  
+
+   ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/permission_view.gif?raw=true)
+
 * **Chatbot flow to get service information for all the relevant services**  
 
    ![Service_Flow](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_service_flow.gif?raw=true)
@@ -48,9 +52,9 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 
    ![Alternate location view](https://github.com/aritra0925/CoTrack/blob/master/clippings/location_alternate_view.gif?raw=true)
 
-* **Permission request flow (Even if the user allows location access while using this app. Our services flow will work fine)**  
+* **Service registration and service addition flow**  
 
-   ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/permission_view.gif?raw=true)
+   ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/service_addition_flow.gif?raw=true)
 
 **Architecture Diagram:**  
     

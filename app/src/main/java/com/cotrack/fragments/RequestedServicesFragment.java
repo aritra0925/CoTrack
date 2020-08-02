@@ -1,12 +1,18 @@
 package com.cotrack.fragments;
 
+import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
 public class RequestedServicesFragment  extends Fragment implements OnItemClick {
@@ -32,7 +39,8 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
     final String USER_TYPE_COOKIE = "UserTypeCookie";
-
+    ProgressBar progressBar;
+    FrameLayout frameLayout;
     public RequestedServicesFragment() {
         // Required empty public constructor
     }
@@ -57,21 +65,21 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requested_services, container, false);
+        frameLayout = view.findViewById(R.id.requestedServicesLayout);
         ImageView backButton = getActivity().findViewById(R.id.backButtonService);
         disableBackButton(backButton);
         listView=(ListView) view.findViewById(R.id.listViewRequestedServices);
         listView.setDivider(null);
-
-        Map<String, List<OrderDataHolder>> serviceSpecificDetails = OrderDataHolder.getAllServiceSpecificDetails();
-        if( serviceSpecificDetails == null ||  serviceSpecificDetails.isEmpty()){
+        try {
+            new DataLoadTask().execute("").get();
+        } catch (ExecutionException e) {
+            Log.e("Fatal Error", "Exception while retreiving data", e);
+        } catch (InterruptedException e) {
+            Log.e("Fatal Error", "Exception while retreiving data", e);
+        }
+        if( orders == null ||  orders.isEmpty()) {
             view = inflater.inflate(R.layout.layout_missing_data, container, false);
             return view;
-        } else if(serviceSpecificDetails.get(getProperties().getProperty(USER_COOKIE)) == null
-                || serviceSpecificDetails.get(getProperties().getProperty(USER_COOKIE)).isEmpty()){
-            view = inflater.inflate(R.layout.layout_missing_data, container, false);
-            return view;
-        } else {
-            orders = serviceSpecificDetails.get(getProperties().getProperty(USER_COOKIE));
         }
         RequestedServicesAdapter serviceAdapter = new RequestedServicesAdapter(view.getContext(), orders);
         listView.setAdapter(serviceAdapter);
@@ -102,5 +110,39 @@ public class RequestedServicesFragment  extends Fragment implements OnItemClick 
             Log.e("File Error", "Error reading properties file", e);
         }
         return props;
+    }
+
+    @SuppressWarnings("deprecation")
+    class DataLoadTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = new ProgressBar(view.getContext());
+            progressBar.setTooltipText("Please wait. Fetching data...");
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            frameLayout.addView(progressBar, params);
+        }
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        public Boolean doInBackground(String... objects) {
+            orders = OrderDataHolder.getAllServiceSpecificDetails().get(getProperties().getProperty(USER_COOKIE));
+            System.out.println("User specific data" + orders);
+            return true;
+        }
+
+        public void onPostExecute(Boolean objects) {
+            progressBar.setVisibility(View.GONE);
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
     }
 }

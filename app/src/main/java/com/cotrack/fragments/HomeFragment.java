@@ -228,10 +228,10 @@ public class HomeFragment extends Fragment {
                             Log.e("Response", response.toString());
                             Global globalData = JSONUtils.mapJsonObject(response.toString(), Global.class);
                             Log.e("Global", globalData.getGlobal().getNewConfirmed());
-                            TextView covidActiveCount = (TextView) getActivity().findViewById(R.id.covidActiveCount);
-                            TextView covidDeceasedCount = (TextView) getActivity().findViewById(R.id.covidDeceasedCount);
-                            TextView covidRecoveredCount = (TextView) getActivity().findViewById(R.id.covidRecoveredCount);
-                            TextView covidTotalCount = (TextView) getActivity().findViewById(R.id.covidTotalCount);
+                            TextView covidActiveCount = (TextView) view.findViewById(R.id.covidActiveCount);
+                            TextView covidDeceasedCount = (TextView) view.findViewById(R.id.covidDeceasedCount);
+                            TextView covidRecoveredCount = (TextView) view.findViewById(R.id.covidRecoveredCount);
+                            TextView covidTotalCount = (TextView) view.findViewById(R.id.covidTotalCount);
 
                             if (isCountry) {
                                 for (Country country : globalData.getCountryList()) {
