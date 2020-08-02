@@ -42,15 +42,14 @@ public class AssetDataHolder implements Serializable {
     public static List<AssetDataHolder> refreshAllInstances() {
         allInstances = new ArrayList<>();
         QueryResult<AssetDetails> queryResult = CloudantAssetUtils.getAllData();
-        System.out.println("Result size:" + queryResult.getDocs().size());
         for (AssetDetails assetDetails : queryResult.getDocs()) {
-            System.out.println("Retreived id:" + assetDetails._id);
             AssetDataHolder holder = new AssetDataHolder();
             holder.setAsset_id(assetDetails.asset_id);
             holder.setAsset_title(assetDetails.asset_title);
             holder.setAsset_description(assetDetails.asset_description);
-            holder.setAsset_count_key(assetDetails.getAsset_count_key());
             holder.setAsset_type(assetDetails.asset_type);
+            holder.setAsset_count_key(assetDetails.getAsset_count_key());
+            holder.setAsset_available_services_count(CloudantServiceUtils.queryData(eq("asset_id", assetDetails.get_id())).getDocs().size());
             allInstances.add(holder);
         }
         return allInstances;

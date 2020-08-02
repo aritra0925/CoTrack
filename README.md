@@ -56,6 +56,10 @@ This solution has been developed using Android studio, JAVA, IBM Watson Service,
 
    ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/service_addition_flow.gif?raw=true)
 
+* **Service registration and service addition flow**  
+
+   ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/order_placement_flow.gif?raw=true)
+   
 **Architecture Diagram:**  
     
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)

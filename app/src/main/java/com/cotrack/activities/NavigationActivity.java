@@ -196,8 +196,8 @@ public class NavigationActivity  extends AppCompatActivity {
          */
         @Override
         public Boolean doInBackground(String... objects) {
-            AssetDataHolder.getAllInstances();
-            OrderDataHolder.getAllUserSpecificDetails();
+            AssetDataHolder.refreshAllInstances();
+            OrderDataHolder.refreshAllUserSpecificDetails();
             LinkedTreeMap treeMap = (LinkedTreeMap) CloudantProviderUtils.queryData(eq("user_email", getProperties().getProperty(USER_COOKIE).toString())).getDocs().get(0);
             writeProperties(USER_NAME_COOKIE, treeMap.get("user_name").toString());
             return true;
