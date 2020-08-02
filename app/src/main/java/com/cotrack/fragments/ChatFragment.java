@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.cotrack.BuildConfig;
 import com.cotrack.R;
 import com.cotrack.adaptors.MessageListAdapter;
+import com.cotrack.global.OrderDataHolder;
 import com.cotrack.global.ServiceProviderDataHolder;
 import com.cotrack.models.Message;
 import com.cotrack.models.OrderDetails;
@@ -351,6 +352,7 @@ public class ChatFragment extends Fragment {
             }else if(text.contains("Place order")) {
                 //TO DO
                 String orderID=requestService();
+                OrderDataHolder.refreshAllUserSpecificDetails();
                 messageText="Order Placed. Please check your orders with order ID: "+orderID;
 
 
