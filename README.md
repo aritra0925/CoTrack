@@ -1,5 +1,6 @@
-# CoTracker
-Covid-19 Tracking and Community Collaboration App <a href="url"><img src="https://github.com/aritra0925/CoTrack/blob/master/logo.png" align="left" height="48" width="48" ></a>  
+# CoTracker <a href="https://github.com/aritra0925/CoTrack/blob/master/logo.png"><img src="https://github.com/aritra0925/CoTrack/blob/master/logo.png" align="left" height="48" width="48" ></a>  
+
+Covid-19 Tracking and Community Collaboration App   
 
 **Project name:**  
   
