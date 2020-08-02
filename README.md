@@ -1,8 +1,5 @@
 # CoTracker
-Covid-19 Tracking and Community Collaboration App
-
-**Logo:**  
-![Logo](https://github.com/aritra0925/CoTrack/blob/master/logo.png?raw=true)  
+Covid-19 Tracking and Community Collaboration App <a href="url"><img src="https://github.com/aritra0925/CoTrack/blob/master/logo.png" align="left" height="48" width="48" ></a>  
 
 **Project name:**  
   
@@ -23,11 +20,11 @@ The application is easy to navigate and very user friendly. One can avail variou
 Among other information, it provides a summary view of the status of the pandemic across the country and even globally. This includes total confirmed cases, recoveries, and deaths. There is a map that provides an overview of the situation in any country in the world based on your location. One can click on the map to get a better insight into the state or country they’re living in. For India, the website shows a graphical representation of the cases confirmed in every state along with age demographics. It also shows the distance between the user and the nearest COVID 19 confirmed case. 
 This solution has been developed using Android studio, JAVA, IBM Watson Service, NoSQL Database Cloudant Services from IBM, Google Map, Covid 19 APIs.
 
-**Video Link**  
+# Video Link  
   
 [![Video](http://img.youtube.com/vi/gPEU3JHNKx4/0.jpg)](http://www.youtube.com/watch?v=gPEU3JHNKx4)
 
-**Architecture Diagram:**  
+# Architecture Diagram  
     
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/architecture.png?raw=true)  
 
@@ -36,18 +33,18 @@ This application is built using artificial intelligence and machine learning sol
 Also, the solution is built using IBM’s NOSQL database Cloudant to ensure unstructured data is stored securely and easily.  
 Apart from that Google Map SDK has enabled location based services to ensure each citizen is aware and informed anytime and anywhere. It has also used Covid 19 APIs as well.
 
-**Future Roadmap:**  
+# Future Roadmap  
   
 ![Architecture](https://github.com/aritra0925/CoTrack/blob/master/roadmap.png?raw=true)
 
 The solution is developed for android users to ensure they can avail all the required information related to COVID 19 in their locality based on location and avail various health services. It also provides avenues to the doctors, hospitals, health institutions to extend their services in the digitized platform.
 The below pictures gives a bird eye view of various readily available services which were developed as part of the hackathon event and the planned future enhancement.
 
-**Features:**  
+# Features  
   
 ![Fatures](https://github.com/aritra0925/CoTrack/blob/master/features.png?raw=true)
   
-**Features not covered in video**  
+# Screen clipping of features not covered in video  
 * **Permission request flow (Even if the user allows location access while using this app. Our services flow will work fine)**  
 
    ![Permissions](https://github.com/aritra0925/CoTrack/blob/master/clippings/permission_view.gif?raw=true)
