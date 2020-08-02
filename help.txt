@@ -1,0 +1,12 @@
+Update the following keys inside local.properties
+
+CLOUDANT_API_KEY=ngpeWlOu1fUpz4y9zrFLCTnvF4Aq3WwZ2_pDjHNAA_yt
+CLOUDANT_URL=https://ff37d895-652c-42c6-9987-c0f9fbbf5bc4-bluemix.cloudantnosqldb.appdomain.cloud
+CLOUDANT_DB_LIST=provider,asset
+WATSON_API_KEY=XmOiu7Oe0Bl2s6cA-_WPXsRmaLFQTADvFRiDIpHLW-6i
+WATSON_ASSISTANT_URL=https://api.us-south.assistant.watson.cloud.ibm.com/instances/3c53eaa3-e748-4047-8989-cc1ed18c9c2a/v2/assistants/f4315384-6a4f-428a-b328-129debd27469/sessions
+WATSON_WORKSPACE=f4315384-6a4f-428a-b328-129debd27469
+GOOGLE_API_KEY=AIzaSyD2cZC35V8rthCAfrcElHuVlSfHtz189zM
+
+Update the following key inside gradle.properties
+GOOGLE_MAPS_API_KEY=AIzaSyAAkWR5Ektn63hRlkKajhkOSAF7frmP26U

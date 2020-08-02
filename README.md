@@ -1,4 +1,4 @@
-# CoTrack
+# CoTracker
 Covid-19 Tracking and Community Collaboration App
 
 **Logo:**  
@@ -85,6 +85,26 @@ The below pictures gives a bird eye view of various readily available services w
 * Gateway for donations to Covid cause thru Govt agencies/registered NGOs etc.
 * E-Commerce – online medicine supply ( both retail & bulk)
 
+#Technical Specifications
+
+**SDK Details**
+
+* Target: Api 30
+* Minimum: Api 26
+* Compile: Api 30
+
+**How to import**  
+
+* Checkout the code
+* Update the following keys in **local.properties** and **gradle.properties** as per the help.txt document provided inside project
+* Sync and build the project
+* You are good to go
+
+**Devices Tested On** 
+* One plus 8 - Android 10
+* Poco X2 - MIUI 11
+* Google Pixel 3A - API29 (Emulator)
+
 **Team Members:** 
    
 The email address of the team lead and other members are  
@@ -94,4 +114,3 @@ The email address of the team lead and other members are
 * Soumik.Mazumder@cognizant.com
 * AbhishekKumar.Singh4@cognizant.com
 * Sumita.biswal@cognizant.com
-
