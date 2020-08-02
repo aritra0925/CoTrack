@@ -85,7 +85,7 @@ The below pictures gives a bird eye view of various readily available services w
 * Gateway for donations to Covid cause thru Govt agencies/registered NGOs etc.
 * E-Commerce – online medicine supply ( both retail & bulk)
 
-#Technical Specifications
+# Technical Specifications
 
 **SDK Details**
 
