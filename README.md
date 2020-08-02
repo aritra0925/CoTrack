@@ -101,6 +101,7 @@ The below pictures gives a bird eye view of various readily available services w
 
 **Devices Tested On** 
 
+* Mi Note 6 Pro - MIUI 8.1
 * One plus 8 - Android 10
 * Poco X2 - MIUI 11
 * Google Pixel 3A - API29 (Emulator)

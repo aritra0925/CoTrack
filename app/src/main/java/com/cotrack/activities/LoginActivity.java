@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -22,22 +23,27 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+
 import com.cloudant.client.api.query.Selector;
 import com.cotrack.R;
 import com.cotrack.helpers.Session;
 import com.cotrack.receivers.Restarter;
 import com.cotrack.utils.CloudantProviderUtils;
 import com.cotrack.utils.CommonUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static com.cloudant.client.api.query.Expression.eq;
 import static com.cloudant.client.api.query.Operation.and;
 
@@ -64,7 +70,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     @BindView(R.id.login_user_type)
     RadioGroup _radioGroup;
     boolean flag = false;
-    String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION };
+    String[] PERMISSIONS = android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ? new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION} : new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
     int PERMISSION_ALL = 101;
     String email;
     public String userCookie;
@@ -103,7 +109,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    public void askFotLocationPermission(){
+    public void askFotLocationPermission() {
         boolean foreground = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
@@ -315,10 +321,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -371,7 +377,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     // user rejected the permission
-                    if(!flag) {
+                    if (!flag) {
                         showExplanation("Permission Required", "In order to keep you safe we need to know you location even when you are not using the app. " +
                                 "Please note that your location data will not be made public. This is for our use only", permission, PERMISSION_ALL);
                     }
