@@ -117,6 +117,9 @@ public class NotificationService extends Service {
         protected List<OrderDataHolder> doInBackground(String[] objects) {
             List<OrderDataHolder> orderDataHolderList = OrderDataHolder.getAllServiceSpecificDetails().get(objects[0]);
             List<OrderDataHolder> requestedUpdates = new ArrayList<>();
+            if(requestedUpdates== null || requestedUpdates.isEmpty()){
+                return  requestedUpdates;
+            }
             for (OrderDataHolder holder : orderDataHolderList) {
                 if (holder.getOrder_status().equalsIgnoreCase("Update Requested")) {
                     requestedUpdates.add(holder);
