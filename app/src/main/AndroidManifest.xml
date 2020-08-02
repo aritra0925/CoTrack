@@ -24,7 +24,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCiiXS9hkacecneEn0hfx1vNSbudwZ_thY" />
+            android:value="AIzaSyAAkWR5Ektn63hRlkKajhkOSAF7frmP26U" />
         <receiver
             android:name=".receivers.Restarter"
             android:enabled="true"

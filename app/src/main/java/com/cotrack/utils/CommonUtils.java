@@ -14,12 +14,12 @@ public class CommonUtils {
     }
 
     public static String decode(String encodedString){
-        return new String(Base64.decode(encodedString, Base64.DEFAULT));
+        return new String(Base64.decode(encodedString, Base64.NO_WRAP));
     }
 
     public static String encode(String text){
 
-        return Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
+        return Base64.encodeToString(text.getBytes(), Base64.NO_WRAP);
     }
 
 }

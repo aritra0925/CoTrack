@@ -45,10 +45,15 @@ public class CloudantProviderUtils {
     }
 
     public static boolean validateEntry(Selector selector) {
+        boolean flag = false;
         Database database = cloudantConnect();
         QueryBuilder queryBuilder = new QueryBuilder(selector);
-        QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
-        boolean flag = queryResult.getDocs().size() > 0;
+        try {
+            QueryResult<Object> queryResult = database.query(queryBuilder.build(), Object.class);
+            flag = queryResult.getDocs().size() > 0;
+        }catch(Exception ex){
+            Log.d(LOG, "No Entry found");
+        }
         Log.d(LOG, "Validating entry status: '" + flag + "' from " + DB + "'");
         return flag;
     }
