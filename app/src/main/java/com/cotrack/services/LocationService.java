@@ -86,8 +86,10 @@ public class LocationService extends Service implements
         super.onCreate();
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
             startMyOwnForeground();
-        else
-            startForeground(1, new Notification());
+        else {
+            notification = new Notification();
+            startForeground(1, notification);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -146,9 +148,6 @@ public class LocationService extends Service implements
                 new DBConnect().execute(location);
             }
         });
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
-            notification = new Notification();
-        }
         startForeground(1, notification);
         Log.d("Location Service", "Foreground Started");
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
@@ -272,7 +271,7 @@ public class LocationService extends Service implements
         protected LocationMap doInBackground(Location[] objects) {
             Location location = objects[0];
             LocationMap locationMap = null;
-            if(getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")){
+            if (getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")) {
                 return locationMap;
             }
             try {
@@ -303,13 +302,13 @@ public class LocationService extends Service implements
         }
 
         protected void onPostExecute(LocationMap feed) {
-            if(getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")){
+            if (getProperties().getProperty(USER_TYPE_COOKIE).equalsIgnoreCase("SERVICE")) {
                 return;
             }
             if (feed != null) {
                 if (feed.status) {
                     Log.d("Location Service", "Inside Covid + result");
-                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
                     notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
@@ -323,7 +322,7 @@ public class LocationService extends Service implements
                             .build();
                     manager.notify(0, notificationBuilder.build());
                 } else {
-                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     notificationBuilder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID);
                     notification = notificationBuilder.setOngoing(true)
                             .setContentTitle("CoTrack")
@@ -388,7 +387,7 @@ public class LocationService extends Service implements
         locationDetails.setLatLang_details(latLangDetailsList);
         locationDetails.setCovid_test_status("NOT TAKEN");
         List<OrderDataHolder> orderDataHolder = OrderDataHolder.getAllUserSpecificDetails().get(user_id);
-        if(orderDataHolder != null) {
+        if (orderDataHolder != null) {
             for (OrderDataHolder dataHolder : orderDataHolder) {
                 if (dataHolder.getService_type().equalsIgnoreCase("PATHOLOGY")) {
                     if (dataHolder.getTests() != null
@@ -417,13 +416,13 @@ public class LocationService extends Service implements
                     return false;
                 }
                 disance = distance(currentLocation.getLatitude(), currentLocation.getLongitude(), lat, lng);
-                Log.d("Location Service","Location User LAT: " + currentLocation.getLatitude());
-                Log.d("Location Service","Location User LONG: " + currentLocation.getLongitude());
-                Log.d("Location Service","Location User Threat LAT: " + lat);
-                Log.d("Location Service","Location User Threat LONG: " + lng);
-                Log.d("Location Service","Location User ID: " + userId);
-                Log.d("Location Service","Location distance: " + disance);
-                Log.d("Location Service","Location Difference: " + getDaysDifference(date, trackingDate) );
+                Log.d("Location Service", "Location User LAT: " + currentLocation.getLatitude());
+                Log.d("Location Service", "Location User LONG: " + currentLocation.getLongitude());
+                Log.d("Location Service", "Location User Threat LAT: " + lat);
+                Log.d("Location Service", "Location User Threat LONG: " + lng);
+                Log.d("Location Service", "Location User ID: " + userId);
+                Log.d("Location Service", "Location distance: " + disance);
+                Log.d("Location Service", "Location Difference: " + getDaysDifference(date, trackingDate));
                 if (disance < 20 && !locationDetails.getUser_id().equalsIgnoreCase(userId) && (getDaysDifference(date, trackingDate) < 30)) {
                     flag = true;
                     break;

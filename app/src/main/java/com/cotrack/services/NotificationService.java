@@ -48,10 +48,13 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             startMyOwnForeground();
-        else
-            startForeground(1, new Notification());
+        }
+        else {
+            notification = new Notification();
+            startForeground(1, notification);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -82,9 +85,6 @@ public class NotificationService extends Service {
         String userName = getProperties().getProperty(USER_COOKIE);
         Log.d("Notification Service", "Checking update requests");
         new DBConnect().execute(userName);
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
-            notification = new Notification();
-        }
         startForeground(1, notification);
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
         return START_STICKY;
