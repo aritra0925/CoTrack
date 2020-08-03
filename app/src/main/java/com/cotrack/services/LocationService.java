@@ -146,7 +146,7 @@ public class LocationService extends Service implements
                 new DBConnect().execute(location);
             }
         });
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
             notification = new Notification();
         }
         startForeground(1, notification);

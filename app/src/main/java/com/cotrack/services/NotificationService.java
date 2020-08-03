@@ -82,6 +82,9 @@ public class NotificationService extends Service {
         String userName = getProperties().getProperty(USER_COOKIE);
         Log.d("Notification Service", "Checking update requests");
         new DBConnect().execute(userName);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
+            notification = new Notification();
+        }
         startForeground(1, notification);
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
         return START_STICKY;
