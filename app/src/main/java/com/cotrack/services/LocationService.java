@@ -146,6 +146,9 @@ public class LocationService extends Service implements
                 new DBConnect().execute(location);
             }
         });
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            notification = new Notification();
+        }
         startForeground(1, notification);
         Log.d("Location Service", "Foreground Started");
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
