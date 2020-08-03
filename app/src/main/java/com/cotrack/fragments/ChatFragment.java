@@ -45,6 +45,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.io.IOUtils;
 import com.cotrack.utils.CommonUtils;
 import com.cotrack.utils.JSONUtils;
@@ -77,7 +79,7 @@ public class ChatFragment extends Fragment {
     final String COOKIE_FILE_NAME = "Cookie.properties";
     final String USER_COOKIE = "UserCookie";
     List<ServiceProviderDataHolder> serviceProviderDataHolderList;
-
+    String orderID;
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -230,7 +232,28 @@ public class ChatFragment extends Fragment {
          */
         @Override
         protected String doInBackground(Object[] objects) {
-            //APIUtils.insertDocument("Test test text");
+            serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
+            return "";
+        }
+
+        protected void onPostExecute(String feed) {
+            //Toast.makeText(view.getContext(), feed, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    class RefreshConnect extends AsyncTask {
+
+        private Exception exception;
+
+        /**
+         * @param objects
+         * @deprecated
+         */
+        @Override
+        protected String doInBackground(Object[] objects) {
+            orderID=requestService();
+            OrderDataHolder.refreshAllUserSpecificDetails();
             return "";
         }
 
@@ -250,7 +273,6 @@ public class ChatFragment extends Fragment {
         @Override
         protected MessageResponse doInBackground(String... strings) {
             MessageResponse messageResponse = WatsonUtils.startService(BuildConfig.WATSON_API_KEY, BuildConfig.WATSON_ASSISTANT_URL, BuildConfig.WATSON_WORKSPACE, strings[0]);
-            serviceProviderDataHolderList = ServiceProviderDataHolder.getAllInstances();
             //System.out.println("Response: " + messageResponse.toString());
             return messageResponse;
         }
@@ -350,11 +372,18 @@ public class ChatFragment extends Fragment {
                 }
 
             }else if(text.contains("Place order")) {
-                //TO DO
-                String orderID=requestService();
-                OrderDataHolder.refreshAllUserSpecificDetails();
-                messageText="Order Placed. Please check your orders with order ID: "+orderID;
-
+                if(serviceProvider == null){
+                    messageText = "Please ask to book service in order to confirm selection";
+                } else {
+                    try {
+                        Object o = new RefreshConnect().execute("").get();
+                    } catch (ExecutionException e) {
+                        Log.e("Chat", "Order placement error", e);
+                    } catch (InterruptedException e) {
+                        Log.e("Chat", "Order placement error", e);
+                    }
+                    messageText = "Order Placed. Please check your orders with order ID: " + orderID;
+                }
 
             } else if(text.contains("Disinfectent")) {
                 for(ServiceProviderDataHolder dataHolder:serviceProviderDataHolderList){
