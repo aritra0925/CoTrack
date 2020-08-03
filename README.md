@@ -60,10 +60,11 @@ The below pictures gives a bird eye view of various readily available services w
    ![Order_flow](https://github.com/aritra0925/CoTrack/blob/master/clippings/chatbot_order_flow.gif?raw=true)
 
 * **Location view**  
+    The below markers are in fact mocked up data, to show how it will look like once we have a proper user base  
 
    ![Location view](https://github.com/aritra0925/CoTrack/blob/master/clippings/location_view.gif?raw=true)
 
-* **Alternate location view(Exact location details can be masked to ensure user safety in this view)**  
+* **Alternate location view (Exact location details can be masked to ensure user safety in this view)**  
 
    ![Alternate location view](https://github.com/aritra0925/CoTrack/blob/master/clippings/location_alternate_view.gif?raw=true)
 
